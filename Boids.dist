@@ -7,8 +7,8 @@ darcs-dev / fh.daimi.au.dk:/users/cgd/code/openengine
 
 # project repository
 # (uncomment the following two lines after uploading your project)
-#darcs /projects/Boids http://openengine.dk/code/projects/Boids
-#darcs-dev /projects/Boids fh.daimi.au.dk:/users/cgd/code/projects/Boids
+darcs /projects/Boids http://openengine.dk/code/projects/Boids
+darcs-dev /projects/Boids fh.daimi.au.dk:/users/cgd/code/projects/Boids
 
 # required extensions
 darcs /extensions/SetupHelpers           http://openengine.dk/code/extensions/SetupHelpers
