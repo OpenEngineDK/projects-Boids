@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
     Camera* cam = setup->GetCamera();
 
     cam->SetPosition(Vector<3,float>(100,100,-100));
-    cam->LookAt(Vector<3,float>());
+    cam->LookAt(Vector<3,float>(0,0,0));
 
     setup->GetEngine().InitializeEvent().Attach(*fm);
     setup->GetEngine().ProcessEvent().Attach(*fm);

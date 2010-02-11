@@ -22,6 +22,15 @@ private:
     SceneNode *root;
     std::vector<Fish*> fishes;
     RandomGenerator *rg;
+
+    Timer loopTimer;
+
+    Vector<3,float> Rule1(Fish* f);
+    Vector<3,float> Rule2(Fish* f);
+    Vector<3,float> Rule3(Fish* f);
+
+    void LimitSpeed(Fish* f);
+    Vector<3,float> TendToPlace(Fish* f);
 public:
     FishMaster();
 
