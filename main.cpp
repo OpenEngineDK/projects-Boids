@@ -50,7 +50,9 @@ int main(int argc, char** argv) {
 
     // Create simple setup
     SimpleSetup* setup = new SimpleSetup("Example Project Title");
-    FishMaster *fm = new FishMaster();    
+    setup->GetRenderer().SetBackgroundColor(Vector<4, float>(0.12, 0.16, 0.35, 1.0));
+
+    FishMaster *fm = new FishMaster();
 
     SceneNode *root = new SceneNode();
     RenderStateNode *rsn = new RenderStateNode();
