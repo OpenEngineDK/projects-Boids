@@ -10,6 +10,7 @@ SET( PROJECT_SOURCES
   FishMaster.cpp
   Fish.h
   Fish.cpp
+  Scene/OceanFloorNode.h
 )
 
 # Include needed to use SDL under Mac OS X

@@ -13,6 +13,7 @@
 #include <Logging/StreamLogger.h>
 #include <Core/Engine.h>
 #include <Display/Camera.h>
+#include <Resources/ResourceManager.h>
 
 // SimpleSetup
 #include <Utils/SimpleSetup.h>
@@ -20,8 +21,15 @@
 #include <Scene/PointLightNode.h>
 #include <Scene/TransformationNode.h>
 
-// Game factory
-//#include "GameFactory.h"
+// Terrain stuff
+#include "Scene/OceanFloorNode.h"
+#include <Scene/SunNode.h>
+#include <Utils/TerrainUtils.h>
+#include <Utils/TerrainTexUtils.h>
+#include <Renderers/OpenGL/TerrainRenderingView.h>
+
+#include <Display/SDLEnvironment.h>
+
 
 #include "FishMaster.h"
 
@@ -33,7 +41,10 @@ using namespace OpenEngine::Core;
 using namespace OpenEngine::Utils;
 using namespace OpenEngine::Display;
 using namespace OpenEngine::Scene;
+using namespace OpenEngine::Renderers::OpenGL;
 
+// Forward method declarations
+ISceneNode* SetupTerrain(SimpleSetup* setup);
 
 /**
  * Main method for the first quarter project of CGD.
@@ -42,14 +53,16 @@ using namespace OpenEngine::Scene;
  * method in Java.
  */
 int main(int argc, char** argv) {
-    // Setup logging facilities.
-    //Logger::AddLogger(new StreamLogger(&std::cout));
-
-    // Print usage info.
-    //logger.info << "========= Running OpenEngine Test Project =========" << logger.end;
 
     // Create simple setup
-    SimpleSetup* setup = new SimpleSetup("Example Project Title");
+    IEnvironment* env = new SDLEnvironment(800,600);
+    Viewport* vp = new Viewport(env->GetFrame());
+    IRenderingView* rv = new TerrainRenderingView(*vp);
+
+    SimpleSetup* setup = new SimpleSetup("Larry - The not so Friendly Shark",
+                                         vp, env, rv);
+    DirectoryManager::AppendPath("projects/Boids/data/");
+
     setup->GetRenderer().SetBackgroundColor(Vector<4, float>(0.12, 0.16, 0.35, 1.0));
 
     FishMaster *fm = new FishMaster();
@@ -60,7 +73,10 @@ int main(int argc, char** argv) {
     rsn->EnableOption(RenderStateNode::LIGHTING);    
     rsn->EnableOption(RenderStateNode::COLOR_MATERIAL);
 
+    //SetupTerrain(setup);
+
     root->AddNode(rsn);
+    root->AddNode(SetupTerrain(setup));
     setup->SetScene(*root);
     
     PointLightNode *ln = new PointLightNode();
@@ -92,4 +108,28 @@ int main(int argc, char** argv) {
     return EXIT_SUCCESS;
 }
 
+ISceneNode* SetupTerrain(SimpleSetup* setup){
+    // Create the map
+    FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(1024, 1024, 1));
+    map = CreateSmoothTerrain(map, 1000, 40, 10);
+    map = CreateSmoothTerrain(map, 2000, 20, -6);
+    map = CreateSmoothTerrain(map, 4000, 10, 3);
+    
+    float widthScale = 2.0;
+    float origo[] = {map->GetHeight() * widthScale / 2, 0, map->GetWidth() * widthScale / 2};
+    float sunDir[] = {1448, 2048, 1448};
+    SunNode* sun = new SunNode(sunDir, origo);
+    setup->GetEngine().ProcessEvent().Attach(*sun);
 
+    IShaderResourcePtr floorShader = ResourceManager<IShaderResource>::Create("projects/Boids/data/shaders/oceanfloor/oceanfloor.glsl");
+
+    OceanFloorNode* node = new OceanFloorNode(map);
+    node->SetLandscapeShader(floorShader);
+    node->SetTextureDetail(1.0f / 16.0f);
+    node->SetWidthScale(widthScale);
+    node->SetSun(sun);
+    setup->GetRenderer().InitializeEvent().Attach(*node);
+    setup->GetEngine().ProcessEvent().Attach(*node);
+
+    return node;
+}
