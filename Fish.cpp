@@ -24,7 +24,13 @@ void Fish::Update(Time dt) {
     float delta = dt.AsInt()/1000000.0;
 
     position += velocity*delta;
+
+    Vector<3,float> x = velocity.GetNormalize(); // x vector
+    Vector<3,float> y(0,1,0); // up vector
+    Vector<3,float> z = x % y;
+
+    Matrix<3,3,float> rotMat(x,y,z);
     
-    node->SetRotation(Quaternion<float>(velocity.GetNormalize()));
+    node->SetRotation(Quaternion<float>(rotMat));
     node->SetPosition(position);
 }
