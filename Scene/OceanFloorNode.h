@@ -30,7 +30,7 @@ namespace OpenEngine {
             }
 
             void PreRender(Display::Viewport view) {
-                this->landscapeShader->SetUniform("time", elapsedTime / 16000000.0f);
+                this->landscapeShader->SetUniform("time", (float) elapsedTime / 8000000);
             }
         };
     }
