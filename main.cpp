@@ -94,8 +94,10 @@ int main(int argc, char** argv) {
 
     Camera* cam = setup->GetCamera();
 
-    cam->SetPosition(Vector<3,float>(100,100,-100));
-    cam->LookAt(Vector<3,float>(0,0,0));
+    //cam->SetPosition(Vector<3,float>(100,100,-100));
+    //cam->LookAt(Vector<3,float>(0,0,0));
+    cam->SetPosition(Vector<3, float>(-256.0, 200.0, -256.0));
+    cam->LookAt(0.0, 127.0, 0.0);
 
     setup->GetEngine().InitializeEvent().Attach(*fm);
     setup->GetEngine().ProcessEvent().Attach(*fm);
@@ -111,7 +113,7 @@ int main(int argc, char** argv) {
 ISceneNode* SetupTerrain(SimpleSetup* setup){
     // Create the map
     FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(1024, 1024, 1));
-    map = CreateSmoothTerrain(map, 1000, 40, 10);
+    map = CreateSmoothTerrain(map, 1000, 40, 20);
     map = CreateSmoothTerrain(map, 2000, 20, -6);
     map = CreateSmoothTerrain(map, 4000, 10, 3);
     

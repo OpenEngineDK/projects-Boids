@@ -16,10 +16,22 @@ namespace OpenEngine {
     namespace Scene {
         
         class OceanFloorNode : public HeightMapNode {
+        private:
+            unsigned int elapsedTime;
         public:
             OceanFloorNode() : HeightMapNode() {}
-            OceanFloorNode(FloatTexture2DPtr tex) : HeightMapNode(tex) {}
+            OceanFloorNode(FloatTexture2DPtr tex) : HeightMapNode(tex) {
+                elapsedTime = 0;
+            }
             ~OceanFloorNode() {}
+
+            void Process(ProcessEventArg arg){
+                elapsedTime += arg.approx;
+            }
+
+            void PreRender(Display::Viewport view) {
+                this->landscapeShader->SetUniform("time", elapsedTime / 16000000.0f);
+            }
         };
     }
 }
