@@ -44,7 +44,7 @@ using namespace OpenEngine::Scene;
 using namespace OpenEngine::Renderers::OpenGL;
 
 // Forward method declarations
-ISceneNode* SetupTerrain(SimpleSetup* setup);
+OceanFloorNode* SetupTerrain(SimpleSetup* setup);
 
 /**
  * Main method for the first quarter project of CGD.
@@ -65,7 +65,8 @@ int main(int argc, char** argv) {
 
     setup->GetRenderer().SetBackgroundColor(Vector<4, float>(0.12, 0.16, 0.35, 1.0));
 
-    FishMaster *fm = new FishMaster();
+    OceanFloorNode* oceanFloor = SetupTerrain(setup);
+    FishMaster *fm = new FishMaster(oceanFloor,100);
 
     SceneNode *root = new SceneNode();
     RenderStateNode *rsn = new RenderStateNode();
@@ -75,8 +76,10 @@ int main(int argc, char** argv) {
 
     //SetupTerrain(setup);
 
+
+
     root->AddNode(rsn);
-    root->AddNode(SetupTerrain(setup));
+    root->AddNode(oceanFloor);
     setup->SetScene(*root);
     
     PointLightNode *ln = new PointLightNode();
@@ -103,6 +106,8 @@ int main(int argc, char** argv) {
     setup->GetEngine().ProcessEvent().Attach(*fm);
     setup->GetEngine().DeinitializeEvent().Attach(*fm);
 
+    setup->ShowFPS();
+
     // Start the engine.
     setup->GetEngine().Start();
 
@@ -110,12 +115,17 @@ int main(int argc, char** argv) {
     return EXIT_SUCCESS;
 }
 
-ISceneNode* SetupTerrain(SimpleSetup* setup){
+OceanFloorNode* SetupTerrain(SimpleSetup* setup){
     // Create the map
-    FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(1024, 1024, 1));
-    map = CreateSmoothTerrain(map, 1000, 40, 20);
-    map = CreateSmoothTerrain(map, 2000, 20, -6);
-    map = CreateSmoothTerrain(map, 4000, 10, 3);
+    //FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(1024, 1024, 1));
+    // map = CreateSmoothTerrain(map, 1000, 40, 20);
+    // map = CreateSmoothTerrain(map, 2000, 20, -6);
+    // map = CreateSmoothTerrain(map, 4000, 10, 3);
+    FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(256, 256, 1));
+    map = CreateSmoothTerrain(map, 40, 40, 40);
+    map = CreateSmoothTerrain(map, 80, 20, -6);
+    map = CreateSmoothTerrain(map, 160, 10, 3);
+
     
     float widthScale = 2.0;
     Vector<3, float> origo = Vector<3, float>(map->GetHeight() * widthScale / 2, 0, map->GetWidth() * widthScale / 2);

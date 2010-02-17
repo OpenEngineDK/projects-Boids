@@ -9,10 +9,10 @@ Fish::Fish(FaceSet* fs, RandomGenerator* rg) {
     GeometryNode *gn = new GeometryNode(fs);
     node = new TransformationNode();
     node->AddNode(gn);
-    position = Vector<3,float>(rg->UniformFloat(0,20),
-                               rg->UniformFloat(0,20),
-                               rg->UniformFloat(0,20));
-
+     position = Vector<3,float>(rg->UniformFloat(100,300),
+                                rg->UniformFloat(100,300),
+                                rg->UniformFloat(100,300));
+    //position = Vector<3,float>(0,0,0);
 }
 
 

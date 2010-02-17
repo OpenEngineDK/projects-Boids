@@ -5,6 +5,7 @@
 #include <Scene/SceneNode.h>
 
 #include "Fish.h"
+#include "Scene/OceanFloorNode.h"
 
 #include <vector>
 
@@ -22,17 +23,24 @@ private:
     SceneNode *root;
     std::vector<Fish*> fishes;
     RandomGenerator *rg;
-
+    OceanFloorNode* ocean;
     Timer loopTimer;
+
+    Vector<3,float> startPoint;
+    Vector<3,float> endPoint;
 
     Vector<3,float> Rule1(Fish* f);
     Vector<3,float> Rule2(Fish* f);
     Vector<3,float> Rule3(Fish* f);
 
+    Vector<3,float> BoxRule(Fish* f);
+    Vector<3,float> HeightRule(Fish* f);
+        
+
     void LimitSpeed(Fish* f);
     Vector<3,float> TendToPlace(Fish* f);
 public:
-    FishMaster();
+    FishMaster(OceanFloorNode* ocean, unsigned int n=10);
 
     ISceneNode* GetFishNode();
 
