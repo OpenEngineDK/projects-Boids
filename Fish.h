@@ -22,7 +22,7 @@ private:
 public:
     Vector<3,float> velocity;
     Vector<3,float> position;
-
+    Quaternion<float> rotation;
 
     TransformationNode *node;
 

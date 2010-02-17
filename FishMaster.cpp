@@ -63,7 +63,7 @@ Vector<3,float> FishMaster::Rule2(Fish* f) {
 
     }
 
-    return c/100.0;
+    return c/10.0;
 }
 
 Vector<3,float> FishMaster::Rule3(Fish* f) {
@@ -113,10 +113,7 @@ void FishMaster::Handle(ProcessEventArg arg) {
         Fish *f = *itr;
         Vector<3,float> v1,v2,v3;
 
-
-
-
-
+        
         f->velocity += Rule1(f);
         f->velocity += Rule2(f);
         f->velocity += Rule3(f);
