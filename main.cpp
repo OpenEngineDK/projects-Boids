@@ -121,6 +121,9 @@ ISceneNode* SetupTerrain(SimpleSetup* setup){
     Vector<3, float> origo = Vector<3, float>(map->GetHeight() * widthScale / 2, 0, map->GetWidth() * widthScale / 2);
     Vector<3, float> sunDir = Vector<3, float>(1448, 2048, 1448);
     SunNode* sun = new SunNode(sunDir, origo);
+    sun->SetAmbient(Vector<4, float>(0.06, 0.12, 0.17, 1.0));
+    //sun->SetDiffuse(Vector<4, float>(0.36, 0.72, 1.0, 1.0));
+    sun->SetDiffuse(Vector<4, float>(0.6, 1.0, 0.8, 1.0));
     setup->GetEngine().ProcessEvent().Attach(*sun);
 
     IShaderResourcePtr floorShader = ResourceManager<IShaderResource>::Create("projects/Boids/data/shaders/oceanfloor/oceanfloor.glsl");
