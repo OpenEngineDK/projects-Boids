@@ -118,8 +118,8 @@ ISceneNode* SetupTerrain(SimpleSetup* setup){
     map = CreateSmoothTerrain(map, 4000, 10, 3);
     
     float widthScale = 2.0;
-    float origo[] = {map->GetHeight() * widthScale / 2, 0, map->GetWidth() * widthScale / 2};
-    float sunDir[] = {1448, 2048, 1448};
+    Vector<3, float> origo = Vector<3, float>(map->GetHeight() * widthScale / 2, 0, map->GetWidth() * widthScale / 2);
+    Vector<3, float> sunDir = Vector<3, float>(1448, 2048, 1448);
     SunNode* sun = new SunNode(sunDir, origo);
     setup->GetEngine().ProcessEvent().Attach(*sun);
 
