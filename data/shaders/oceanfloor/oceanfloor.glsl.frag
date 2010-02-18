@@ -29,14 +29,14 @@ void main()
 
     // Calculate diffuse
     float ndotl = dot(normal, lightDir);
-    float diffuse = clamp(ndotl, 0.0, 1.0);
+    float diffuseScalar = clamp(ndotl, 0.0, 1.0);
     
     // Looking up the texture values
     vec4 sand = texture2D(sandTex, gl_TexCoord[0].xy);
-    
-    vec4 text = caustic + sand;
-    
-    vec4 color = text * (gl_LightSource[0].ambient + gl_LightSource[0].diffuse * diffuse);
+
+    vec4 diffuse = gl_LightSource[0].diffuse * diffuseScalar;
+    vec4 color = sand * (gl_LightSource[0].ambient + diffuse);
+    color += caustic * diffuse;
 
     //float fade = 0.2;//1.0 - (gl_FragCoord.z - 0.2) * 1.25;
     //float fade = gl_FragCoord.z;
