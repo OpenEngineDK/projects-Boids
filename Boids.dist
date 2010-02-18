@@ -46,7 +46,7 @@ win32 /libraries http://openengine.dk/data/libraries/dlls-win32.zip
 
 # darwin libraries
 
-darwin /libraries http://openengine.dk/data/libraries/wii_mac64.zip
+darwin /libraries http://openengine.dk/data/libraries/wii_mac64.tgz
 
 # linux libraries
 
