@@ -117,23 +117,34 @@ int main(int argc, char** argv) {
 
 OceanFloorNode* SetupTerrain(SimpleSetup* setup){
     // Create the map
-    //FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(1024, 1024, 1));
-    // map = CreateSmoothTerrain(map, 1000, 40, 20);
-    // map = CreateSmoothTerrain(map, 2000, 20, -6);
-    // map = CreateSmoothTerrain(map, 4000, 10, 3);
+    /*
+    FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(1024, 1024, 1));
+    Empty(map);
+    map = CreateSmoothTerrain(map, 500, 40, 20);
+    map = CreateSmoothTerrain(map, 1000, 20, -6);
+    map = CreateSmoothTerrain(map, 2000, 10, 3);
+    */
     FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(256, 256, 1));
+    Empty(map);
     map = CreateSmoothTerrain(map, 40, 40, 40);
     map = CreateSmoothTerrain(map, 80, 20, -6);
     map = CreateSmoothTerrain(map, 160, 10, 3);
-
     
     float widthScale = 2.0;
+    /*
+    FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(64, 64, 1));
+    Empty(map);
+    map = CreateSmoothTerrain(map, 40, 10, 40);
+    map = CreateSmoothTerrain(map, 80, 5, -6);
+    map = CreateSmoothTerrain(map, 160, 3, 3);
+    
+    float widthScale = 8.0;
+    */
     Vector<3, float> origo = Vector<3, float>(map->GetHeight() * widthScale / 2, 0, map->GetWidth() * widthScale / 2);
     Vector<3, float> sunDir = Vector<3, float>(1448, 2048, 1448);
     SunNode* sun = new SunNode(sunDir, origo);
     sun->SetAmbient(Vector<4, float>(0.06, 0.12, 0.17, 1.0));
-    //sun->SetDiffuse(Vector<4, float>(0.36, 0.72, 1.0, 1.0));
-    sun->SetDiffuse(Vector<4, float>(0.6, 1.0, 0.8, 1.0));
+    sun->SetDiffuse(Vector<4, float>(0.8, 1.0, 0.8, 1.0));
     setup->GetEngine().ProcessEvent().Attach(*sun);
 
     IShaderResourcePtr floorShader = ResourceManager<IShaderResource>::Create("projects/Boids/data/shaders/oceanfloor/oceanfloor.glsl");
