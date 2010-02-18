@@ -25,6 +25,7 @@ private:
     RandomGenerator *rg;
     OceanFloorNode* ocean;
     Timer loopTimer;
+    Timer reloadTimer;
 
     Vector<3,float> startPoint;
     Vector<3,float> endPoint;

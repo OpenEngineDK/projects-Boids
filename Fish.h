@@ -26,7 +26,7 @@ public:
 
     TransformationNode *node;
 
-    Fish(FaceSet *fs, RandomGenerator* rg);
+    Fish(ISceneNode* child, RandomGenerator* rg);
 
     ISceneNode* GetNode();
 

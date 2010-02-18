@@ -2,6 +2,7 @@
 
 #include <Geometry/FaceBuilder.h>
 #include <Logging/Logger.h>
+#include <Scene/VertexArrayNode.h>
 
 
 using namespace OpenEngine::Geometry;
@@ -18,15 +19,20 @@ FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n) : ocean(ocean) {
     state.color = Vector<4,float>(.5,.5,.5,1);
     FaceBuilder::MakeABox(fs,state,Vector<3,float>(),Vector<3,float>(8) );
 
+    VertexArray* arr = new VertexArray(*fs);
+    delete fs;
+
+
     rg = new RandomGenerator();
 
     for (unsigned int i=0;i<n;i++) {
-        Fish *f = new Fish(fs,rg);
+        VertexArrayNode* node = new VertexArrayNode();
+        node->AddVertexArray(*arr);
+
+        Fish *f = new Fish(node,rg);
         fishes.push_back(f);
         root->AddNode(f->GetNode());
     }
-    
-
 }
 
 ISceneNode* FishMaster::GetFishNode() {
@@ -50,7 +56,7 @@ Vector<3,float> FishMaster::Rule1(Fish* f) {
 
     pc = pc / float(fishes.size() - 1);
 
-    return (pc - f->position) / 100;
+    return (pc - f->position) / 100.0f;
 }
 
 // Keep distance to other boids
@@ -64,7 +70,7 @@ Vector<3,float> FishMaster::Rule2(Fish* f) {
                 continue;
             Vector<3,float> d = (n->position - f->position);
 
-            if (d.GetLength() < 10)
+            if (d.GetLength() < 10.0f)
                 c = c - d;
 
     }
@@ -87,13 +93,13 @@ Vector<3,float> FishMaster::Rule3(Fish* f) {
 
     pv = pv / float(fishes.size() - 1);
 
-    return (pv - f->velocity)/8;
+    return (pv - f->velocity)/8.0f;
 }
 
 Vector<3,float> FishMaster::TendToPlace(Fish* f) {
     Vector<3,float> home(0,0,0);
 
-    return (home - f->position) / 100;
+    return (home - f->position) / 100.0f;
 }
 
 Vector<3,float> FishMaster::BoxRule(Fish* f) {
@@ -125,7 +131,7 @@ Vector<3,float> FishMaster::BoxRule(Fish* f) {
         
     Vector<3,float> p = f->position;
     Vector<3,float> v;
-    const float boxSpeed = 10.0;
+    const float boxSpeed = 10.0f;
 
     if (p[0] < startPoint[0]) {
         v[0] = boxSpeed;
@@ -150,17 +156,15 @@ Vector<3,float> FishMaster::HeightRule(Fish* f) {
 
     float dt = f->position[1] - h;
 
-    float heightSpeed = 30.0;
+    float heightSpeed = 30.0f;
 
     //logger.info << "height: " << h << logger.end;
 
     Vector<3,float> v;
 
-    if (dt < 20) 
-        //v[1] = 20;
+    if (dt < 10.0f) 
         v = ocean->GetNormal(f->position)*heightSpeed;
-    else if (dt > 70) 
-        //v[1] = 20;
+    else if (dt > 70.0f) 
         v = -ocean->GetNormal(f->position)*heightSpeed;
 
     return v;
@@ -169,8 +173,8 @@ Vector<3,float> FishMaster::HeightRule(Fish* f) {
 
 void FishMaster::LimitSpeed(Fish* f) {
 
-    float maxSpeed = 200.0;
-    float minSpeed = 70.0;
+    float maxSpeed = 200.0f;
+    float minSpeed = 30.0f;
     float len = (f->velocity).GetLength();
 
     if (len > maxSpeed) {
@@ -189,9 +193,16 @@ void FishMaster::Handle(InitializeEventArg arg) {
     endPoint += startPoint;
 
     loopTimer.Start();
+    reloadTimer.Start();
 }
 void FishMaster::Handle(ProcessEventArg arg) {
     Time dt = loopTimer.GetElapsedTimeAndReset();
+
+    // if (reloadTimer.GetElapsedIntervals(1000000)) {
+    //     logger.info << "Reload" << logger.end;
+    //     reloadTimer.Reset();
+    //     ReloadChangedTweakableValues();
+    // }
 
     for (vector<Fish*>::iterator itr = fishes.begin();
          itr != fishes.end();

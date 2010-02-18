@@ -5,13 +5,13 @@
 #include <Scene/GeometryNode.h>
 
 
-Fish::Fish(FaceSet* fs, RandomGenerator* rg) {
-    GeometryNode *gn = new GeometryNode(fs);
+Fish::Fish(ISceneNode* child, RandomGenerator* rg) {
+    
     node = new TransformationNode();
-    node->AddNode(gn);
-     position = Vector<3,float>(rg->UniformFloat(100,300),
-                                rg->UniformFloat(100,300),
-                                rg->UniformFloat(100,300));
+    node->AddNode(child);
+    position = Vector<3,float>(rg->UniformFloat(100,300),
+                               rg->UniformFloat(100,300),
+                               rg->UniformFloat(100,300));
     //position = Vector<3,float>(0,0,0);
 }
 
