@@ -78,21 +78,11 @@ int main(int argc, char** argv) {
     rsn->EnableOption(RenderStateNode::LIGHTING);    
     rsn->EnableOption(RenderStateNode::COLOR_MATERIAL);
 
-    root->AddNode(rsn);
     root->AddNode(sun);
-    root->AddNode(oceanFloor);
-    setup->SetScene(*root);
-    
-    PointLightNode *ln = new PointLightNode();
-
-    TransformationNode *lt = new TransformationNode();
-    lt->AddNode(ln);
-    lt->SetPosition(Vector<3,float>(100,100,-100));
-    
-
-    rsn->AddNode(lt);
-    
+    sun->AddNode(oceanFloor);
+    sun->AddNode(rsn);
     rsn->AddNode(fm->GetFishNode());
+    setup->SetScene(*root);
 
 
     Camera* cam = setup->GetCamera();
