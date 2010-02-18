@@ -183,8 +183,10 @@ void FishMaster::LimitSpeed(Fish* f) {
 
 void FishMaster::Handle(InitializeEventArg arg) {
 
-    startPoint = Vector<3,float>(0,0,0);
+    float* startVertex = ocean->GetVertex(0, 0);
+    startPoint = Vector<3,float>(startVertex[0], 0, startVertex[2]);
     endPoint = Vector<3,float>(ocean->GetWidth(), 50, ocean->GetDepth());
+    endPoint += startPoint;
 
     loopTimer.Start();
 }
