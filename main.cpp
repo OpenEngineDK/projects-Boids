@@ -45,7 +45,10 @@ using namespace OpenEngine::Scene;
 using namespace OpenEngine::Renderers::OpenGL;
 
 // Forward method declarations
-OceanFloorNode* SetupTerrain(SimpleSetup* setup);
+void SetupTerrain(SimpleSetup* setup);
+
+SunNode* sun;
+OceanFloorNode* oceanFloor;
 
 /**
  * Main method for the first quarter project of CGD.
@@ -66,7 +69,7 @@ int main(int argc, char** argv) {
 
     setup->GetRenderer().SetBackgroundColor(Vector<4, float>(0.12, 0.16, 0.35, 1.0));
 
-    OceanFloorNode* oceanFloor = SetupTerrain(setup);
+    SetupTerrain(setup);
     FishMaster *fm = new FishMaster(oceanFloor,50);
 
     SceneNode *root = new SceneNode();
@@ -76,6 +79,7 @@ int main(int argc, char** argv) {
     rsn->EnableOption(RenderStateNode::COLOR_MATERIAL);
 
     root->AddNode(rsn);
+    root->AddNode(sun);
     root->AddNode(oceanFloor);
     setup->SetScene(*root);
     
@@ -109,7 +113,7 @@ int main(int argc, char** argv) {
     return EXIT_SUCCESS;
 }
 
-OceanFloorNode* SetupTerrain(SimpleSetup* setup){
+void SetupTerrain(SimpleSetup* setup){
     // Create the map
     /*
     FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(1024, 1024, 1));
@@ -136,7 +140,7 @@ OceanFloorNode* SetupTerrain(SimpleSetup* setup){
     */
     Vector<3, float> origo = Vector<3, float>(map->GetHeight() * widthScale / 2, 0, map->GetWidth() * widthScale / 2);
     Vector<3, float> sunDir = Vector<3, float>(1448, 2048, 1448);
-    SunNode* sun = new SunNode(sunDir, origo);
+    sun = new SunNode(sunDir, origo);
     sun->SetAmbient(Vector<4, float>(0.06, 0.12, 0.17, 1.0));
     sun->SetDiffuse(Vector<4, float>(0.8, 1.0, 0.8, 1.0));
     setup->GetEngine().ProcessEvent().Attach(*sun);
@@ -150,6 +154,5 @@ OceanFloorNode* SetupTerrain(SimpleSetup* setup){
     node->SetSun(sun);
     setup->GetRenderer().InitializeEvent().Attach(*node);
     setup->GetEngine().ProcessEvent().Attach(*node);
-
-    return node;
+    oceanFloor = node;
 }
