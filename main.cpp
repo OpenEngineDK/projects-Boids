@@ -31,8 +31,8 @@
 #include <Display/GLUTEnvironment.h>
 #include <Core/GLUTEngine.h>
 
-
 #include "FishMaster.h"
+#include "WiiFishController.h"
 
 // name spaces that we will be using.
 // this combined with the above imports is almost the same as
@@ -90,9 +90,18 @@ int main(int argc, char** argv) {
     cam->SetPosition(Vector<3, float>(-256.0, 200.0, -256.0));
     cam->LookAt(0.0, 127.0, 0.0);
 
+
+    WiiFishController *ctrl = new WiiFishController(fm,cam);
+
+
     setup->GetEngine().InitializeEvent().Attach(*fm);
     setup->GetEngine().ProcessEvent().Attach(*fm);
     setup->GetEngine().DeinitializeEvent().Attach(*fm);
+
+    setup->GetEngine().InitializeEvent().Attach(*ctrl);
+    setup->GetEngine().ProcessEvent().Attach(*ctrl);
+    setup->GetEngine().DeinitializeEvent().Attach(*ctrl);
+
 
     setup->ShowFPS();
 

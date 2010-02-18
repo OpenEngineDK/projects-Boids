@@ -10,6 +10,8 @@ SET( PROJECT_SOURCES
   FishMaster.cpp
   Fish.h
   Fish.cpp
+  WiiFishController.h
+  WiiFishController.cpp
   Scene/OceanFloorNode.h
 )
 
@@ -36,4 +38,5 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
   Extensions_SetupHelpers  
   Extensions_FaceBuilder
   Extensions_HeightMap
+  Extensions_WiiMote
 )
