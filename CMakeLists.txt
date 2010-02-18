@@ -10,6 +10,8 @@ SET( PROJECT_SOURCES
   FishMaster.cpp
   Fish.h
   Fish.cpp
+  Shark.h
+  Shark.cpp
   WiiFishController.h
   WiiFishController.cpp
   Scene/OceanFloorNode.h

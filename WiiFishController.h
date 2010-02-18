@@ -33,15 +33,21 @@ using namespace OpenEngine::Display;
 class WiiFishController : public IModule
                         , public IListener<WiiButtonEventArg> 
                         , public IListener<WiiMoteFoundEventArg>
+                        , public IListener<WiiAccelerationEventArg>
 {
 private:
     FishMaster* fm;
     Camera* cam;
+    
+    Vector<3,float> camMove;
 public:    
     WiiFishController(FishMaster* fm, Camera* cam);    
     
     void Handle(WiiButtonEventArg arg);
     void Handle(WiiMoteFoundEventArg arg);
+    void Handle(WiiAccelerationEventArg arg);
+
+
     void Handle(InitializeEventArg arg);
     void Handle(DeinitializeEventArg arg);
     void Handle(ProcessEventArg arg);

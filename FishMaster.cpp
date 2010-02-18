@@ -12,6 +12,8 @@ using namespace OpenEngine::Math;
 
 FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n) : ocean(ocean) {
     root = new SceneNode();
+    
+
 
     FaceSet* fs = new FaceSet();
 
@@ -20,10 +22,14 @@ FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n) : ocean(ocean) {
     FaceBuilder::MakeABox(fs,state,Vector<3,float>(),Vector<3,float>(8) );
 
     VertexArray* arr = new VertexArray(*fs);
-    delete fs;
+    
 
 
     rg = new RandomGenerator();
+
+    
+
+    shark = new Shark(new GeometryNode(fs),rg);
 
     for (unsigned int i=0;i<n;i++) {
         VertexArrayNode* node = new VertexArrayNode();
@@ -33,6 +39,9 @@ FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n) : ocean(ocean) {
         fishes.push_back(f);
         root->AddNode(f->GetNode());
     }
+    root->AddNode(shark->GetNode());
+
+    //delete fs;
 }
 
 ISceneNode* FishMaster::GetFishNode() {
@@ -225,6 +234,10 @@ void FishMaster::Handle(ProcessEventArg arg) {
         f->Update(dt);
     }
 
-
+    shark->Update(dt);
 }
 void FishMaster::Handle(DeinitializeEventArg arg) {}
+
+Shark* FishMaster::GetShark() {
+    return shark;
+}

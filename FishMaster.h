@@ -5,6 +5,7 @@
 #include <Scene/SceneNode.h>
 
 #include "Fish.h"
+#include "Shark.h"
 #include "Scene/OceanFloorNode.h"
 
 #include <vector>
@@ -21,6 +22,7 @@ using namespace OpenEngine::Scene;
 class FishMaster : public IModule {
 private:
     SceneNode *root;
+    Shark* shark;
     std::vector<Fish*> fishes;
     RandomGenerator *rg;
     OceanFloorNode* ocean;
@@ -44,6 +46,7 @@ public:
     FishMaster(OceanFloorNode* ocean, unsigned int n=10);
 
     ISceneNode* GetFishNode();
+    Shark* GetShark();
 
     void Handle(InitializeEventArg arg);
     void Handle(ProcessEventArg arg);

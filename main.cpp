@@ -29,6 +29,7 @@
 #include <Renderers/OpenGL/TerrainRenderingView.h>
 
 #include <Display/GLUTEnvironment.h>
+#include <Display/SDLEnvironment.h>
 #include <Core/GLUTEngine.h>
 
 #include "FishMaster.h"
@@ -59,12 +60,14 @@ OceanFloorNode* oceanFloor;
 int main(int argc, char** argv) {
 
     // Create simple setup
+    //IEnvironment* env = new SDLEnvironment(800,600);
     IEnvironment* env = new GLUTEnvironment(800,600);
     Viewport* vp = new Viewport(env->GetFrame());
     IRenderingView* rv = new TerrainRenderingView(*vp);
-
+   
     SimpleSetup* setup = new SimpleSetup("Larry - The not so Friendly Shark",
-                                         vp, env, rv, new GLUTEngine());
+                                          vp, env, rv, new GLUTEngine());
+    //                                     vp, env, rv );
     DirectoryManager::AppendPath("projects/Boids/data/");
 
     setup->GetRenderer().SetBackgroundColor(Vector<4, float>(0.12, 0.16, 0.35, 1.0));
@@ -84,6 +87,7 @@ int main(int argc, char** argv) {
     rsn->AddNode(fm->GetFishNode());
     setup->SetScene(*root);
 
+    
 
     Camera* cam = setup->GetCamera();
 
