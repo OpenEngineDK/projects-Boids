@@ -32,7 +32,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
   OpenEngine_Devices
   OpenEngine_Scene
   # Extension dependencies
-  Extensions_SDL
+  Extensions_GLUT
   Extensions_SetupHelpers  
   Extensions_FaceBuilder
   Extensions_HeightMap
