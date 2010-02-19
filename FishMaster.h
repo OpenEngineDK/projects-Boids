@@ -42,6 +42,20 @@ private:
 
     void LimitSpeed(Fish* f);
     Vector<3,float> TendToPlace(Fish* f);
+
+    // Boid properties
+    float socialSphereRadius;
+    float maxSpeed;
+    float minSpeed;
+    float followScalar;
+    Vector<3, float> home;
+    float homeScalar;
+    float privacyRadius;
+    float boxSpeed;
+    float heightSpeed;
+
+    void InitProperties();
+
 public:
     FishMaster(OceanFloorNode* ocean, unsigned int n=10);
 

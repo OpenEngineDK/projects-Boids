@@ -91,6 +91,8 @@ int main(int argc, char** argv) {
 
     Camera* cam = setup->GetCamera();
 
+    //cam->SetPosition(Vector<3, float>(-256.0, 800.0, -256.0));
+    //cam->LookAt(1024.0, 127.0, 1024.0);
     cam->SetPosition(Vector<3, float>(-256.0, 200.0, -256.0));
     cam->LookAt(0.0, 127.0, 0.0);
 
@@ -118,20 +120,20 @@ int main(int argc, char** argv) {
 
 void SetupTerrain(SimpleSetup* setup){
     // Create the map
-    /*
     FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(1024, 1024, 1));
     Empty(map);
-    map = CreateSmoothTerrain(map, 500, 40, 20);
-    map = CreateSmoothTerrain(map, 1000, 20, -6);
-    map = CreateSmoothTerrain(map, 2000, 10, 3);
-    */
+    map = CreateSmoothTerrain(map, 400, 40, 60);
+    map = CreateSmoothTerrain(map, 2000, 10, 40);
+    map = CreateSmoothTerrain(map, 4000, 5, -6);
+    map = CreateSmoothTerrain(map, 10000, 3, 3);
+    /*
     FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(256, 256, 1));
     Empty(map);
     map = CreateSmoothTerrain(map, 40, 40, 40);
     map = CreateSmoothTerrain(map, 80, 20, -6);
     map = CreateSmoothTerrain(map, 160, 10, 3);
-    
-    float widthScale = 2.0;
+    */
+    float widthScale = 8.0;
     /*
     FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(64, 64, 1));
     Empty(map);

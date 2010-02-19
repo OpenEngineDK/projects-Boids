@@ -11,10 +11,10 @@ using namespace OpenEngine::Math;
 
 
 FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n) : ocean(ocean) {
+    InitProperties();
+
     root = new SceneNode();
     
-
-
     FaceSet* fs = new FaceSet();
 
     FaceBuilder::FaceState state;
@@ -23,11 +23,7 @@ FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n) : ocean(ocean) {
 
     VertexArray* arr = new VertexArray(*fs);
     
-
-
     rg = new RandomGenerator();
-
-    
 
     shark = new Shark(new GeometryNode(fs),rg);
 
@@ -44,6 +40,18 @@ FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n) : ocean(ocean) {
     //delete fs;
 }
 
+void FishMaster::InitProperties(){
+    socialSphereRadius = 20;
+    maxSpeed = 200.0f;
+    minSpeed = 30.0f;
+    followScalar = 8.0f;
+    home = Vector<3,float>(0,0,0);
+    homeScalar = 100.0f;
+    privacyRadius = 10.0f;
+    boxSpeed = 10.0f;
+    heightSpeed = 30.0f;
+}
+
 ISceneNode* FishMaster::GetFishNode() {
     return root;
 }
@@ -54,13 +62,11 @@ Vector<3,float> FishMaster::Rule1(Fish* f) {
     for (vector<Fish*>::iterator itr = fishes.begin();
          itr != fishes.end();
          itr++) {
+        
         Fish *n = *itr;
 
-        if (n == f) // Skip self
-            continue;
-
-        pc += n->position;
-
+        if (n != f) // Skip self
+            pc += n->position;
     }
 
     pc = pc / float(fishes.size() - 1);
@@ -75,13 +81,11 @@ Vector<3,float> FishMaster::Rule2(Fish* f) {
          itr != fishes.end();
          itr++) {
             Fish *n = *itr;
-            if (n == f) // Skip self
-                continue;
-            Vector<3,float> d = (n->position - f->position);
-
-            if (d.GetLength() < 10.0f)
-                c = c - d;
-
+            if (n != f){ // if not self
+                Vector<3,float> d = (n->position - f->position);
+                if (d.GetLength() < privacyRadius)
+                    c = c - d;
+            }
     }
 
     return c;
@@ -94,21 +98,17 @@ Vector<3,float> FishMaster::Rule3(Fish* f) {
          itr != fishes.end();
          itr++) {
             Fish *n = *itr;
-            if (n == f) // Skip self
-                continue;
-
-            pv = pv + n->velocity;
+            if (n != f) // If not self
+                pv = pv + n->velocity;
     }
 
     pv = pv / float(fishes.size() - 1);
 
-    return (pv - f->velocity)/8.0f;
+    return (pv - f->velocity) / followScalar;
 }
 
 Vector<3,float> FishMaster::TendToPlace(Fish* f) {
-    Vector<3,float> home(0,0,0);
-
-    return (home - f->position) / 100.0f;
+    return (home - f->position) / homeScalar;
 }
 
 Vector<3,float> FishMaster::BoxRule(Fish* f) {
@@ -140,7 +140,6 @@ Vector<3,float> FishMaster::BoxRule(Fish* f) {
         
     Vector<3,float> p = f->position;
     Vector<3,float> v;
-    const float boxSpeed = 10.0f;
 
     if (p[0] < startPoint[0]) {
         v[0] = boxSpeed;
@@ -165,10 +164,6 @@ Vector<3,float> FishMaster::HeightRule(Fish* f) {
 
     float dt = f->position[1] - h;
 
-    float heightSpeed = 30.0f;
-
-    //logger.info << "height: " << h << logger.end;
-
     Vector<3,float> v;
 
     if (dt < 10.0f) 
@@ -182,8 +177,6 @@ Vector<3,float> FishMaster::HeightRule(Fish* f) {
 
 void FishMaster::LimitSpeed(Fish* f) {
 
-    float maxSpeed = 200.0f;
-    float minSpeed = 30.0f;
     float len = (f->velocity).GetLength();
 
     if (len > maxSpeed) {
