@@ -16,7 +16,7 @@ Fish::Fish(ISceneNode* child, RandomGenerator* rg) {
 }
 
 
-ISceneNode* Fish::GetNode() {
+TransformationNode* Fish::GetNode() {
     return node;
 }
 

@@ -28,7 +28,7 @@ public:
 
     Fish(ISceneNode* child, RandomGenerator* rg);
 
-    ISceneNode* GetNode();
+    TransformationNode* GetNode();
 
     
 

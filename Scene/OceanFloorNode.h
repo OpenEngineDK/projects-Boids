@@ -11,29 +11,31 @@
 #define _OCEANFLOOR_NODE_H_
 
 #include <Scene/HeightMapNode.h>
+#include <Resources/IShaderResource.h>
+
 
 namespace OpenEngine {
-    namespace Scene {
+namespace Scene {
         
-        class OceanFloorNode : public HeightMapNode {
-        private:
-            unsigned int elapsedTime;
-        public:
-            OceanFloorNode() : HeightMapNode() {}
-            OceanFloorNode(FloatTexture2DPtr tex) : HeightMapNode(tex) {
-                elapsedTime = 0;
-            }
-            ~OceanFloorNode() {}
+    class OceanFloorNode : public HeightMapNode {
+    private:
+        unsigned int elapsedTime;
+    public:
+        OceanFloorNode() : HeightMapNode() {}
+        OceanFloorNode(FloatTexture2DPtr tex) : HeightMapNode(tex) {
+            elapsedTime = 0;
+        }
+        ~OceanFloorNode() {}
 
-            void Process(ProcessEventArg arg){
-                elapsedTime += arg.approx;
-            }
+        void Process(ProcessEventArg arg){
+            elapsedTime += arg.approx;
+        }
 
-            void PreRender(Display::Viewport view) {
-                this->landscapeShader->SetUniform("time", (float) elapsedTime / 12000000);
-            }
-        };
-    }
+        void PreRender(Display::Viewport view) {
+            this->landscapeShader->SetUniform("time", (float) elapsedTime / 12000000);
+        }
+    };
+}
 }
 
 #endif

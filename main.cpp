@@ -12,7 +12,8 @@
 #include <Logging/Logger.h>
 #include <Logging/StreamLogger.h>
 #include <Core/Engine.h>
-#include <Display/Camera.h>
+#include <Display/FollowCamera.h>
+#include <Display/PerspectiveViewingVolume.h>
 #include <Resources/ResourceManager.h>
 #include <Resources/ColladaResource.h>
 
@@ -21,6 +22,7 @@
 #include <Scene/RenderStateNode.h>
 #include <Scene/PointLightNode.h>
 #include <Scene/TransformationNode.h>
+#include <Scene/VertexArrayTransformer.h>
 
 // Terrain stuff
 #include "Scene/OceanFloorNode.h"
@@ -78,6 +80,22 @@ int main(int argc, char** argv) {
     SetupTerrain(setup);
     FishMaster *fm = new FishMaster(oceanFloor,50);
 
+    IModelResourcePtr sharkModel = ResourceManager<IModelResource>::Create("shark/models/shark.dae");
+
+    sharkModel->Load();
+    
+    TransformationNode* sharkGeom = new TransformationNode();
+    sharkGeom->AddNode(sharkModel->GetSceneNode());
+
+    sharkGeom->Move(0,0,-100);
+    sharkGeom->Scale(200,200,200);
+
+
+    VertexArrayTransformer transf;
+    transf.Transform(*sharkGeom);
+
+    fm->GetShark()->GetNode()->AddNode(sharkGeom);
+
     SceneNode *root = new SceneNode();
     RenderStateNode *rsn = new RenderStateNode();
 
@@ -91,13 +109,17 @@ int main(int argc, char** argv) {
     setup->SetScene(*root);
 
     
-
-    Camera* cam = setup->GetCamera();
+    
+    FollowCamera* cam = new FollowCamera(*(new PerspectiveViewingVolume()));
+    cam->Follow(fm->GetShark()->GetNode());
+    setup->SetCamera(*cam);
 
     //cam->SetPosition(Vector<3, float>(-256.0, 800.0, -256.0));
     //cam->LookAt(1024.0, 127.0, 1024.0);
-    cam->SetPosition(Vector<3, float>(-256.0, 200.0, -256.0));
-    cam->LookAt(0.0, 127.0, 0.0);
+
+    cam->SetDirection(Vector<3,float>(1,0,0),Vector<3,float>(0,1,0));
+    cam->Move(Vector<3, float>(200, 0, 600));
+    //cam->LookAt(0.0, 0.0, 0.0);
 
 
     WiiFishController *ctrl = new WiiFishController(fm,cam);
