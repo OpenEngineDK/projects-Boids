@@ -14,6 +14,7 @@
 #include <Core/Engine.h>
 #include <Display/Camera.h>
 #include <Resources/ResourceManager.h>
+#include <Resources/ColladaResource.h>
 
 // SimpleSetup
 #include <Utils/SimpleSetup.h>
@@ -58,6 +59,8 @@ OceanFloorNode* oceanFloor;
  * method in Java.
  */
 int main(int argc, char** argv) {
+
+    ResourceManager<IModelResource>::AddPlugin(new ColladaPlugin());
 
     // Create simple setup
     //IEnvironment* env = new SDLEnvironment(800,600);

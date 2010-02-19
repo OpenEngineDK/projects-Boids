@@ -1,6 +1,9 @@
 # Distribution file for the Example project.
 # http://www.openengine.dk/wiki/Projects/Boids
 
+dist /extensions/OpenColladaResource/OpenColladaResource.dist    http://openengine.dk/code/extensions/OpenColladaResource/OpenColladaResource.dist
+
+
 # main repository
 darcs / http://openengine.dk/code/openengine
 darcs-dev / fh.daimi.au.dk:/users/cgd/code/openengine
