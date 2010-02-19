@@ -56,6 +56,9 @@ private:
 
     void InitProperties();
 
+    float GetHeight(Vector<3,float>);
+    Vector<3,float> GetNormal(Vector<3,float>);
+
 public:
     FishMaster(OceanFloorNode* ocean, unsigned int n=10);
 

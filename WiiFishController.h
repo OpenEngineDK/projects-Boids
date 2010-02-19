@@ -17,6 +17,7 @@
 
 #include <Devices/WiiMote.h>
 #include <Devices/WiiMoteManager.h>
+#include <Devices/IKeyboard.h>
 
 #include "FishMaster.h"
 #include <Display/Camera.h>
@@ -34,6 +35,7 @@ class WiiFishController : public IModule
                         , public IListener<WiiButtonEventArg> 
                         , public IListener<WiiMoteFoundEventArg>
                         , public IListener<WiiAccelerationEventArg>
+                        , public IListener<KeyboardEventArg>
 {
 private:
     FishMaster* fm;
@@ -49,6 +51,7 @@ public:
     void Handle(WiiMoteFoundEventArg arg);
     void Handle(WiiAccelerationEventArg arg);
 
+    void Handle(KeyboardEventArg arg);
 
     void Handle(InitializeEventArg arg);
     void Handle(DeinitializeEventArg arg);

@@ -159,17 +159,32 @@ Vector<3,float> FishMaster::BoxRule(Fish* f) {
     return v;
 }
 
+float FishMaster::GetHeight(Vector<3,float> p) {
+    if (p[0] >= startPoint[0] && p[2] >= 0 &&
+        p[0] < endPoint[0] && p[2] < endPoint[2])
+        return ocean->GetHeight(p);
+    return 0;
+        
+}
+Vector<3,float> FishMaster::GetNormal(Vector<3,float> p) {
+    if (p[0] >= startPoint[0] && p[2] >= 0 &&
+        p[0] < endPoint[0] && p[2] < endPoint[2])
+        return ocean->GetNormal(p);
+    return Vector<3,float>(0,1,0);    
+}
+
+
 Vector<3,float> FishMaster::HeightRule(Fish* f) {
-    float h = ocean->GetHeight(f->position);
+    float h = GetHeight(f->position);
 
     float dt = f->position[1] - h;
 
     Vector<3,float> v;
 
     if (dt < 10.0f) 
-        v = ocean->GetNormal(f->position)*heightSpeed;
+        v = GetNormal(f->position)*heightSpeed;
     else if (dt > 70.0f) 
-        v = -ocean->GetNormal(f->position)*heightSpeed;
+        v = -GetNormal(f->position)*heightSpeed;
 
     return v;
 }

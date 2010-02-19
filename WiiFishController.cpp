@@ -36,8 +36,33 @@ void WiiFishController::Handle(WiiButtonEventArg arg) {
         break;
     }
     
-    camMove += (arg.type == EVENT_PRESS)?relVec*10:-relVec*10;
-    
+    camMove += (arg.type == EVENT_PRESS)?relVec*10:-relVec*10;    
+}
+
+void WiiFishController::Handle(KeyboardEventArg arg) {
+    if (arg.type == EVENT_RELEASE)
+        return;
+
+    switch(arg.sym) {
+    case KEY_UP:
+        jaw -= 0.1;
+        break;
+    case KEY_DOWN:
+        jaw += 0.1;
+        break;
+    case KEY_RIGHT:
+        direction -= 0.1;
+        break;
+    case KEY_LEFT:
+        direction += 0.1;
+        break;        
+    case KEY_a:
+        speed += 10.0;
+        break;
+    default:
+        logger.info << arg.sym << logger.end;
+        break;
+    }
 }
 
 void WiiFishController::Handle(WiiAccelerationEventArg arg) {

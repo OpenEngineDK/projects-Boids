@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
     TransformationNode* sharkGeom = new TransformationNode();
     sharkGeom->AddNode(sharkModel->GetSceneNode());
 
-    sharkGeom->Move(0,0,-100);
+    sharkGeom->Move(0,0,-150);
     sharkGeom->Scale(200,200,200);
 
 
@@ -118,11 +118,13 @@ int main(int argc, char** argv) {
     //cam->LookAt(1024.0, 127.0, 1024.0);
 
     cam->SetDirection(Vector<3,float>(1,0,0),Vector<3,float>(0,1,0));
-    cam->Move(Vector<3, float>(200, 0, 600));
+    cam->Move(Vector<3, float>(0, 0, 600));
     //cam->LookAt(0.0, 0.0, 0.0);
 
 
     WiiFishController *ctrl = new WiiFishController(fm,cam);
+
+    setup->GetKeyboard().KeyEvent().Attach(*ctrl);
 
 
     setup->GetEngine().InitializeEvent().Attach(*fm);
