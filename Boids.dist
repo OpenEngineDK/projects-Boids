@@ -53,3 +53,4 @@ darwin /libraries http://openengine.dk/data/libraries/wii_mac64.tgz
 # project data
 
 any /projects/Boids/data	http://www.openengine.dk/data/projects/ThirdPersonEater/textures.zip
+any /projects/Boids/data	http://www.openengine.dk/data/projects/ThirdPersonEater/fish.tar.gz
