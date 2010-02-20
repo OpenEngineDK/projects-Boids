@@ -5,7 +5,6 @@ uniform float invIncDistance;
 uniform vec3 lightDir;
 
 varying vec3 eyeDirection;
-varying vec2 causticRipple; //moving texcoords
 varying vec3 point;
 
 void main()
@@ -23,10 +22,10 @@ void main()
     float morphScale = clamp(dist * invIncDistance - lod, 0.0, 1.0);
     vertex.y += morphScale * morphValue;
 
-    // Calculate the eyeDir relative to the vertex.
-    eyeDirection = viewPos - vertex.xyz;
-
     point = vertex.xyz;
+
+    // Calculate the eyeDir relative to the vertex.
+    eyeDirection = viewPos - point;
 
     // Doing the stuff
     gl_ClipVertex = gl_ModelViewMatrix * vertex;

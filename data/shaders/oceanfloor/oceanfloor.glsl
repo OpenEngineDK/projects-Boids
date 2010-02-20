@@ -1,4 +1,4 @@
-# Terrain shader resource.
+# ocean floor shader resource.
 
 # Vertext shader program.
 vert: shaders/oceanfloor/oceanfloor.glsl.vert

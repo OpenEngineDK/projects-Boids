@@ -1,6 +1,5 @@
 const vec4 BACKGROUND = vec4(0.12, 0.16, 0.35, 1.0);
 const float sca2 = 0.2;
-const float tscale = 0.15;
 
 uniform float time;
 
@@ -12,7 +11,6 @@ uniform sampler2D normalMap;
 uniform vec3 lightDir; // Should be pre-normalized. Or else the world will BURN IN RIGHTEOUS FIRE!!
 
 varying vec3 eyeDirection;
-varying vec2 causticRipple; //moving texcoords
 varying vec3 point;
 
 void main()
@@ -38,9 +36,9 @@ void main()
     vec4 color = sand * (gl_LightSource[0].ambient + diffuse);
     color += caustic * diffuse;
 
-    //float fade = 0.2;//1.0 - (gl_FragCoord.z - 0.2) * 1.25;
-    //float fade = gl_FragCoord.z;
+    // TODO far clipping plane should be a uniform
+    float farClip = 4000.0;
+    float fade = clamp(gl_FragCoord.z / gl_FragCoord.w / farClip, 0.0, 1.0);
 
-    gl_FragColor = color;
-    //gl_FragColor = mix(color, BACKGROUND, fade);
+    gl_FragColor = mix(color, BACKGROUND, fade);
 }
