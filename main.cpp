@@ -177,11 +177,7 @@ void SetupTerrain(SimpleSetup* setup){
     sun->SetDiffuse(Vector<4, float>(0.8, 1.0, 0.8, 1.0));
     setup->GetEngine().ProcessEvent().Attach(*sun);
 
-    IShaderResourcePtr floorShader = ResourceManager<IShaderResource>::Create("projects/Boids/data/shaders/oceanfloor/oceanfloor.glsl");
-
     OceanFloorNode* node = new OceanFloorNode(map);
-    node->SetLandscapeShader(floorShader);
-    node->SetTextureDetail(1.0f / 16.0f);
     node->SetWidthScale(widthScale);
     node->SetSun(sun);
     setup->GetRenderer().InitializeEvent().Attach(*node);

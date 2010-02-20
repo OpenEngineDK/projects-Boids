@@ -12,7 +12,7 @@
 
 #include <Scene/HeightMapNode.h>
 #include <Resources/IShaderResource.h>
-
+#include <Resources/ResourceManager.h>
 
 namespace OpenEngine {
 namespace Scene {
@@ -26,6 +26,11 @@ namespace Scene {
             elapsedTime = 0;
         }
         ~OceanFloorNode() {}
+
+        void Initialize(RenderingEventArg arg) {
+            landscapeShader = ResourceManager<IShaderResource>::Create("projects/Boids/data/shaders/oceanfloor/oceanfloor.glsl");
+            SetTextureDetail(1.0f / 16.0f);
+        }
 
         void Process(ProcessEventArg arg){
             elapsedTime += arg.approx;
