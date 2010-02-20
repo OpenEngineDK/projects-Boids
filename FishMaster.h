@@ -53,6 +53,7 @@ private:
     float privacyRadius;
     float boxSpeed;
     float heightSpeed;
+    float heightMin, heightMax;
 
     void InitProperties();
 

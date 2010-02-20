@@ -41,7 +41,7 @@ FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n) : ocean(ocean) {
 }
 
 void FishMaster::InitProperties(){
-    socialSphereRadius = 20;
+    socialSphereRadius = 10;
     maxSpeed = 200.0f;
     minSpeed = 30.0f;
     followScalar = 8.0f;
@@ -50,6 +50,8 @@ void FishMaster::InitProperties(){
     privacyRadius = 10.0f;
     boxSpeed = 10.0f;
     heightSpeed = 30.0f;
+    heightMin = 10.0f;
+    heightMax = 70.0f;
 }
 
 ISceneNode* FishMaster::GetFishNode() {
@@ -59,17 +61,20 @@ ISceneNode* FishMaster::GetFishNode() {
 // Follow center of mass
 Vector<3,float> FishMaster::Rule1(Fish* f) {
     Vector<3,float> pc;
+    int c = 1;
     for (vector<Fish*>::iterator itr = fishes.begin();
          itr != fishes.end();
          itr++) {
         
         Fish *n = *itr;
 
-        if (n != f) // Skip self
+        if (n != f){ // Skip self
             pc += n->position;
+            c++;
+        }
     }
 
-    pc = pc / float(fishes.size() - 1);
+    pc = pc / c;
 
     return (pc - f->position) / 100.0f;
 }
@@ -94,15 +99,18 @@ Vector<3,float> FishMaster::Rule2(Fish* f) {
 // Match velocity
 Vector<3,float> FishMaster::Rule3(Fish* f) {
     Vector<3,float> pv;
+    int c = 1;
     for (vector<Fish*>::iterator itr = fishes.begin();
          itr != fishes.end();
          itr++) {
             Fish *n = *itr;
-            if (n != f) // If not self
+            if (n != f){ // If not self
                 pv = pv + n->velocity;
+                c++;
+    }
     }
 
-    pv = pv / float(fishes.size() - 1);
+    pv = pv / c;
 
     return (pv - f->velocity) / followScalar;
 }
@@ -180,10 +188,11 @@ Vector<3,float> FishMaster::HeightRule(Fish* f) {
     float dt = f->position[1] - h;
 
     Vector<3,float> v;
-
-    if (dt < 10.0f) 
+    if (dt < heightMin){
+        if (dt < 0)
+            f->position[1] = h;
         v = GetNormal(f->position)*heightSpeed;
-    else if (dt > 70.0f) 
+    }else if (dt > heightMax) 
         v = -GetNormal(f->position)*heightSpeed;
 
     return v;
@@ -236,6 +245,7 @@ void FishMaster::Handle(ProcessEventArg arg) {
         //f->velocity += TendToPlace(f);
         f->velocity += BoxRule(f);
         f->velocity += HeightRule(f);
+        
 
         LimitSpeed(f);
 
