@@ -4,6 +4,7 @@ const float sca2 = 0.2;
 uniform float time;
 
 uniform sampler2D sandTex;
+uniform sampler2D sandBump;
 uniform sampler2D causticMap;
 uniform sampler2D dudvMap;
 uniform sampler2D normalMap;
@@ -17,8 +18,18 @@ void main()
 {
     vec3 eyeDir = normalize(eyeDirection);
     
-    // Extract normal
+    // Extract normal and calculate tangent and binormal
     vec3 normal = normalize(texture2D(normalMap, gl_TexCoord[1].xy).xyz);
+    vec3 tangent = normalize(vec3(normal.y * 0.5, -normal.x, 0.0));
+    vec3 binormal = normalize(vec3(0.0, -normal.z, normal.y * 0.5));
+
+    // Extract the bump and rotate the bump into normalspace
+    vec3 bump = normalize(texture2D(sandBump, gl_TexCoord[0].xy).xzy) * 2.0 - 1.0;
+    vec3 tBump;
+    tBump.x = dot(bump, tangent);
+    tBump.y = dot(bump, normal);
+    tBump.z = dot(bump, binormal);
+    bump = normalize(tBump);
 
     // Extract ocean normal
     vec2 causticRipple = point.xz * 0.0025 + vec2(0.0, time);
@@ -26,7 +37,11 @@ void main()
     vec4 caustic = texture2D(causticMap, point.xz * 0.0025 + rippleEffect);
 
     // Calculate diffuse
-    float ndotl = dot(normal, lightDir);
+    float ndotl;
+    if (gl_FragCoord.x < 400.0)
+        ndotl = dot(normal, lightDir);
+    else
+        ndotl = dot(bump, lightDir);
     float diffuseScalar = clamp(ndotl, 0.0, 1.0);
     
     // Looking up the texture values
@@ -41,4 +56,10 @@ void main()
     float fade = clamp(gl_FragCoord.z / gl_FragCoord.w / farClip, 0.0, 1.0);
 
     gl_FragColor = mix(color, BACKGROUND, fade);
+    /*
+    if (gl_FragCoord.x < 400.0)
+        gl_FragColor.xyz = normal * 0.5 + 0.5;
+    else
+        gl_FragColor.xyz = bump * 0.5 + 0.5;
+    */
 }
