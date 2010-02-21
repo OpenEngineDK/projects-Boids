@@ -113,7 +113,7 @@ int main(int argc, char** argv) {
     //setup->GetCamera()->SetPosition(Vector<3, float>(-256.0, 800.0, -256.0));
     //setup->GetCamera()->LookAt(1024.0, 127.0, 1024.0);
 
-    FollowCamera* cam = new FollowCamera(*(new InterpolatedViewingVolume(*(new PerspectiveViewingVolume()))));
+    FollowCamera* cam = new FollowCamera(*(new InterpolatedViewingVolume(*(new PerspectiveViewingVolume(10)))));
     cam->Follow(fm->GetShark()->GetNode());
     setup->SetCamera(*cam);
     cam->SetDirection(Vector<3,float>(1,0,0),Vector<3,float>(0,1,0));

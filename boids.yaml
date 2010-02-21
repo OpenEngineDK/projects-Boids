@@ -1,0 +1,41 @@
+# Yaml configuration of boids
+
+speed:
+        enabled: true
+        max: 200
+        min: 30
+
+rule1: # Match the velocities
+        enabled: true
+        massFactor: 100
+
+rule2:
+        enabled: true
+        privacyRadius: 10
+
+rule3:
+        enabled: true
+        followScalar: 16
+
+home:
+        factor: 100
+
+boxrule:
+        enabled: true
+        speed: 10
+
+height:
+        enabled: true
+        top:
+                enabled: true
+        speed: 30
+        min: 10
+        max: 70
+
+flee:
+        enabled: true
+        sharkDistance: 100
+
+randomize:
+        enabled: true
+        factor: 10

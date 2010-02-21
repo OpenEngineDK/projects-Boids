@@ -6,7 +6,7 @@
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/info_parser.hpp>
-#include <boost/filesystem/operations.hpp>
+
 //#include "boost/timer.hpp"
 
 
@@ -15,8 +15,12 @@ using namespace OpenEngine::Math;
 
 
 
-FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n) : ocean(ocean) {
-    Reload();
+FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n) 
+    : ptree(*(new PropertyTree(DirectoryManager::FindFileInPath("boids.yaml"))))
+    , ocean(ocean) {
+    ptree.PropertiesChangedEvent().Attach(*this);
+    ptree.Reload();
+    //ReloadProperties();
 
     root = new SceneNode();
     
@@ -45,60 +49,46 @@ FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n) : ocean(ocean) {
     //delete fs;
 }
 
-void FishMaster::Reload() {
-    using namespace boost::filesystem;
-
-
-    string fname = DirectoryManager::FindFileInPath("boids.conf");
-
-    time_t new_ts = last_write_time(fname);
-    if (new_ts != last_ts) {
-        logger.info << "Reloading properties" << logger.end;
-        ReloadProperties();
-        last_ts = new_ts;
-    }
+void FishMaster::Handle(PropertiesChangedEventArg arg) {
+    ReloadProperties();
 }
 
 void FishMaster::ReloadProperties() {
-    string fname = DirectoryManager::FindFileInPath("boids.conf");
 
-    using boost::property_tree::ptree;
-
-    ptree pt;
-    read_info(fname,pt);
-
-    speedEnabled = pt.get("speed.enabled",true);
-    maxSpeed = pt.get("speed.max",200.0f);
-    minSpeed = pt.get("speed.min",30.0f);
-
-    rule1Enabled = pt.get("rule1.enabled",true);
-    massFactor = pt.get("rule1.massFactor",100);
-
-    rule2Enabled = pt.get("rule2.enabled",true);
-    privacyRadius = pt.get("rule2.privacyRadius",10.0f);
+    logger.info << "Reloading" << logger.end;
     
-    rule3Enabled = pt.get("rule3.enabled",true);
-    followScalar = pt.get("rule3.followScalar",16.0f);
+    speedEnabled = ptree.Get("speed.enabled",true);
+    maxSpeed = ptree.Get("speed.max",200.0f);
+    minSpeed = ptree.Get("speed.min",30.0f);
+
+    rule1Enabled = ptree.Get("rule1.enabled",true);
+    massFactor = ptree.Get("rule1.massFactor",100);
+
+    rule2Enabled = ptree.Get("rule2.enabled",true);
+    privacyRadius = ptree.Get("rule2.privacyRadius",10.0f);
+    
+    rule3Enabled = ptree.Get("rule3.enabled",true);
+    followScalar = ptree.Get("rule3.followScalar",16.0f);
     home = Vector<3,float>(0,0,0);
-    homeScalar = pt.get("home.factor",100.0f);
+    homeScalar = ptree.Get("home.factor",100.0f);
 
 
-    boxSpeed = pt.get("boxrule.speed",10.0f);
-    boxRuleEnabled = pt.get("boxrule.enabled",true);
+    boxSpeed = ptree.Get("boxrule.speed",10.0f);
+    boxRuleEnabled = ptree.Get("boxrule.enabled",true);
 
-    randomEnabled = pt.get("randomize.enabled",true);
-    randomFactor = pt.get("randomize.factor",10.0);
+    randomEnabled = ptree.Get("randomize.enabled",true);
+    randomFactor = ptree.Get("randomize.factor",10.0);
     
-    heightEnabled = pt.get("height.enabled",true);
-    topEnabled = pt.get("height.top.enabled",true);    
-    heightSpeed = pt.get("height.speed",30.0f);
-    heightMin = pt.get("height.min",10.0f);
-    heightMax = pt.get("height.max",70.0f);
+    heightEnabled = ptree.Get("height.enabled",true);
+    topEnabled = ptree.Get("height.top.enabled",true);    
+    heightSpeed = ptree.Get("height.speed",30.0f);
+    heightMin = ptree.Get("height.min",10.0f);
+    heightMax = ptree.Get("height.max",70.0f);
 
     //    pt.put("socialSphereRadius",10);
     //write_info(fname,pt);
-    fleeEnabled = pt.get("flee.enabled",true);
-    sharkDistance = pt.get("flee.sharkDistance",100);
+    fleeEnabled = ptree.Get("flee.enabled",true);
+    sharkDistance = ptree.Get("flee.sharkDistance",100);
 
 }
 
@@ -306,7 +296,7 @@ void FishMaster::Handle(ProcessEventArg arg) {
 
     if (reloadTimer.GetElapsedIntervals(1000000)) {
         reloadTimer.Reset();
-        Reload();
+        ptree.ReloadIfNeeded();
     }
 
     for (vector<Fish*>::iterator itr = fishes.begin();

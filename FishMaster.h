@@ -7,6 +7,7 @@
 #include "Fish.h"
 #include "Shark.h"
 #include "Scene/OceanFloorNode.h"
+#include <Utils/PropertyTree.h>
 
 #include <vector>
 
@@ -19,8 +20,12 @@
 using namespace OpenEngine::Core;
 using namespace OpenEngine::Scene;
 
-class FishMaster : public IModule {
+class FishMaster
+    : public IModule
+    , public IListener<PropertiesChangedEventArg> {
 private:
+    PropertyTree& ptree;
+    
     time_t last_ts;
 
     SceneNode *root;
@@ -87,7 +92,6 @@ private:
 
 
     void ReloadProperties();
-    void Reload();
 
     float GetHeight(Vector<3,float>);
     Vector<3,float> GetNormal(Vector<3,float>);
@@ -101,6 +105,8 @@ public:
     void Handle(InitializeEventArg arg);
     void Handle(ProcessEventArg arg);
     void Handle(DeinitializeEventArg arg);
+
+    void Handle(PropertiesChangedEventArg arg);
 };
 
 #endif

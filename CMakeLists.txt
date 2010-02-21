@@ -42,4 +42,5 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
   Extensions_HeightMap
   Extensions_WiiMote
   Extensions_OpenColladaResource
+  Extensions_PropertyTree
 )

@@ -113,14 +113,15 @@ void WiiFishController::Handle(InitializeEventArg arg) {
 void WiiFishController::Handle(DeinitializeEventArg arg) {} 
 void WiiFishController::Handle(ProcessEventArg arg) {
 
-    // times approx?
+    float dt = arg.approx / 10000.0;
 
-    if (forward) speed += 10.0;
-    if (back) speed -= 10.0;
-    if (up) jaw += 0.01;
-    if (down) jaw -= 0.01;
-    if (left) direction -= 0.01;
-    if (right) direction += 0.01;
+
+    if (forward) speed += 10.0*dt;
+    if (back) speed -= 10.0*dt;
+    if (up) jaw += 0.01*dt;
+    if (down) jaw -= 0.01*dt;
+    if (left) direction -= 0.01*dt;
+    if (right) direction += 0.01*dt;
 
         
 
