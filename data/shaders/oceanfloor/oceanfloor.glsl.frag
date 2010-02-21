@@ -1,6 +1,6 @@
 const vec4 BACKGROUND = vec4(0.12, 0.16, 0.35, 1.0);
 const float sca2 = 0.2;
-const float BUMP_FACTOR = 2.0;
+const float BUMP_FACTOR = 4.0;
 
 uniform float time;
 
@@ -31,7 +31,10 @@ void main()
     vec3 bump = texture2D(sandBump, gl_TexCoord[0].xy).xzy * 2.0 - 1.0;
     bump.y *= BUMP_FACTOR;
     bump = vec3(dot(bump, tangent), dot(bump, normal), dot(bump, binormal));
-    bump = normalize(bump);
+    if (gl_FragCoord.x < 400.0)
+        bump = normalize(bump);
+    else
+        bump = normal;
 
     // Extract ocean normal
     vec2 causticRipple = point.xz * 0.0025 + vec2(0.0, time);
