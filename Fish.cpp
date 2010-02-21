@@ -26,7 +26,7 @@ void Fish::Update(Time dt) {
     position += velocity*delta;
     node->SetPosition(position);
 
-    if (velocity.IsZero())
+    if (velocity.GetLength() < 0.0001)
         return;
 
     Vector<3,float> x = velocity.GetNormalize(); // x vector

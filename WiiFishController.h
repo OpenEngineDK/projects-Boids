@@ -44,6 +44,9 @@ private:
     Vector<3,float> camMove;
     float speed;
     float direction,jaw;
+    
+    bool up,down,left,right,forward,back;
+
 public:    
     WiiFishController(FishMaster* fm, Camera* cam);    
     

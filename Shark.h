@@ -27,9 +27,11 @@ using namespace OpenEngine::Utils;
  */
 class Shark : public Fish{
 private:
-    Vector<3,float> direction;
+
     float speed;
 public:
+    Vector<3,float> direction;
+
     Shark(ISceneNode* child, RandomGenerator* rg);
 
     void SetSpeed(float s);

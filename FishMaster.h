@@ -38,10 +38,15 @@ private:
 
     Vector<3,float> BoxRule(Fish* f);
     Vector<3,float> HeightRule(Fish* f);
+    Vector<3,float> TopRule(Fish* f);
+    
         
 
     void LimitSpeed(Fish* f);
     Vector<3,float> TendToPlace(Fish* f);
+
+    Vector<3,float> HeadForDirection(Fish* f, Vector<3,float> d);
+    Vector<3,float> Flee(Fish* f, Vector<3,float> p);
 
     // Boid properties
     float socialSphereRadius;

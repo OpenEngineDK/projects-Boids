@@ -119,6 +119,15 @@ Vector<3,float> FishMaster::TendToPlace(Fish* f) {
     return (home - f->position) / homeScalar;
 }
 
+
+Vector<3,float> FishMaster::Flee(Fish* f, Vector<3,float> p) {
+    Vector<3,float> v;
+    if ((p - f->position).GetLength() < 100.0) {
+        v = (f->position - p);
+    }
+    return v;
+}
+
 Vector<3,float> FishMaster::BoxRule(Fish* f) {
         
     /*
@@ -192,12 +201,26 @@ Vector<3,float> FishMaster::HeightRule(Fish* f) {
         if (dt < 0)
             f->position[1] = h;
         v = GetNormal(f->position)*heightSpeed;
-    }else if (dt > heightMax) 
+    } 
+    return v;
+}
+
+Vector<3,float> FishMaster::TopRule(Fish* f) {
+    float h = GetHeight(f->position);
+
+    float dt = f->position[1] - h;
+    
+    Vector<3,float> v;
+    if (dt > heightMax) 
         v = -GetNormal(f->position)*heightSpeed;
 
     return v;
 }
 
+
+Vector<3,float> FishMaster::HeadForDirection(Fish* f, Vector<3,float> d) {
+    return d*0.1;
+}
 
 void FishMaster::LimitSpeed(Fish* f) {
 
@@ -245,13 +268,20 @@ void FishMaster::Handle(ProcessEventArg arg) {
         //f->velocity += TendToPlace(f);
         f->velocity += BoxRule(f);
         f->velocity += HeightRule(f);
+        f->velocity += TopRule(f);
+        f->velocity += Flee(f, shark->position);
         
-
         LimitSpeed(f);
 
         f->Update(dt);
     }
 
+    shark->velocity += HeightRule(shark);
+    shark->velocity += HeadForDirection(shark, shark->direction);
+    
+    // Daming
+    shark->velocity = shark->velocity*0.5;
+    
     shark->Update(dt);
 }
 void FishMaster::Handle(DeinitializeEventArg arg) {}

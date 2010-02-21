@@ -4,7 +4,17 @@
 #include <Devices/WiiMote.h>
 
 WiiFishController::WiiFishController(FishMaster* fm, Camera* cam) 
-  : fm(fm), cam(cam),speed(0),jaw(0) {
+    : fm(fm)
+    , cam(cam)
+    , speed(0)
+    , jaw(0)
+    , up(false) 
+    , down(false) 
+    , left(false) 
+    , right(false) 
+    , forward(false) 
+    , back(false) 
+{
     
 }
 
@@ -40,24 +50,31 @@ void WiiFishController::Handle(WiiButtonEventArg arg) {
 }
 
 void WiiFishController::Handle(KeyboardEventArg arg) {
-    if (arg.type == EVENT_RELEASE)
-        return;
 
     switch(arg.sym) {
     case KEY_UP:
-        jaw -= 0.1;
+        up = arg.type == EVENT_PRESS;
+
         break;
     case KEY_DOWN:
-        jaw += 0.1;
+        down = arg.type == EVENT_PRESS;                
+
         break;
     case KEY_RIGHT:
-        direction += 0.1;
+        right = arg.type == EVENT_PRESS;                
+
         break;
     case KEY_LEFT:
-        direction -= 0.1;
+        left = arg.type == EVENT_PRESS;                
+
         break;        
     case KEY_a:
-        speed += 10.0;
+        forward = arg.type == EVENT_PRESS;                
+
+        break;
+    case KEY_z:
+        back = arg.type == EVENT_PRESS;                
+
         break;
     default:
         logger.info << arg.sym << logger.end;
@@ -95,6 +112,18 @@ void WiiFishController::Handle(InitializeEventArg arg) {
 }
 void WiiFishController::Handle(DeinitializeEventArg arg) {} 
 void WiiFishController::Handle(ProcessEventArg arg) {
+
+    // times approx?
+
+    if (forward) speed += 10.0;
+    if (back) speed -= 10.0;
+    if (up) jaw += 0.01;
+    if (down) jaw -= 0.01;
+    if (left) direction -= 0.01;
+    if (right) direction += 0.01;
+
+        
+
     cam->Move(camMove);
     fm->GetShark()->SetSpeed(speed);
     fm->GetShark()->SetDirection(jaw,direction);
