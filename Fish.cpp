@@ -12,6 +12,7 @@ Fish::Fish(ISceneNode* child, RandomGenerator* rg) {
     // position = Vector<3,float>(rg->UniformFloat(100,300),
     //                            rg->UniformFloat(100,300),
     //                            rg->UniformFloat(100,300));
+    velocity = Vector<3,float>(0,0,0);
     position = Vector<3,float>(100,100,100);
 }
 
@@ -26,12 +27,14 @@ void Fish::Update(Time dt) {
     position += velocity*delta;
     node->SetPosition(position);
 
-    if (velocity.GetLength() < 0.0001)
+    if (velocity.GetLength() < 0.01)
         return;
 
     Vector<3,float> x = velocity.GetNormalize(); // x vector
     Vector<3,float> y(0,1,0); // up vector
     Vector<3,float> z = x % y;
+    if (z.GetLength() < 0.01)
+        return;
     z.Normalize();
 
     Matrix<3,3,float> rotMat(x,y,z);

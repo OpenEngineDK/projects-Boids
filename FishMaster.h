@@ -52,16 +52,39 @@ private:
     Vector<3,float> Randomize(Fish *f);
 
     // Boid properties
-    float socialSphereRadius;
-    float maxSpeed;
-    float minSpeed;
+
+    bool rule1Enabled,rule2Enabled,rule3Enabled;
+    float massFactor;
+    float privacyRadius;
     float followScalar;
+
+
     Vector<3, float> home;
     float homeScalar;
-    float privacyRadius;
-    float boxSpeed;
-    float heightSpeed;
+
+    
+
+    bool speedEnabled;
+    float maxSpeed;
+    float minSpeed;
+
+
+
+    bool heightEnabled,topEnabled;
     float heightMin, heightMax;
+    float heightSpeed;
+
+
+    bool fleeEnabled;
+    float sharkDistance;
+
+
+    bool boxRuleEnabled;
+    float boxSpeed;
+
+    bool randomEnabled;
+    float randomFactor;
+
 
     void ReloadProperties();
     void Reload();

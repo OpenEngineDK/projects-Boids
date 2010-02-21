@@ -5,7 +5,7 @@
 #include <Scene/VertexArrayNode.h>
 
 #include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/ini_parser.hpp>
+#include <boost/property_tree/info_parser.hpp>
 #include <boost/filesystem/operations.hpp>
 //#include "boost/timer.hpp"
 
@@ -65,19 +65,41 @@ void FishMaster::ReloadProperties() {
     using boost::property_tree::ptree;
 
     ptree pt;
-    read_ini(fname,pt);
+    read_info(fname,pt);
 
-    socialSphereRadius = pt.get("socialSphereRadius",10.0);
-    maxSpeed = pt.get("maxSpeed",200.0f);
-    minSpeed = pt.get("minSpeed",30.0f);
-    followScalar = pt.get("followScalar",16.0f);
+    speedEnabled = pt.get("speed.enabled",true);
+    maxSpeed = pt.get("speed.max",200.0f);
+    minSpeed = pt.get("speed.min",30.0f);
+
+    rule1Enabled = pt.get("rule1.enabled",true);
+    massFactor = pt.get("rule1.massFactor",100);
+
+    rule2Enabled = pt.get("rule2.enabled",true);
+    privacyRadius = pt.get("rule2.privacyRadius",10.0f);
+    
+    rule3Enabled = pt.get("rule3.enabled",true);
+    followScalar = pt.get("rule3.followScalar",16.0f);
     home = Vector<3,float>(0,0,0);
-    homeScalar = pt.get("homeScalar",100.0f);
-    privacyRadius = pt.get("privacyRadius",10.0f);
-    boxSpeed = pt.get("boxSpeed",10.0f);
-    heightSpeed = pt.get("heightSpeed",30.0f);
-    heightMin = pt.get("heightMin",10.0f);
-    heightMax = pt.get("heightMax",70.0f);
+    homeScalar = pt.get("home.factor",100.0f);
+
+
+    boxSpeed = pt.get("boxrule.speed",10.0f);
+    boxRuleEnabled = pt.get("boxrule.enabled",true);
+
+    randomEnabled = pt.get("randomize.enabled",true);
+    randomFactor = pt.get("randomize.factor",10.0);
+    
+    heightEnabled = pt.get("height.enabled",true);
+    topEnabled = pt.get("height.top.enabled",true);    
+    heightSpeed = pt.get("height.speed",30.0f);
+    heightMin = pt.get("height.min",10.0f);
+    heightMax = pt.get("height.max",70.0f);
+
+    //    pt.put("socialSphereRadius",10);
+    //write_info(fname,pt);
+    fleeEnabled = pt.get("flee.enabled",true);
+    sharkDistance = pt.get("flee.sharkDistance",100);
+
 }
 
 ISceneNode* FishMaster::GetFishNode() {
@@ -102,7 +124,7 @@ Vector<3,float> FishMaster::Rule1(Fish* f) {
 
     pc = pc / c;
 
-    return (pc - f->position) / 100.0f;
+    return (pc - f->position) / massFactor;
 }
 
 // Keep distance to other boids
@@ -148,8 +170,10 @@ Vector<3,float> FishMaster::TendToPlace(Fish* f) {
 
 Vector<3,float> FishMaster::Flee(Fish* f, Vector<3,float> p) {
     Vector<3,float> v;
-    if ((p - f->position).GetLength() < 100.0) {
+    float len = (p - f->position).GetLength();
+    if (len < sharkDistance) {
         v = (f->position - p);
+        v *= (sharkDistance - len);
     }
     return v;
 }
@@ -249,9 +273,9 @@ Vector<3,float> FishMaster::HeadForDirection(Fish* f, Vector<3,float> d) {
 }
 
 Vector<3,float> FishMaster::Randomize(Fish* f) {
-        return Vector<3,float>(rg->UniformFloat(0,1),
-                               rg->UniformFloat(0,1),
-                               rg->UniformFloat(0,1))*10.0f;
+        return Vector<3,float>(rg->UniformFloat(-1,1),
+                               rg->UniformFloat(-1,1),
+                               rg->UniformFloat(-1,1))*randomFactor;;
 }
 
 
@@ -294,26 +318,29 @@ void FishMaster::Handle(ProcessEventArg arg) {
 
         // Based on: http://www.vergenet.net/~conrad/boids/pseudocode.html
         
-        f->velocity += Rule1(f);
-        f->velocity += Rule2(f);
-        f->velocity += Rule3(f);
+        if (rule1Enabled) f->velocity += Rule1(f);
+        if (rule2Enabled) f->velocity += Rule2(f);
+        if (rule3Enabled) f->velocity += Rule3(f);
         //f->velocity += TendToPlace(f);
-        f->velocity += BoxRule(f);
-        f->velocity += HeightRule(f);
-        f->velocity += TopRule(f);
-        f->velocity += Flee(f, shark->position);
-        f->velocity += Randomize(f);
+        if (boxRuleEnabled) f->velocity += BoxRule(f);
+        if (heightEnabled) f->velocity += HeightRule(f);
+        if (topEnabled) f->velocity += TopRule(f);
+        if (fleeEnabled) f->velocity += Flee(f, shark->position);
+        if (randomEnabled) f->velocity += Randomize(f);
 
-        LimitSpeed(f);
+        if (speedEnabled) LimitSpeed(f);
 
         f->Update(dt);
+        
     }
 
     shark->velocity += HeightRule(shark);
     shark->velocity += HeadForDirection(shark, shark->direction);
+    if (boxRuleEnabled) shark->velocity += BoxRule(shark);
     
     // Daming
     shark->velocity = shark->velocity*0.5;
+
     
     shark->Update(dt);
 }

@@ -14,6 +14,7 @@
 #include <Core/Engine.h>
 #include <Display/FollowCamera.h>
 #include <Display/PerspectiveViewingVolume.h>
+#include <Display/InterpolatedViewingVolume.h>
 #include <Resources/ResourceManager.h>
 #include <Resources/ColladaResource.h>
 
@@ -111,7 +112,7 @@ int main(int argc, char** argv) {
 
     
     
-    FollowCamera* cam = new FollowCamera(*(new PerspectiveViewingVolume()));
+    FollowCamera* cam = new FollowCamera(*(new InterpolatedViewingVolume(*(new PerspectiveViewingVolume()))));
     cam->Follow(fm->GetShark()->GetNode());
     setup->SetCamera(*cam);
 
