@@ -110,33 +110,24 @@ int main(int argc, char** argv) {
     rsn->AddNode(fm->GetFishNode());
     setup->SetScene(*root);
 
-    
-    
+    //setup->GetCamera()->SetPosition(Vector<3, float>(-256.0, 800.0, -256.0));
+    //setup->GetCamera()->LookAt(1024.0, 127.0, 1024.0);
+
     FollowCamera* cam = new FollowCamera(*(new InterpolatedViewingVolume(*(new PerspectiveViewingVolume()))));
     cam->Follow(fm->GetShark()->GetNode());
     setup->SetCamera(*cam);
-
-    //cam->SetPosition(Vector<3, float>(-256.0, 800.0, -256.0));
-    //cam->LookAt(1024.0, 127.0, 1024.0);
-
     cam->SetDirection(Vector<3,float>(1,0,0),Vector<3,float>(0,1,0));
     cam->Move(Vector<3, float>(0, 0, 600));
-    //cam->LookAt(0.0, 0.0, 0.0);
-
 
     WiiFishController *ctrl = new WiiFishController(fm,cam);
-
     setup->GetKeyboard().KeyEvent().Attach(*ctrl);
-
-
-    setup->GetEngine().InitializeEvent().Attach(*fm);
-    setup->GetEngine().ProcessEvent().Attach(*fm);
-    setup->GetEngine().DeinitializeEvent().Attach(*fm);
-
     setup->GetEngine().InitializeEvent().Attach(*ctrl);
     setup->GetEngine().ProcessEvent().Attach(*ctrl);
     setup->GetEngine().DeinitializeEvent().Attach(*ctrl);
 
+    setup->GetEngine().InitializeEvent().Attach(*fm);
+    setup->GetEngine().ProcessEvent().Attach(*fm);
+    setup->GetEngine().DeinitializeEvent().Attach(*fm);
 
     setup->ShowFPS();
 
