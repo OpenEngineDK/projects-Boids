@@ -1,41 +1,47 @@
 # Yaml configuration of boids
+# search for yaml-mode to edit nicely with emacs
+#
+ 
 
 speed:
-        enabled: true
-        max: 200
-        min: 30
+  enabled: true
+  max: 200
+  min: 30
 
-rule1: # Match the velocities
-        enabled: true
-        massFactor: 100
+# Match the velocities
+rule1:
+  enabled: true
+  massFactor: 100
 
 rule2:
-        enabled: true
-        privacyRadius: 10
+  enabled: true
+  privacyRadius: 10
 
 rule3:
-        enabled: true
-        followScalar: 16
+  enabled: true
+  followScalar: 16
 
-home:
-        factor: 100
+home:  
+  enabled: false
+  position: [500, 500, 500] # This is a custom format for Vector<3,float>
+  factor: 100
 
 boxrule:
-        enabled: true
-        speed: 10
+  enabled: true
+  speed: 10
 
 height:
-        enabled: true
-        top:
-                enabled: true
-        speed: 30
-        min: 10
-        max: 70
+  enabled: true
+  top:
+    enabled: true
+  speed: 30
+  min: 10
+  max: 70
 
 flee:
-        enabled: true
-        sharkDistance: 100
+  enabled: true
+  sharkDistance: 100
 
 randomize:
-        enabled: true
-        factor: 10
+  enabled: true
+  factor: 10

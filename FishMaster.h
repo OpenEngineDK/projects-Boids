@@ -63,11 +63,9 @@ private:
     float privacyRadius;
     float followScalar;
 
-
+    bool homeEnabled;
     Vector<3, float> home;
-    float homeScalar;
-
-    
+    float homeScalar;    
 
     bool speedEnabled;
     float maxSpeed;

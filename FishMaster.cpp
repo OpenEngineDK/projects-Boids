@@ -69,7 +69,9 @@ void FishMaster::ReloadProperties() {
     
     rule3Enabled = ptree.Get("rule3.enabled",true);
     followScalar = ptree.Get("rule3.followScalar",16.0f);
-    home = Vector<3,float>(0,0,0);
+    
+    homeEnabled = ptree.Get("home.enabled", true);
+    home = ptree.Get("home.position", Vector<3,float>(0,0,0));
     homeScalar = ptree.Get("home.factor",100.0f);
 
 
@@ -85,8 +87,6 @@ void FishMaster::ReloadProperties() {
     heightMin = ptree.Get("height.min",10.0f);
     heightMax = ptree.Get("height.max",70.0f);
 
-    //    pt.put("socialSphereRadius",10);
-    //write_info(fname,pt);
     fleeEnabled = ptree.Get("flee.enabled",true);
     sharkDistance = ptree.Get("flee.sharkDistance",100);
 
@@ -308,15 +308,15 @@ void FishMaster::Handle(ProcessEventArg arg) {
 
         // Based on: http://www.vergenet.net/~conrad/boids/pseudocode.html
         
-        if (rule1Enabled) f->velocity += Rule1(f);
-        if (rule2Enabled) f->velocity += Rule2(f);
-        if (rule3Enabled) f->velocity += Rule3(f);
-        //f->velocity += TendToPlace(f);
-        if (boxRuleEnabled) f->velocity += BoxRule(f);
-        if (heightEnabled) f->velocity += HeightRule(f);
-        if (topEnabled) f->velocity += TopRule(f);
-        if (fleeEnabled) f->velocity += Flee(f, shark->position);
-        if (randomEnabled) f->velocity += Randomize(f);
+        if (rule1Enabled)   f->velocity += Rule1       (f);
+        if (rule2Enabled)   f->velocity += Rule2       (f);
+        if (rule3Enabled)   f->velocity += Rule3       (f);
+        if (homeEnabled)    f->velocity += TendToPlace (f);
+        if (boxRuleEnabled) f->velocity += BoxRule     (f);
+        if (heightEnabled)  f->velocity += HeightRule  (f);
+        if (topEnabled)     f->velocity += TopRule     (f);
+        if (fleeEnabled)    f->velocity += Flee        (f, shark->position);
+        if (randomEnabled)  f->velocity += Randomize   (f);
 
         if (speedEnabled) LimitSpeed(f);
 
