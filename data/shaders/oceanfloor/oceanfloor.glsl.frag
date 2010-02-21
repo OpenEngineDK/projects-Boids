@@ -20,15 +20,16 @@ void main()
     
     // Extract normal and calculate tangent and binormal
     vec3 normal = normalize(texture2D(normalMap, gl_TexCoord[1].xy).xyz);
-    //vec3 tangent = normalize(vec3(-normal.y * 0.5, normal.x, 0.0));
-    //vec3 binormal = normalize(vec3(0.0, normal.z, -normal.y * 0.5));
+
+    // Calculate tangent and binormal. Taking advantage of what we
+    // know of the heightmap
+    vec3 tangent = normalize(vec3(-normal.y * 0.5, normal.x, 0.0));
+    vec3 binormal = normalize(vec3(0.0, normal.z, -normal.y * 0.5));
 
     // Extract the bump and rotate the bump into normalspace
-    /*
     vec3 bump = texture2D(sandBump, gl_TexCoord[0].xy).xzy * 2.0 - 1.0;
     bump = vec3(dot(bump, tangent), dot(bump, normal), dot(bump, binormal));
-    normal = normalize(bump);
-    */
+    bump = normalize(bump);
 
     // Extract ocean normal
     vec2 causticRipple = point.xz * 0.0025 + vec2(0.0, time);
@@ -36,7 +37,7 @@ void main()
     vec4 caustic = texture2D(causticMap, point.xz * 0.0025 + rippleEffect);
 
     // Calculate diffuse
-    float ndotl = dot(normal, lightDir);
+    float ndotl = dot(bump, lightDir);
     float diffuseScalar = clamp(ndotl, 0.0, 1.0);
     
     // Looking up the texture values
