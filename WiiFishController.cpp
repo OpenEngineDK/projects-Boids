@@ -51,10 +51,10 @@ void WiiFishController::Handle(KeyboardEventArg arg) {
         jaw += 0.1;
         break;
     case KEY_RIGHT:
-        direction -= 0.1;
+        direction += 0.1;
         break;
     case KEY_LEFT:
-        direction += 0.1;
+        direction -= 0.1;
         break;        
     case KEY_a:
         speed += 10.0;

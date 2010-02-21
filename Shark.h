@@ -28,6 +28,7 @@ using namespace OpenEngine::Utils;
 class Shark : public Fish{
 private:
     Vector<3,float> direction;
+    float speed;
 public:
     Shark(ISceneNode* child, RandomGenerator* rg);
 

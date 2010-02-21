@@ -4,14 +4,18 @@
 
 Shark::Shark(ISceneNode* child, RandomGenerator* rg) : Fish(child,rg) {
     direction = Vector<3,float>(1,0,0);
+    speed = 0.0f;
 }
 
 void Shark::SetSpeed(float s) {
-    this->velocity = direction * s;
+    speed = s;
+    //this->direction = direction * s;
 }
 
 void Shark::SetDirection(float d, float r) {
-    Quaternion<float> q(0,r,d);
-    this->velocity = q.RotateVector(this->velocity);
+
+    Vector<3,float> v(cos(r),sin(d),sin(r));    
+
+    this->velocity = v*speed;
 
 }
