@@ -4,6 +4,11 @@
 #include <Logging/Logger.h>
 #include <Scene/VertexArrayNode.h>
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ini_parser.hpp>
+#include <boost/filesystem/operations.hpp>
+//#include "boost/timer.hpp"
+
 
 using namespace OpenEngine::Geometry;
 using namespace OpenEngine::Math;
@@ -11,7 +16,7 @@ using namespace OpenEngine::Math;
 
 
 FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n) : ocean(ocean) {
-    InitProperties();
+    Reload();
 
     root = new SceneNode();
     
@@ -40,18 +45,39 @@ FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n) : ocean(ocean) {
     //delete fs;
 }
 
-void FishMaster::InitProperties(){
-    socialSphereRadius = 10;
-    maxSpeed = 200.0f;
-    minSpeed = 30.0f;
-    followScalar = 8.0f;
+void FishMaster::Reload() {
+    using namespace boost::filesystem;
+
+
+    string fname = DirectoryManager::FindFileInPath("boids.conf");
+
+    time_t new_ts = last_write_time(fname);
+    if (new_ts != last_ts) {
+        logger.info << "Reloading properties" << logger.end;
+        ReloadProperties();
+        last_ts = new_ts;
+    }
+}
+
+void FishMaster::ReloadProperties() {
+    string fname = DirectoryManager::FindFileInPath("boids.conf");
+
+    using boost::property_tree::ptree;
+
+    ptree pt;
+    read_ini(fname,pt);
+
+    socialSphereRadius = pt.get("socialSphereRadius",10.0);
+    maxSpeed = pt.get("maxSpeed",200.0f);
+    minSpeed = pt.get("minSpeed",30.0f);
+    followScalar = pt.get("followScalar",16.0f);
     home = Vector<3,float>(0,0,0);
-    homeScalar = 100.0f;
-    privacyRadius = 10.0f;
-    boxSpeed = 10.0f;
-    heightSpeed = 30.0f;
-    heightMin = 10.0f;
-    heightMax = 70.0f;
+    homeScalar = pt.get("homeScalar",100.0f);
+    privacyRadius = pt.get("privacyRadius",10.0f);
+    boxSpeed = pt.get("boxSpeed",10.0f);
+    heightSpeed = pt.get("heightSpeed",30.0f);
+    heightMin = pt.get("heightMin",10.0f);
+    heightMax = pt.get("heightMax",70.0f);
 }
 
 ISceneNode* FishMaster::GetFishNode() {
@@ -222,6 +248,13 @@ Vector<3,float> FishMaster::HeadForDirection(Fish* f, Vector<3,float> d) {
     return d*0.1;
 }
 
+Vector<3,float> FishMaster::Randomize(Fish* f) {
+        return Vector<3,float>(rg->UniformFloat(0,1),
+                               rg->UniformFloat(0,1),
+                               rg->UniformFloat(0,1))*10.0f;
+}
+
+
 void FishMaster::LimitSpeed(Fish* f) {
 
     float len = (f->velocity).GetLength();
@@ -247,11 +280,10 @@ void FishMaster::Handle(InitializeEventArg arg) {
 void FishMaster::Handle(ProcessEventArg arg) {
     Time dt = loopTimer.GetElapsedTimeAndReset();
 
-    // if (reloadTimer.GetElapsedIntervals(1000000)) {
-    //     logger.info << "Reload" << logger.end;
-    //     reloadTimer.Reset();
-    //     ReloadChangedTweakableValues();
-    // }
+    if (reloadTimer.GetElapsedIntervals(1000000)) {
+        reloadTimer.Reset();
+        Reload();
+    }
 
     for (vector<Fish*>::iterator itr = fishes.begin();
          itr != fishes.end();
@@ -270,7 +302,8 @@ void FishMaster::Handle(ProcessEventArg arg) {
         f->velocity += HeightRule(f);
         f->velocity += TopRule(f);
         f->velocity += Flee(f, shark->position);
-        
+        f->velocity += Randomize(f);
+
         LimitSpeed(f);
 
         f->Update(dt);

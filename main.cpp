@@ -74,6 +74,7 @@ int main(int argc, char** argv) {
                                           vp, env, rv, new GLUTEngine());
     //                                     vp, env, rv );
     DirectoryManager::AppendPath("projects/Boids/data/");
+    DirectoryManager::AppendPath("projects/Boids/");
 
     setup->GetRenderer().SetBackgroundColor(Vector<4, float>(0.12, 0.16, 0.35, 1.0));
 

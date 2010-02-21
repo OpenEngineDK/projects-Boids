@@ -9,10 +9,10 @@ Fish::Fish(ISceneNode* child, RandomGenerator* rg) {
     
     node = new TransformationNode();
     node->AddNode(child);
-    position = Vector<3,float>(rg->UniformFloat(100,300),
-                               rg->UniformFloat(100,300),
-                               rg->UniformFloat(100,300));
-    //position = Vector<3,float>(0,0,0);
+    // position = Vector<3,float>(rg->UniformFloat(100,300),
+    //                            rg->UniformFloat(100,300),
+    //                            rg->UniformFloat(100,300));
+    position = Vector<3,float>(100,100,100);
 }
 
 

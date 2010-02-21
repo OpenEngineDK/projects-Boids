@@ -21,6 +21,8 @@ using namespace OpenEngine::Scene;
 
 class FishMaster : public IModule {
 private:
+    time_t last_ts;
+
     SceneNode *root;
     Shark* shark;
     std::vector<Fish*> fishes;
@@ -47,6 +49,7 @@ private:
 
     Vector<3,float> HeadForDirection(Fish* f, Vector<3,float> d);
     Vector<3,float> Flee(Fish* f, Vector<3,float> p);
+    Vector<3,float> Randomize(Fish *f);
 
     // Boid properties
     float socialSphereRadius;
@@ -60,7 +63,8 @@ private:
     float heightSpeed;
     float heightMin, heightMax;
 
-    void InitProperties();
+    void ReloadProperties();
+    void Reload();
 
     float GetHeight(Vector<3,float>);
     Vector<3,float> GetNormal(Vector<3,float>);
