@@ -5,7 +5,7 @@
 #include <Scene/GeometryNode.h>
 
 
-Fish::Fish(ISceneNode* child, RandomGenerator* rg) {
+Fish::Fish(ISceneNode* child, Vector<3,float> start, RandomGenerator* rg) {
     
     node = new TransformationNode();
     node->AddNode(child);
@@ -13,7 +13,7 @@ Fish::Fish(ISceneNode* child, RandomGenerator* rg) {
     //                            rg->UniformFloat(100,300),
     //                            rg->UniformFloat(100,300));
     velocity = Vector<3,float>(0,0,0);
-    position = Vector<3,float>(100,100,100);
+    position = start;
 }
 
 

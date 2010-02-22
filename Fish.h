@@ -26,7 +26,7 @@ public:
 
     TransformationNode *node;
 
-    Fish(ISceneNode* child, RandomGenerator* rg);
+    Fish(ISceneNode* child, Vector<3,float> start, RandomGenerator* rg);
 
     TransformationNode* GetNode();
 

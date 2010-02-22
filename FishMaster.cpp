@@ -3,6 +3,9 @@
 #include <Geometry/FaceBuilder.h>
 #include <Logging/Logger.h>
 #include <Scene/VertexArrayNode.h>
+#include <Resources/ResourceManager.h>
+#include <Resources/IModelResource.h>
+#include <Scene/VertexArrayTransformer.h>
 
 using namespace OpenEngine::Geometry;
 using namespace OpenEngine::Math;
@@ -14,8 +17,23 @@ FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n)
     ptree.Reload();
     //ReloadProperties();
 
-    root = new SceneNode();
     
+    string fname = ptree.Get<string>("model.file","");
+    IModelResourcePtr model = ResourceManager<IModelResource>::Create(fname);
+    model->Load();
+    TransformationNode* node = new TransformationNode();
+    
+    Vector<3,float> scale = ptree.Get("model.scale",Vector<3,float>(0,0,0));
+    Quaternion<float> rot(ptree.Get("model.rotation",Vector<3,float>(0,0,0)));
+
+    node->SetScale(scale);
+    node->SetRotation(rot);
+    node->AddNode(model->GetSceneNode());
+
+    VertexArrayTransformer trans;
+    trans.Transform(*node);
+            
+    root = new SceneNode();   
     FaceSet* fs = new FaceSet();
 
     FaceBuilder::FaceState state;
@@ -26,13 +44,21 @@ FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n)
     
     rg = new RandomGenerator();
 
-    shark = new Shark(new GeometryNode(fs),rg);
+    shark = new Shark(new GeometryNode(fs),
+                      ptree.Get("startPos",Vector<3,float>()),
+                      rg);
 
     for (unsigned int i=0;i<n;i++) {
-        VertexArrayNode* node = new VertexArrayNode();
-        node->AddVertexArray(*arr);
-
-        Fish *f = new Fish(node,rg);
+        SceneNode *n = new SceneNode();
+        VertexArrayNode* van = new VertexArrayNode();
+        van->AddVertexArray(*arr);
+        
+        ISceneNode* geom = node->Clone();
+        n->AddNode(van);
+        n->AddNode(geom);
+        Fish *f = new Fish(n,
+                           ptree.Get("startPos",Vector<3,float>()),
+                           rg);
         fishes.push_back(f);
         root->AddNode(f->GetNode());
     }
@@ -68,6 +94,7 @@ void FishMaster::ReloadProperties() {
 
 
     boxSpeed = ptree.Get("boxrule.speed",10.0f);
+    boxDist = ptree.Get("boxrule.dist", 100.0f);
     boxRuleEnabled = ptree.Get("boxrule.enabled",true);
 
     randomEnabled = ptree.Get("randomize.enabled",true);
@@ -189,22 +216,24 @@ Vector<3,float> FishMaster::BoxRule(Fish* f) {
         
     Vector<3,float> p = f->position;
     Vector<3,float> v;
-
-    if (p[0] < startPoint[0]) {
+   
+    if ((p[0] - startPoint[0]) < boxDist) {
         v[0] = boxSpeed;
-    } else if (p[0] > endPoint[0] ) {
+    } else if ((endPoint[0] - p[0]) < boxDist ) {
         v[0] = -boxSpeed;
     }
-    if (p[1] < startPoint[1]) {
+    if ((p[1] - startPoint[1]) < boxDist) {
         v[1] = boxSpeed;
-    } else if (p[1] > endPoint[1] ) {
+    } else if ((endPoint[1] - p[1]) < boxDist ) {
         v[1] = -boxSpeed;
     }
-    if (p[2] < startPoint[2]) {
+    if ((p[2] - startPoint[2]) < boxDist) {
         v[2] = boxSpeed;
-    } else if (p[2] > endPoint[2] ) {
+    } else if ((endPoint[2] - p[2]) < boxDist ) {
         v[2] = -boxSpeed;
     }
+
+
     return v;
 }
 
@@ -263,7 +292,6 @@ Vector<3,float> FishMaster::Randomize(Fish* f) {
 
 
 void FishMaster::LimitSpeed(Fish* f) {
-
     float len = (f->velocity).GetLength();
 
     if (len > maxSpeed) {
@@ -273,12 +301,35 @@ void FishMaster::LimitSpeed(Fish* f) {
     }
 }
 
+void FishMaster::BoxLimit(Fish* f) {
+
+    Vector<3,float> p = f->position;
+
+
+    if (p[0] < startPoint[0]) {
+        f->position[0] = startPoint[0];
+    } else if (p[0] > endPoint[0] ) {
+        f->position[0] = endPoint[0];
+    }
+    if (p[1] < startPoint[1]) {
+        f->position[1] = startPoint[1];
+    } else if (p[1] > endPoint[1] ) {
+        f->position[1] = endPoint[1];
+    }
+    if (p[2] < startPoint[2]) {
+        f->position[2] = startPoint[2];
+    } else if (p[2] > endPoint[2] ) {
+        f->position[2] = endPoint[2];
+    }
+
+}
+
 
 void FishMaster::Handle(InitializeEventArg arg) {
 
     float* startVertex = ocean->GetVertex(0, 0);
     startPoint = Vector<3,float>(startVertex[0], 0, startVertex[2]);
-    endPoint = Vector<3,float>(ocean->GetWidth(), 50, ocean->GetDepth());
+    endPoint = Vector<3,float>(ocean->GetWidth(), 1000, ocean->GetDepth());
     endPoint += startPoint;
 
     loopTimer.Start();
@@ -312,6 +363,8 @@ void FishMaster::Handle(ProcessEventArg arg) {
         if (randomEnabled)  f->AddVelocity(Randomize   (f));
 
         if (speedEnabled) LimitSpeed(f);
+        
+        BoxLimit(f);
 
         f->Update(dt);
         
@@ -319,7 +372,9 @@ void FishMaster::Handle(ProcessEventArg arg) {
 
     shark->AddVelocity(HeightRule(shark));
     shark->AddVelocity(HeadForDirection(shark, shark->direction));
-    if (boxRuleEnabled) shark->AddVelocity(BoxRule(shark));
+    //    if (boxRuleEnabled) shark->AddVelocity(BoxRule(shark));
+
+    BoxLimit(shark);
     
     // Daming
     shark->velocity = shark->velocity*0.5;

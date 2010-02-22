@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
     setup->GetRenderer().SetBackgroundColor(Vector<4, float>(0.12, 0.16, 0.35, 1.0));
 
     SetupTerrain(setup);
-    FishMaster *fm = new FishMaster(oceanFloor,50);
+    FishMaster *fm = new FishMaster(oceanFloor,20);
 
     IModelResourcePtr sharkModel = ResourceManager<IModelResource>::Create("shark/models/shark.dae");
 

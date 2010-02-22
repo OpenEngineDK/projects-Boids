@@ -47,9 +47,10 @@ private:
     Vector<3,float> HeightRule(Fish* f);
     Vector<3,float> TopRule(Fish* f);
     
-        
 
+    void BoxLimit(Fish *f);
     void LimitSpeed(Fish* f);
+
     Vector<3,float> TendToPlace(Fish* f);
 
     Vector<3,float> HeadForDirection(Fish* f, Vector<3,float> d);
@@ -71,19 +72,16 @@ private:
     float maxSpeed;
     float minSpeed;
 
-
-
     bool heightEnabled,topEnabled;
     float heightMin, heightMax;
     float heightSpeed;
 
-
     bool fleeEnabled;
     float sharkDistance;
 
-
     bool boxRuleEnabled;
     float boxSpeed;
+    float boxDist;
 
     bool randomEnabled;
     float randomFactor;

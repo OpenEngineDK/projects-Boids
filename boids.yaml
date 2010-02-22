@@ -2,11 +2,22 @@
 # search for yaml-mode to edit nicely with emacs
 #
  
+# model: 
+#   file: "guppy/models/guppy.dae"
+#   scale: [200, 200, 200]
+#   rotation: [0, 3.14, 0]
+
+model: 
+  file: "goldfish/models/clownfish[1].dae"
+  scale: [10, 10, 10]
+  rotation: [0, 3.14, 0]
+
+startPos: [2000,100,2000]
 
 speed:
   enabled: true
   max: 200
-  min: 30
+  min: 100
 
 # Match the velocities
 rule1:
@@ -28,6 +39,7 @@ home:
 
 boxrule:
   enabled: true
+  dist: 1000
   speed: 10
 
 height:

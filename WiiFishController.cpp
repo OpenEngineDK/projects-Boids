@@ -116,6 +116,7 @@ void WiiFishController::Handle(ProcessEventArg arg) {
 
     float dt = arg.approx / 10000.0;
 
+    //logger.info << dt << logger.end;
 
     if (forward) speed += 10.0*dt;
     if (back) speed -= 10.0*dt;
@@ -124,7 +125,9 @@ void WiiFishController::Handle(ProcessEventArg arg) {
     if (left) direction -= 0.01*dt;
     if (right) direction += 0.01*dt;
 
-        
+    if (jaw > 0.9) jaw = 0.9;
+    if (jaw < -0.9) jaw = -0.9;
+  
 
     cam->Move(camMove);
     fm->GetShark()->SetSpeed(speed);
