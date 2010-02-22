@@ -31,7 +31,7 @@ public:
     TransformationNode* GetNode();
 
     
-
+    void AddVelocity(Vector<3,float> v);
     void Update(Time dt);
 };
 

@@ -12,9 +12,7 @@ void Shark::SetSpeed(float s) {
 }
 
 void Shark::SetDirection(float d, float r) {
-
     Vector<3,float> v(cos(r),tan(d),sin(r));    
 
     this->direction = v*speed;
-
 }

@@ -1,7 +1,7 @@
 
 #include "Fish.h"
 
-
+#include <Logging/Logger.h>
 #include <Scene/GeometryNode.h>
 
 
@@ -19,6 +19,11 @@ Fish::Fish(ISceneNode* child, RandomGenerator* rg) {
 
 TransformationNode* Fish::GetNode() {
     return node;
+}
+
+void Fish::AddVelocity(Vector<3,float> v) {
+    velocity += v;
+
 }
 
 void Fish::Update(Time dt) {

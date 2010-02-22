@@ -232,7 +232,8 @@ Vector<3,float> FishMaster::HeightRule(Fish* f) {
     if (dt < heightMin){
         if (dt < 0)
             f->position[1] = h;
-        v = GetNormal(f->position)*heightSpeed;
+        v = Vector<3,float>(0,1,0)*heightSpeed;
+            //GetNormal(f->position)*heightSpeed;
     } 
     return v;
 }
@@ -300,15 +301,15 @@ void FishMaster::Handle(ProcessEventArg arg) {
 
         // Based on: http://www.vergenet.net/~conrad/boids/pseudocode.html
         
-        if (rule1Enabled)   f->velocity += Rule1       (f);
-        if (rule2Enabled)   f->velocity += Rule2       (f);
-        if (rule3Enabled)   f->velocity += Rule3       (f);
-        if (homeEnabled)    f->velocity += TendToPlace (f);
-        if (boxRuleEnabled) f->velocity += BoxRule     (f);
-        if (heightEnabled)  f->velocity += HeightRule  (f);
-        if (topEnabled)     f->velocity += TopRule     (f);
-        if (fleeEnabled)    f->velocity += Flee        (f, shark->position);
-        if (randomEnabled)  f->velocity += Randomize   (f);
+        if (rule1Enabled)   f->AddVelocity(Rule1       (f));
+        if (rule2Enabled)   f->AddVelocity(Rule2       (f));
+        if (rule3Enabled)   f->AddVelocity(Rule3       (f));
+        if (homeEnabled)    f->AddVelocity(TendToPlace (f));
+        if (boxRuleEnabled) f->AddVelocity(BoxRule     (f));
+        if (heightEnabled)  f->AddVelocity(HeightRule  (f));
+        if (topEnabled)     f->AddVelocity(TopRule     (f));
+        if (fleeEnabled)    f->AddVelocity(Flee        (f, shark->position));
+        if (randomEnabled)  f->AddVelocity(Randomize   (f));
 
         if (speedEnabled) LimitSpeed(f);
 
@@ -316,9 +317,9 @@ void FishMaster::Handle(ProcessEventArg arg) {
         
     }
 
-    shark->velocity += HeightRule(shark);
-    shark->velocity += HeadForDirection(shark, shark->direction);
-    if (boxRuleEnabled) shark->velocity += BoxRule(shark);
+    shark->AddVelocity(HeightRule(shark));
+    shark->AddVelocity(HeadForDirection(shark, shark->direction));
+    if (boxRuleEnabled) shark->AddVelocity(BoxRule(shark));
     
     // Daming
     shark->velocity = shark->velocity*0.5;
