@@ -1,5 +1,4 @@
 const vec4 BACKGROUND = vec4(0.12, 0.16, 0.35, 1.0);
-const float sca2 = 0.2;
 const float BUMP_FACTOR = 4.0;
 
 uniform float time;
@@ -31,14 +30,11 @@ void main()
     vec3 bump = texture2D(sandBump, gl_TexCoord[0].xy).xzy * 2.0 - 1.0;
     bump.y *= BUMP_FACTOR;
     bump = vec3(dot(bump, tangent), dot(bump, normal), dot(bump, binormal));
-    if (gl_FragCoord.x < 400.0)
-        bump = normalize(bump);
-    else
-        bump = normal;
+    bump = normalize(bump);
 
-    // Extract ocean normal
+    // Calculate caustics
     vec2 causticRipple = point.xz * 0.0025 + vec2(0.0, time);
-    vec2 rippleEffect = sca2 * (texture2D(dudvMap, causticRipple).xy * 2.0 - 1.0);
+    vec2 rippleEffect = texture2D(dudvMap, causticRipple).xy * 0.4 - 0.2;
     vec4 caustic = texture2D(causticMap, point.xz * 0.0025 + rippleEffect);
 
     // Calculate diffuse
