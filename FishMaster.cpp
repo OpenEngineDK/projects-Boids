@@ -4,16 +4,8 @@
 #include <Logging/Logger.h>
 #include <Scene/VertexArrayNode.h>
 
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/info_parser.hpp>
-
-//#include "boost/timer.hpp"
-
-
 using namespace OpenEngine::Geometry;
 using namespace OpenEngine::Math;
-
-
 
 FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n) 
     : ptree(*(new PropertyTree(DirectoryManager::FindFileInPath("boids.yaml"))))
