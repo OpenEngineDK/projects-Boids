@@ -10,5 +10,4 @@ frag: shaders/oceanfloor/oceanfloor.glsl.frag
 #text: sandTex|textures/sand.tga
 text: sandTex|textures/sand01.jpg
 text: sandBump|textures/sand01nrm.jpg
-text: dudvMap|textures/waterDistortion.tga
 text: causticMap|textures/caustic2.tga

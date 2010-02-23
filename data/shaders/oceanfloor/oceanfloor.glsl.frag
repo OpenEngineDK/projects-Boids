@@ -6,7 +6,6 @@ uniform float time;
 uniform sampler2D sandTex;
 uniform sampler2D sandBump;
 uniform sampler2D causticMap;
-uniform sampler2D dudvMap;
 uniform sampler2D normalMap;
 
 uniform vec3 lightDir; // Should be pre-normalized. Or else the world will BURN IN RIGHTEOUS FIRE!!
@@ -33,9 +32,9 @@ void main()
     bump = normalize(bump);
 
     // Calculate caustics
-    vec2 causticRipple = point.xz * 0.0025 + vec2(0.0, time);
-    vec2 rippleEffect = texture2D(dudvMap, causticRipple).xy * 0.4 - 0.2;
-    vec4 caustic = texture2D(causticMap, point.xz * 0.0025 + rippleEffect);
+    vec2 causticRipple = vec2(0.0, time) * 2.0;
+    vec4 caustic = texture2D(causticMap, point.xz * 0.0025 + causticRipple);
+    caustic += texture2D(causticMap, point.xz * 0.0025 - causticRipple);
 
     // Calculate diffuse
     float ndotl = dot(bump, lightDir);
