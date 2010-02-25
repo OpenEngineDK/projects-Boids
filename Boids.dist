@@ -5,8 +5,8 @@ dist /extensions/OpenColladaResource/OpenColladaResource.dist http://openengine.
 dist /extensions/PropertyTree/PropertyTree.dist               http://openengine.dk/code/extensions/PropertyTree/PropertyTree.dist
 
 # main repository
-darcs / http://openengine.dk/code/openengine
-darcs-dev / fh.daimi.au.dk:/users/cgd/code/openengine
+darcs / http://openengine.dk/code/branches/BufferObjects
+darcs-dev / fh.daimi.au.dk:/users/cgd/code/branches/BufferObjects
 
 # project repository
 # (uncomment the following two lines after uploading your project)
