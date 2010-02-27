@@ -41,6 +41,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
   Extensions_FaceBuilder
   Extensions_HeightMap
   Extensions_WiiMote
+  Extensions_OpenGLRenderer
   Extensions_OpenColladaResource
   Extensions_PropertyTree
 )
