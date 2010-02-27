@@ -34,7 +34,7 @@ void main()
     // Calculate caustics
     vec2 causticRipple = vec2(0.0, time) * 2.0;
     vec4 caustic = texture2D(causticMap, point.xz * 0.0025 + causticRipple);
-    caustic += texture2D(causticMap, point.xz * 0.0050 - 2.0 * causticRipple);
+    caustic += texture2D(causticMap, point.zx * -0.0050 - 2.0 * causticRipple);
 
     // Calculate diffuse
     float ndotl = dot(bump, lightDir);
