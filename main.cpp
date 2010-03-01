@@ -13,7 +13,7 @@
 #include <Logging/StreamLogger.h>
 #include <Core/Engine.h>
 #include <Display/FollowCamera.h>
-#include "StereoCamera.h"
+//#include "StereoCamera.h"
 #include <Display/PerspectiveViewingVolume.h>
 #include <Display/InterpolatedViewingVolume.h>
 #include <Resources/ResourceManager.h>
