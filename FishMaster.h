@@ -34,7 +34,6 @@ private:
     RandomGenerator *rg;
     OceanFloorNode* ocean;
     Timer loopTimer;
-    Timer reloadTimer;
 
     Vector<3,float> startPoint;
     Vector<3,float> endPoint;
@@ -78,6 +77,7 @@ private:
 
     bool fleeEnabled;
     float sharkDistance;
+    float fleeScale;
 
     bool boxRuleEnabled;
     float boxSpeed;
@@ -93,10 +93,12 @@ private:
     Vector<3,float> GetNormal(Vector<3,float>);
 
 public:
-    FishMaster(OceanFloorNode* ocean, unsigned int n=10);
+    FishMaster(OceanFloorNode* ocean, PropertyTree& ptree);
 
     ISceneNode* GetFishNode();
     Shark* GetShark();
+
+    void Reset();
 
     void Handle(InitializeEventArg arg);
     void Handle(ProcessEventArg arg);

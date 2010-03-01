@@ -8,11 +8,32 @@
 #   rotation: [0, 3.14, 0]
 
 model: 
-  file: "goldfish/models/clownfish[1].dae"
-  scale: [10, 10, 10]
-  rotation: [0, 3.14, 0]
+  file: "bass/models/bass[1].dae"
+  scale: [3,3,3]
+  rotation: [0, 6, 0]
+
+
+# model: 
+#   file: "goldfish/models/clownfish[1].dae"
+#   scale: [10, 10, 10]
+#   rotation: [0, 3.14, 0]
 
 startPos: [2000,100,2000]
+
+numFish: 20
+
+cams:
+  - pos: [1000,2000,1000]
+    lookat: [1000,0,1000]
+  - pos: [1000,2000,1000]
+    tracking: true
+    lookat: [1000,0,1000]
+  - pos: [1000,1000,1000]
+    lookat: [1000,0,1000]
+  - pos: [0,1000,0]
+    lookat: [1000,0,1000]
+  - pos: [1000,500,1000]
+    lookat: [1000,0,1000]
 
 speed:
   enabled: true
@@ -48,11 +69,12 @@ height:
     enabled: true
   speed: 30
   min: 10
-  max: 70
+  max: 200
 
 flee:
   enabled: true
   sharkDistance: 100
+  scale: 20
 
 randomize:
   enabled: true

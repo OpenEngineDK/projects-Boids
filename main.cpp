@@ -13,6 +13,7 @@
 #include <Logging/StreamLogger.h>
 #include <Core/Engine.h>
 #include <Display/FollowCamera.h>
+#include "StereoCamera.h"
 #include <Display/PerspectiveViewingVolume.h>
 #include <Display/InterpolatedViewingVolume.h>
 #include <Resources/ResourceManager.h>
@@ -67,7 +68,7 @@ int main(int argc, char** argv) {
 
     // Create simple setup
     //IEnvironment* env = new SDLEnvironment(800,600);
-    IEnvironment* env = new GLUTEnvironment(800,600);
+    IEnvironment* env = new GLUTEnvironment(1024,768);
     Viewport* vp = new Viewport(env->GetFrame());
     IRenderingView* rv = new TerrainRenderingView(*vp);
    
@@ -80,7 +81,13 @@ int main(int argc, char** argv) {
     setup->GetRenderer().SetBackgroundColor(Vector<4, float>(0.12, 0.16, 0.35, 1.0));
 
     SetupTerrain(setup);
-    FishMaster *fm = new FishMaster(oceanFloor,20);
+
+    string confPath = DirectoryManager::FindFileInPath("boids.yaml");
+
+    PropertyTree* ptree = new PropertyTree(confPath);
+
+    FishMaster *fm = new FishMaster(oceanFloor,
+                                    *ptree);
 
     IModelResourcePtr sharkModel = ResourceManager<IModelResource>::Create("shark/models/shark.dae");
 
@@ -89,7 +96,7 @@ int main(int argc, char** argv) {
     TransformationNode* sharkGeom = new TransformationNode();
     sharkGeom->AddNode(sharkModel->GetSceneNode());
 
-    sharkGeom->Move(0,0,-150);
+    sharkGeom->Move(200,0,-150);
     sharkGeom->Scale(200,200,200);
 
 
@@ -112,14 +119,20 @@ int main(int argc, char** argv) {
 
     //setup->GetCamera()->SetPosition(Vector<3, float>(-256.0, 800.0, -256.0));
     //setup->GetCamera()->LookAt(1024.0, 127.0, 1024.0);
+    
+    //FollowCamera* cam = new FollowCamera(*(new StereoCamera(*(new InterpolatedViewingVolume(*(new PerspectiveViewingVolume(10)))))));
 
     FollowCamera* cam = new FollowCamera(*(new InterpolatedViewingVolume(*(new PerspectiveViewingVolume(10)))));
+
+    //StereoCamera* sc = new StereoCamera(*cam);
+    
     cam->Follow(fm->GetShark()->GetNode());
     setup->SetCamera(*cam);
+    //setup->SetCamera(*sc);
     cam->SetDirection(Vector<3,float>(1,0,0),Vector<3,float>(0,1,0));
     cam->Move(Vector<3, float>(0, 0, 600));
 
-    WiiFishController *ctrl = new WiiFishController(fm,cam);
+    WiiFishController *ctrl = new WiiFishController(fm,cam,setup,*ptree);
     setup->GetKeyboard().KeyEvent().Attach(*ctrl);
     setup->GetEngine().InitializeEvent().Attach(*ctrl);
     setup->GetEngine().ProcessEvent().Attach(*ctrl);
@@ -128,6 +141,11 @@ int main(int argc, char** argv) {
     setup->GetEngine().InitializeEvent().Attach(*fm);
     setup->GetEngine().ProcessEvent().Attach(*fm);
     setup->GetEngine().DeinitializeEvent().Attach(*fm);
+
+    setup->GetEngine().InitializeEvent().Attach(*ptree);
+    setup->GetEngine().ProcessEvent().Attach(*ptree);
+    setup->GetEngine().DeinitializeEvent().Attach(*ptree);
+
 
     setup->ShowFPS();
 

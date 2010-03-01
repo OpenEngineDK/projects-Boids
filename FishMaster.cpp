@@ -10,8 +10,8 @@
 using namespace OpenEngine::Geometry;
 using namespace OpenEngine::Math;
 
-FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n) 
-    : ptree(*(new PropertyTree(DirectoryManager::FindFileInPath("boids.yaml"))))
+FishMaster::FishMaster(OceanFloorNode* ocean, PropertyTree& ptree)
+    : ptree(ptree)
     , ocean(ocean) {
     ptree.PropertiesChangedEvent().Attach(*this);
     ptree.Reload();
@@ -19,15 +19,29 @@ FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n)
 
     
     string fname = ptree.Get<string>("model.file","");
+    
+    logger.info << "Model: " << fname << logger.end;
+
     IModelResourcePtr model = ResourceManager<IModelResource>::Create(fname);
     model->Load();
     TransformationNode* node = new TransformationNode();
     
-    Vector<3,float> scale = ptree.Get("model.scale",Vector<3,float>(0,0,0));
+    Vector<3,float> scale = ptree.Get("model.scale",Vector<3,float>(1,1,1));
     Quaternion<float> rot(ptree.Get("model.rotation",Vector<3,float>(0,0,0)));
+    Vector<3,float> translation = ptree.Get("model.trans", Vector<3,float>(0,0,0));
+    
+    
+
+    logger.info << "Scale: " << scale << logger.end;
+    logger.info << "Translation: " << translation << logger.end;
+    logger.info << "Rotation: " << rot << logger.end;
 
     node->SetScale(scale);
-    node->SetRotation(rot);
+    if (rot.GetNorm() != 0.0) {
+        rot.Normalize();
+        node->SetRotation(rot);
+    }
+    node->SetPosition(translation);
     node->AddNode(model->GetSceneNode());
 
     VertexArrayTransformer trans;
@@ -47,7 +61,8 @@ FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n)
     shark = new Shark(new GeometryNode(fs),
                       ptree.Get("startPos",Vector<3,float>()),
                       rg);
-
+    
+    unsigned int n = ptree.Get("numFish",10);
     for (unsigned int i=0;i<n;i++) {
         SceneNode *n = new SceneNode();
         VertexArrayNode* van = new VertexArrayNode();
@@ -70,6 +85,7 @@ FishMaster::FishMaster(OceanFloorNode* ocean, unsigned int n)
 void FishMaster::Handle(PropertiesChangedEventArg arg) {
     ReloadProperties();
 }
+
 
 void FishMaster::ReloadProperties() {
 
@@ -108,6 +124,7 @@ void FishMaster::ReloadProperties() {
 
     fleeEnabled = ptree.Get("flee.enabled",true);
     sharkDistance = ptree.Get("flee.sharkDistance",100);
+    fleeScale = ptree.Get("flee.scale", 1);
 
 }
 
@@ -182,7 +199,7 @@ Vector<3,float> FishMaster::Flee(Fish* f, Vector<3,float> p) {
     float len = (p - f->position).GetLength();
     if (len < sharkDistance) {
         v = (f->position - p);
-        v *= (sharkDistance - len);
+        v *= (sharkDistance - len)*fleeScale;
     }
     return v;
 }
@@ -333,16 +350,12 @@ void FishMaster::Handle(InitializeEventArg arg) {
     endPoint += startPoint;
 
     loopTimer.Start();
-    reloadTimer.Start();
+
 }
 void FishMaster::Handle(ProcessEventArg arg) {
     Time dt = loopTimer.GetElapsedTimeAndReset();
 
-    if (reloadTimer.GetElapsedIntervals(1000000)) {
-        reloadTimer.Reset();
-        ptree.ReloadIfNeeded();
-    }
-
+    
     for (vector<Fish*>::iterator itr = fishes.begin();
          itr != fishes.end();
          itr++) {
@@ -377,11 +390,29 @@ void FishMaster::Handle(ProcessEventArg arg) {
     BoxLimit(shark);
     
     // Daming
-    shark->velocity = shark->velocity*0.5;
-
-    
+    shark->velocity = shark->velocity*0.5;    
     shark->Update(dt);
 }
+
+void FishMaster::Reset() {
+    Vector<3,float> startPos = ptree.Get("startPos",Vector<3,float>(0,0,0));
+
+    for (vector<Fish*>::iterator itr = fishes.begin();
+         itr != fishes.end();
+         itr++) {
+        Fish *f = *itr;
+        
+        f->position = startPos;
+        f->velocity = Vector<3,float>(0,0,0);
+        //f->Update(0);
+    }
+    shark->position = startPos;
+    shark->velocity = Vector<3,float>(0,0,0);
+                         //shark->Update(0);
+                         
+}
+
+
 void FishMaster::Handle(DeinitializeEventArg arg) {}
 
 Shark* FishMaster::GetShark() {

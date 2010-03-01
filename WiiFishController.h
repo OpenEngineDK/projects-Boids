@@ -1,4 +1,4 @@
-// 
+//
 // -------------------------------------------------------------------
 // Copyright (C) 2007 OpenEngine.dk (See AUTHORS)
 //
@@ -18,6 +18,9 @@
 #include <Devices/WiiMote.h>
 #include <Devices/WiiMoteManager.h>
 #include <Devices/IKeyboard.h>
+#include <Utils/SimpleSetup.h>
+
+
 
 #include "FishMaster.h"
 #include <Display/Camera.h>
@@ -25,6 +28,7 @@
 using namespace OpenEngine::Core;
 using namespace OpenEngine::Devices;
 using namespace OpenEngine::Display;
+using namespace OpenEngine::Utils;
 
 /**
  * Short description.
@@ -32,29 +36,38 @@ using namespace OpenEngine::Display;
  * @class WiiFishController WiiFishController.h ts/Boids/WiiFishController.h
  */
 class WiiFishController : public IModule
-                        , public IListener<WiiButtonEventArg> 
+                        , public IListener<WiiButtonEventArg>
                         , public IListener<WiiMoteFoundEventArg>
                         , public IListener<WiiAccelerationEventArg>
                         , public IListener<KeyboardEventArg>
+                        , public IListener<PropertiesChangedEventArg>
 {
 private:
     FishMaster* fm;
     Camera* cam;
+    SimpleSetup* setup;
+    PropertyTree& ptree;
     
+    vector<Camera*> cams;
+    unsigned int curCamIdx;
+
     Vector<3,float> camMove;
     float speed;
     float direction,jaw;
-    
+
     bool up,down,left,right,forward,back;
 
-public:    
-    WiiFishController(FishMaster* fm, Camera* cam);    
-    
+    void ReloadConfig();
+
+public:
+    WiiFishController(FishMaster* fm, Camera* cam, SimpleSetup* setup, PropertyTree& ptree);
+
     void Handle(WiiButtonEventArg arg);
     void Handle(WiiMoteFoundEventArg arg);
     void Handle(WiiAccelerationEventArg arg);
 
     void Handle(KeyboardEventArg arg);
+    void Handle(PropertiesChangedEventArg arg);
 
     void Handle(InitializeEventArg arg);
     void Handle(DeinitializeEventArg arg);
