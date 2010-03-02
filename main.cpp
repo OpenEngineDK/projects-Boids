@@ -130,7 +130,7 @@ int main(int argc, char** argv) {
     setup->SetCamera(*cam);
     //setup->SetCamera(*sc);
     cam->SetDirection(Vector<3,float>(1,0,0),Vector<3,float>(0,1,0));
-    cam->Move(Vector<3, float>(0, 0, 600));
+    cam->Move(Vector<3, float>(0, 100, 600));
 
     WiiFishController *ctrl = new WiiFishController(fm,cam,setup,*ptree);
     setup->GetKeyboard().KeyEvent().Attach(*ctrl);
@@ -158,29 +158,15 @@ int main(int argc, char** argv) {
 
 void SetupTerrain(SimpleSetup* setup){
     // Create the map
-    FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(1024, 1024, 1));
+    FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(512, 512, 1));
     Empty(map);
-    map = CreateSmoothTerrain(map, 400, 40, 60);
-    map = CreateSmoothTerrain(map, 2000, 10, 40);
-    map = CreateSmoothTerrain(map, 4000, 5, -6);
-    map = CreateSmoothTerrain(map, 10000, 3, 3);
-    /*
-    FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(256, 256, 1));
-    Empty(map);
-    map = CreateSmoothTerrain(map, 40, 40, 40);
-    map = CreateSmoothTerrain(map, 80, 20, -6);
-    map = CreateSmoothTerrain(map, 160, 10, 3);
-    */
-    float widthScale = 8.0;
-    /*
-    FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(64, 64, 1));
-    Empty(map);
-    map = CreateSmoothTerrain(map, 40, 10, 40);
-    map = CreateSmoothTerrain(map, 80, 5, -6);
-    map = CreateSmoothTerrain(map, 160, 3, 3);
-    
-    float widthScale = 8.0;
-    */
+    map = CreateSmoothTerrain(map, 3, 160, 300);
+    map = CreateSmoothTerrain(map, 400, 20, 60);
+    map = CreateSmoothTerrain(map, 2000, 5, 40);
+    map = CreateSmoothTerrain(map, 4000, 3, -6);
+    map = CreateSmoothTerrain(map, 10000, 2, 3);
+    float widthScale = 16.0;
+
     Vector<3, float> origo = Vector<3, float>(map->GetHeight() * widthScale / 2, 0, map->GetWidth() * widthScale / 2);
     Vector<3, float> sunDir = Vector<3, float>(1448, 2048, 1448);
     sun = new SunNode(sunDir, origo);
