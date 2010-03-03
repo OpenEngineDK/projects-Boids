@@ -5,20 +5,25 @@
 #include <Scene/GeometryNode.h>
 
 
-Fish::Fish(ISceneNode* child, Vector<3,float> start, RandomGenerator* rg) {
+Fish::Fish(ISceneNode* child, Vector<3,float> start) {
     
     node = new TransformationNode();
     node->AddNode(child);
-    // position = Vector<3,float>(rg->UniformFloat(100,300),
-    //                            rg->UniformFloat(100,300),
-    //                            rg->UniformFloat(100,300));
+    childNode = child;
     velocity = Vector<3,float>(0,0,0);
     position = start;
+
 }
 
 
 TransformationNode* Fish::GetNode() {
     return node;
+}
+
+void Fish::SetChildNode(ISceneNode* n) {
+    node->DeleteNode(childNode);
+    childNode = n;
+    node->AddNode(childNode);
 }
 
 void Fish::AddVelocity(Vector<3,float> v) {
@@ -46,7 +51,7 @@ void Fish::Update(Time dt) {
     
     Quaternion<float> newRot(rotMat);
 
-    rotation = Quaternion<float>(rotation,newRot,0.01); // Rotate 1%
+    rotation = Quaternion<float>(rotation,newRot,0.1); // Rotate 10%
 
     node->SetRotation(rotation);
 

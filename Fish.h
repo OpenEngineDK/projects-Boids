@@ -25,10 +25,12 @@ public:
     Quaternion<float> rotation;
 
     TransformationNode *node;
+    ISceneNode* childNode;
 
-    Fish(ISceneNode* child, Vector<3,float> start, RandomGenerator* rg);
+    Fish(ISceneNode* child, Vector<3,float> start);
 
     TransformationNode* GetNode();
+    void SetChildNode(ISceneNode* child);
 
     
     void AddVelocity(Vector<3,float> v);

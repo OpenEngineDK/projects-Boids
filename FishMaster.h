@@ -5,6 +5,7 @@
 #include <Scene/SceneNode.h>
 
 #include "Fish.h"
+#include "Shoal.h"
 #include "Shark.h"
 #include "Scene/OceanFloorNode.h"
 #include <Utils/PropertyTree.h>
@@ -30,69 +31,38 @@ private:
 
     SceneNode *root;
     Shark* shark;
-    std::vector<Fish*> fishes;
-    RandomGenerator *rg;
+    std::vector<Shoal*> shoals;
+    
     OceanFloorNode* ocean;
+    RandomGenerator *rg;
+    
     Timer loopTimer;
 
-    Vector<3,float> startPoint;
-    Vector<3,float> endPoint;
 
-    Vector<3,float> Rule1(Fish* f);
-    Vector<3,float> Rule2(Fish* f);
-    Vector<3,float> Rule3(Fish* f);
 
-    Vector<3,float> BoxRule(Fish* f);
-    Vector<3,float> HeightRule(Fish* f);
-    Vector<3,float> TopRule(Fish* f);
-    
-
-    void BoxLimit(Fish *f);
-    void LimitSpeed(Fish* f);
-
-    Vector<3,float> TendToPlace(Fish* f);
-
-    Vector<3,float> HeadForDirection(Fish* f, Vector<3,float> d);
-    Vector<3,float> Flee(Fish* f, Vector<3,float> p);
-    Vector<3,float> Randomize(Fish *f);
-
-    // Boid properties
-
-    bool rule1Enabled,rule2Enabled,rule3Enabled;
-    float massFactor;
-    float privacyRadius;
-    float followScalar;
-
-    bool homeEnabled;
-    Vector<3, float> home;
-    float homeScalar;    
-
-    bool speedEnabled;
-    float maxSpeed;
-    float minSpeed;
+    // boids
 
     bool heightEnabled,topEnabled;
     float heightMin, heightMax;
     float heightSpeed;
 
-    bool fleeEnabled;
-    float sharkDistance;
-    float fleeScale;
 
-    bool boxRuleEnabled;
-    float boxSpeed;
-    float boxDist;
-
-    bool randomEnabled;
-    float randomFactor;
+    Vector<3,float> HeadForDirection(Fish* f, Vector<3,float> d);
+    Vector<3,float> HeightRule(Fish* f);
+    void BoxLimit(Fish *f);
 
 
     void ReloadProperties();
+public:
 
     float GetHeight(Vector<3,float>);
     Vector<3,float> GetNormal(Vector<3,float>);
+                              Vector<3,float> GetReflect(Vector<3,float>,Vector<3,float>);
 
-public:
+
+    Vector<3,float> startPoint;
+    Vector<3,float> endPoint;
+
     FishMaster(OceanFloorNode* ocean, PropertyTree& ptree);
 
     ISceneNode* GetFishNode();

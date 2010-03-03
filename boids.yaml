@@ -1,81 +1,118 @@
 # Yaml configuration of boids
 # search for yaml-mode to edit nicely with emacs
 #
- 
-# model: 
+
+# model:
 #   file: "guppy/models/guppy.dae"
 #   scale: [200, 200, 200]
 #   rotation: [0, 3.14, 0]
 
-model: 
-  file: "bass/models/bass[1].dae"
-  scale: [3,3,3]
-  rotation: [0, 6, 0]
 
-
-# model: 
+# model:
 #   file: "goldfish/models/clownfish[1].dae"
 #   scale: [10, 10, 10]
 #   rotation: [0, 3.14, 0]
 
-startPos: [2000,100,2000]
-
-numFish: 20
-
 cams:
   - pos: [1000,2000,1000]
     lookat: [1000,0,1000]
-  - pos: [1000,2000,1000]
+  - pos: [100,2000,100]
     tracking: true
     lookat: [1000,0,1000]
   - pos: [1000,1000,1000]
     lookat: [1000,0,1000]
   - pos: [0,1000,0]
     lookat: [1000,0,1000]
-  - pos: [1000,500,1000]
+  - pos: [1000,700,1000]
     lookat: [1000,0,1000]
 
-speed:
-  enabled: true
-  max: 200
-  min: 100
+shark:
+  pos: [200,100,200]
+  height:
+    min: 10
 
-# Match the velocities
-rule1:
-  enabled: true
-  massFactor: 100
 
-rule2:
-  enabled: true
-  privacyRadius: 10
-
-rule3:
-  enabled: true
-  followScalar: 16
-
-home:  
-  enabled: false
-  position: [500, 500, 500] # This is a custom format for Vector<3,float>
-  factor: 100
-
-boxrule:
-  enabled: true
-  dist: 1000
-  speed: 10
-
-height:
-  enabled: true
-  top:
-    enabled: true
-  speed: 30
-  min: 10
-  max: 200
-
-flee:
-  enabled: true
-  sharkDistance: 100
-  scale: 20
-
-randomize:
-  enabled: true
-  factor: 10
+shoals:
+  - model:
+      file: "bass/models/bass[1].dae"
+      scale: [3,3,3]
+      trans: [-25,0,0]
+      rotation: [0, 6, 0]
+    startPos: [200,100,200]
+    numFish: 20
+    speed:
+      enabled: true
+      max: 600
+      min: 200
+    rule1: # Match the velocities
+      enabled: true
+      massFactor: 100
+    rule2:
+      enabled: true
+      privacyRadius: 30
+    rule3:
+      enabled: true
+      followScalar: 16
+    home:
+      enabled: true
+      position: [800, 100, 800] # This is a custom format for Vector<3,float>
+      factor: 100
+    boxrule:
+      enabled: true
+      dist: 100
+      speed: 10
+    height:
+      enabled: true
+      top:
+        enabled: true
+      speed: 30
+      min: 10
+      max: 200
+    flee:
+      enabled: true
+      sharkDistance: 100
+      scale: 20
+    randomize:
+      enabled: true
+      factor: 10
+  - model:
+     file: "guppy/models/guppy.dae"
+     scale: [2000, 2000, 2000]
+     rotation: [0, 3.14, 0]
+    startPos: [200,100,200]
+    numFish: 20
+    speed:
+      enabled: true
+      max: 300
+      min: 100
+    rule1: # Match the velocities
+      enabled: true
+      massFactor: 100
+    rule2:
+      enabled: true
+      privacyRadius: 30
+    rule3:
+      enabled: true
+      followScalar: 16
+    home:
+      enabled: false
+      position: [800, 100, 800] # This is a custom format for Vector<3,float>
+      factor: 100
+    boxrule:
+      enabled: true
+      dist: 100
+      speed: 10
+    height:
+      enabled: true
+      top:
+        enabled: true
+      speed: 30
+      min: 10
+      max: 200
+    flee:
+      enabled: true
+      sharkDistance: 100
+      scale: 20
+    randomize:
+      enabled: true
+      factor: 10

@@ -2,8 +2,8 @@
 #include "Shark.h"
 #include <Logging/Logger.h>
 
-Shark::Shark(ISceneNode* child, Vector<3,float> start, RandomGenerator* rg) 
-  : Fish(child,start,rg) {
+Shark::Shark(ISceneNode* child, Vector<3,float> start) 
+  : Fish(child,start) {
     direction = Vector<3,float>(1,0,0);
     speed = 1.0f;
 }

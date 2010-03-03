@@ -32,7 +32,7 @@ private:
 public:
     Vector<3,float> direction;
 
-    Shark(ISceneNode* child, Vector<3,float> start, RandomGenerator* rg);
+    Shark(ISceneNode* child, Vector<3,float> start);
 
     void SetSpeed(float s);
     void SetDirection(float j, float r);

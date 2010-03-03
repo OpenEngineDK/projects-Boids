@@ -12,6 +12,8 @@ SET( PROJECT_SOURCES
   Fish.cpp
   Shark.h
   Shark.cpp
+  Shoal.h
+  Shoal.cpp
   WiiFishController.h
   WiiFishController.cpp
   Scene/OceanFloorNode.h
