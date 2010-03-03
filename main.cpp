@@ -165,7 +165,6 @@ void SetupTerrain(SimpleSetup* setup){
     map = CreateSmoothTerrain(map, 8000, 10, 40);
     map = CreateSmoothTerrain(map, 16000, 3, -6);
     map = CreateSmoothTerrain(map, 40000, 2, 3);
-    float widthScale = 16.0;
     */
     FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(128, 128, 1));
     Empty(map);
@@ -174,6 +173,7 @@ void SetupTerrain(SimpleSetup* setup){
     map = CreateSmoothTerrain(map, 125, 5, 40);
     map = CreateSmoothTerrain(map, 250, 3, -6);
     map = CreateSmoothTerrain(map, 625, 2, 3);
+    map = MakePlateau(map, 700, 30);
     float widthScale = 16.0;
 
     Vector<3, float> origo = Vector<3, float>(map->GetHeight() * widthScale / 2, 0, map->GetWidth() * widthScale / 2);
