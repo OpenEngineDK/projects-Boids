@@ -18,6 +18,7 @@
 #include <Display/InterpolatedViewingVolume.h>
 #include <Resources/ResourceManager.h>
 #include <Resources/ColladaResource.h>
+#include <Renderers/BufferObjectBinder.h>
 
 // SimpleSetup
 #include <Utils/SimpleSetup.h>
@@ -49,6 +50,7 @@ using namespace OpenEngine::Utils;
 using namespace OpenEngine::Display;
 using namespace OpenEngine::Scene;
 using namespace OpenEngine::Renderers::OpenGL;
+using namespace OpenEngine::Renderers;
 
 // Forward method declarations
 void SetupTerrain(SimpleSetup* setup);
@@ -145,6 +147,9 @@ int main(int argc, char** argv) {
     setup->GetEngine().InitializeEvent().Attach(*ptree);
     setup->GetEngine().ProcessEvent().Attach(*ptree);
     setup->GetEngine().DeinitializeEvent().Attach(*ptree);
+
+    BufferObjectBinder* bob = new BufferObjectBinder(setup->GetRenderer());
+    setup->GetRenderer().InitializeEvent().Attach(*bob);
 
     setup->ShowFPS();
 
