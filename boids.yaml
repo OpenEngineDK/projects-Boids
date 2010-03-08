@@ -19,7 +19,7 @@ cams:
   - pos: [100,2000,100]
     tracking: true
     lookat: [1000,0,1000]
-  - pos: [1000,1000,1000]
+  - pos: [1000,3000,1000]
     lookat: [1000,0,1000]
   - pos: [0,1000,0]
     lookat: [1000,0,1000]
@@ -27,50 +27,57 @@ cams:
     lookat: [1000,0,1000]
 
 shark:
-  pos: [200,100,200]
+  pos: [0.55,100,0.55]
   height:
     min: 10
 
 
+
 shoals:
+  # - model:
+  #     file: "duck/duck_triangulate.dae"
+  #     scale: [.2,.2,.2]
+  #     trans: [0,0,0]
+  #     rotation: [0, 0, 0]
   - model:
       file: "bass/models/bass[1].dae"
       scale: [3,3,3]
       trans: [-25,0,0]
       rotation: [0, 6, 0]
-    startPos: [200,100,200]
-    numFish: 20
+    startPos: [0.5,100,0.5]
+    numFish: 40
     speed:
       enabled: true
-      max: 600
-      min: 200
-    rule1: # Match the velocities
-      enabled: true
-      massFactor: 100
-    rule2:
-      enabled: true
-      privacyRadius: 30
-    rule3:
-      enabled: true
+      max: 200
+      min: 20
+    nearDist: 200
+    rule1:
+      enabled: yes
+      privacyRadius: 50
+    rule2: # Match the velocities
+      enabled: yes
       followScalar: 16
+    rule3: 
+      enabled: yes
+      massFactor: 10
     home:
-      enabled: true
-      position: [800, 100, 800] # This is a custom format for Vector<3,float>
+      enabled: no
+      position: &home [.5, 100, .5] # This is a custom format for Vector<3,float>
       factor: 100
     boxrule:
-      enabled: true
+      enabled: yes
       dist: 100
       speed: 10
     height:
-      enabled: true
+      enabled: yes
       top:
         enabled: true
-      speed: 30
+      speed: 60
       min: 10
       max: 200
     flee:
-      enabled: true
-      sharkDistance: 100
+      enabled: yes
+      sharkDistance: 200
       scale: 20
     randomize:
       enabled: true
@@ -79,36 +86,36 @@ shoals:
      file: "guppy/models/guppy.dae"
      scale: [2000, 2000, 2000]
      rotation: [0, 3.14, 0]
-    startPos: [200,100,200]
+    startPos: [0.5,100,0.5]
     numFish: 20
     speed:
       enabled: true
       max: 300
       min: 100
-    rule1: # Match the velocities
+    rule1: 
       enabled: true
       massFactor: 100
     rule2:
       enabled: true
       privacyRadius: 30
-    rule3:
+    rule3: # Match the velocities
       enabled: true
       followScalar: 16
     home:
-      enabled: false
-      position: [800, 100, 800] # This is a custom format for Vector<3,float>
+      enabled: no
+      position: *home
       factor: 100
     boxrule:
       enabled: true
       dist: 100
       speed: 10
     height:
-      enabled: true
+      enabled: yes
       top:
         enabled: true
-      speed: 30
+      speed: 60
       min: 10
-      max: 200
+      max: 1000
     flee:
       enabled: true
       sharkDistance: 100

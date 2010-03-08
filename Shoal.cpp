@@ -122,14 +122,16 @@ void Shoal::ReloadProperties(PropertyTreeNode ptn) {
     maxSpeed = ptn.GetPath("speed.max",200.0f);
     minSpeed = ptn.GetPath("speed.min",30.0f);
 
+    nearDist = ptn.GetPath("nearDist",200.0f);
+
     rule1Enabled = ptn.GetPath("rule1.enabled",true);
-    massFactor = ptn.GetPath("rule1.massFactor",100);
+    privacyRadius = ptn.GetPath("rule1.privacyRadius",10.0f);
 
     rule2Enabled = ptn.GetPath("rule2.enabled",true);
-    privacyRadius = ptn.GetPath("rule2.privacyRadius",10.0f);
+    followScalar = ptn.GetPath("rule2.followScalar",16.0f);
 
     rule3Enabled = ptn.GetPath("rule3.enabled",true);
-    followScalar = ptn.GetPath("rule3.followScalar",16.0f);
+    massFactor = ptn.GetPath("rule3.massFactor",100);
 
     homeEnabled = ptn.GetPath("home.enabled", true);
     home = ptn.GetPath("home.position", Vector<3,float>(0,0,0));
@@ -207,8 +209,48 @@ void Shoal::Reset() {
 
 
 /// Boids rules
-// Follow center of mass
+// Keep distance to other boids
 Vector<3,float> Shoal::Rule1(Fish* f) {
+    Vector<3,float> c;
+    for (vector<Fish*>::iterator itr = fishes.begin();
+         itr != fishes.end();
+         itr++) {
+            Fish *n = *itr;
+            if (n != f){ // if not self
+                Vector<3,float> d = (n->position - f->position);
+                float dist = d.GetLength();
+                if (dist < nearDist && dist < privacyRadius)
+                    c = c - d;
+            }
+    }
+
+    return c;
+}
+
+// Match velocity
+Vector<3,float> Shoal::Rule2(Fish* f) {
+    Vector<3,float> pv;
+    int c = 0;
+    for (vector<Fish*>::iterator itr = fishes.begin();
+         itr != fishes.end();
+         itr++) {
+            Fish *n = *itr;
+            if (n != f) { // If not self
+                Vector<3,float> d = (n->position - f->position);
+                float dist = d.GetLength();
+                if (dist < nearDist) {
+                    pv = pv + n->velocity;
+                    c++;
+                }
+            }
+    }
+
+    pv = pv / max(c,1);
+    return (pv - f->velocity) / followScalar;
+}
+
+// Follow center of mass
+Vector<3,float> Shoal::Rule3(Fish* f) {
     Vector<3,float> pc;
     int c = 0;
     for (vector<Fish*>::iterator itr = fishes.begin();
@@ -218,51 +260,20 @@ Vector<3,float> Shoal::Rule1(Fish* f) {
         Fish *n = *itr;
 
         if (n != f){ // Skip self
-            pc += n->position;
-            c++;
+            Vector<3,float> d = (n->position - f->position);
+            float dist = d.GetLength();
+            if (dist < nearDist) {
+                pc += n->position;
+                c++;
+            }
         }
     }
 
-    pc = pc / c;
+    pc = pc / max(c,1);
 
     return (pc - f->position) / massFactor;
 }
 
-// Keep distance to other boids
-Vector<3,float> Shoal::Rule2(Fish* f) {
-    Vector<3,float> c;
-    for (vector<Fish*>::iterator itr = fishes.begin();
-         itr != fishes.end();
-         itr++) {
-            Fish *n = *itr;
-            if (n != f){ // if not self
-                Vector<3,float> d = (n->position - f->position);
-                if (d.GetLength() < privacyRadius)
-                    c = c - d;
-            }
-    }
-
-    return c;
-}
-
-// Match velocity
-Vector<3,float> Shoal::Rule3(Fish* f) {
-    Vector<3,float> pv;
-    int c = 1;
-    for (vector<Fish*>::iterator itr = fishes.begin();
-         itr != fishes.end();
-         itr++) {
-            Fish *n = *itr;
-            if (n != f){ // If not self
-                pv = pv + n->velocity;
-                c++;
-    }
-    }
-
-    pv = pv / c;
-
-    return (pv - f->velocity) / followScalar;
-}
 
 Vector<3,float> Shoal::TendToPlace(Fish* f) {
     return (home - f->position) / homeScalar;

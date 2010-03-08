@@ -44,6 +44,7 @@ private:
 
 
     RandomGenerator* rg;
+
     // Boids rules
     Vector<3,float> Rule1(Fish* f);
     Vector<3,float> Rule2(Fish* f);
@@ -66,6 +67,8 @@ private:
 
 
     // Boid properties
+    float nearDist;
+
     bool rule1Enabled,rule2Enabled,rule3Enabled;
     float massFactor;
     float privacyRadius;
