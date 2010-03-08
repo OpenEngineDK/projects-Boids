@@ -48,8 +48,8 @@ void Shoal::ReloadProperties(PropertyTreeNode ptn) {
         node->SetPosition(translation);
         node->AddNode(model->GetSceneNode());
         
-        VertexArrayTransformer trans;
-        trans.Transform(*node);
+        // VertexArrayTransformer trans;
+        // trans.Transform(*node);
 
         childNode = node;
         
@@ -59,6 +59,7 @@ void Shoal::ReloadProperties(PropertyTreeNode ptn) {
     fishes.clear();
 
     startPos = ptn.Get("startPos",Vector<3,float>());
+
     unsigned int n = ptn.Get("numFish",10);
     for (unsigned int i=0;i<n;i++) {
         
@@ -132,6 +133,7 @@ void Shoal::ReloadProperties(PropertyTreeNode ptn) {
 
     homeEnabled = ptn.GetPath("home.enabled", true);
     home = ptn.GetPath("home.position", Vector<3,float>(0,0,0));
+    home = fm->ScaledPos(home);
     homeScalar = ptn.GetPath("home.factor",100.0f);
 
     boxSpeed = ptn.GetPath("boxrule.speed",10.0f);
@@ -198,7 +200,7 @@ void Shoal::Reset() {
          itr++) {
         Fish *f = *itr;
 
-        f->position = startPos;
+        f->position = fm->ScaledPos(startPos);
         f->velocity = Vector<3,float>(0,0,0);
     }
 }
@@ -208,7 +210,7 @@ void Shoal::Reset() {
 // Follow center of mass
 Vector<3,float> Shoal::Rule1(Fish* f) {
     Vector<3,float> pc;
-    int c = 1;
+    int c = 0;
     for (vector<Fish*>::iterator itr = fishes.begin();
          itr != fishes.end();
          itr++) {
@@ -341,21 +343,18 @@ Vector<3,float> Shoal::HeightRule(Fish* f) {
         if (dt < 0)
             f->position[1] = h;
         //v = Vector<3,float>(0,1,0)*heightSpeed;
-        v = fm->GetNormal(f->position)*heightSpeed;
-        //v = fm->GetReflect(f->position,f->velocity)*heightSpeed;
+        //v = fm->GetNormal(f->position)*heightSpeed;
+        v = fm->GetReflect(f->position,f->prev)*heightSpeed;
     }
     return v;
 }
 
 Vector<3,float> Shoal::TopRule(Fish* f) {
     float h = fm->GetHeight(f->position);
-
     float dt = f->position[1] - h;
-
     Vector<3,float> v;
     if (dt > heightMax)
         v = -fm->GetNormal(f->position)*heightSpeed;
-
     return v;
 }
 
@@ -369,7 +368,6 @@ Vector<3,float> Shoal::Randomize(Fish* f) {
 
 void Shoal::LimitSpeed(Fish* f) {
     float len = (f->velocity).GetLength();
-
     if (len > maxSpeed) {
         f->velocity = (f->velocity / len) * maxSpeed;
     } else if (len < minSpeed) {
@@ -378,9 +376,7 @@ void Shoal::LimitSpeed(Fish* f) {
 }
 
  void Shoal::BoxLimit(Fish* f) {
-
     Vector<3,float> p = f->position;
-
     Vector<3,float> startPoint = fm->startPoint;
     Vector<3,float> endPoint = fm->endPoint;
 
@@ -399,5 +395,4 @@ void Shoal::LimitSpeed(Fish* f) {
     } else if (p[2] > endPoint[2] ) {
         f->position[2] = endPoint[2];
     }
-
 }

@@ -63,6 +63,8 @@ public:
     Vector<3,float> startPoint;
     Vector<3,float> endPoint;
 
+    Vector<3,float> ScaledPos(Vector<3,float>);
+
     FishMaster(OceanFloorNode* ocean, PropertyTree& ptree);
 
     ISceneNode* GetFishNode();

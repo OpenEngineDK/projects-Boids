@@ -6,7 +6,7 @@
 
 
 Fish::Fish(ISceneNode* child, Vector<3,float> start) {
-    
+
     node = new TransformationNode();
     node->AddNode(child);
     childNode = child;
@@ -28,7 +28,6 @@ void Fish::SetChildNode(ISceneNode* n) {
 
 void Fish::AddVelocity(Vector<3,float> v) {
     velocity += v;
-
 }
 
 void Fish::Update(Time dt) {
@@ -36,23 +35,20 @@ void Fish::Update(Time dt) {
 
     position += velocity*delta;
     node->SetPosition(position);
-
     if (velocity.GetLength() < 0.01)
         return;
 
     Vector<3,float> x = velocity.GetNormalize(); // x vector
-    Vector<3,float> y(0,1,0); // up vector
-    Vector<3,float> z = x % y;
-    if (z.GetLength() < 0.01)
+    Vector<3,float> up(0,1,0); // up vector
+    Vector<3,float> z = x % up;
+    if (x.GetLength() < 0.01)
         return;
-    z.Normalize();
+    Vector<3,float> y = z % x;
 
     Matrix<3,3,float> rotMat(x,y,z);
-    
     Quaternion<float> newRot(rotMat);
-
-    rotation = Quaternion<float>(rotation,newRot,0.1); // Rotate 10%
-
+    rotation = Quaternion<float>(rotation,newRot.GetNormalize(),0.1); // Rotate 10%
     node->SetRotation(rotation);
 
+    prev = velocity;
 }

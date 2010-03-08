@@ -60,7 +60,9 @@ void WiiFishController::ReloadConfig() {
         c->LookAt(lookat);
         cams.push_back(c);
     }
-    if (curCamIdx < cams.size())
+    if (curCamIdx == -1)
+        setup->SetCamera(*cam);
+    else if (curCamIdx < cams.size())
         setup->SetCamera(*(cams[curCamIdx]));
     else
         setup->SetCamera(*cam);
@@ -132,6 +134,7 @@ void WiiFishController::Handle(KeyboardEventArg arg) {
             break;
             
         case KEY_1:
+            curCamIdx = -1;
             setup->SetCamera(*cam);
             break;
         case KEY_2:

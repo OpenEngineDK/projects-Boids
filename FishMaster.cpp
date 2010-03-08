@@ -19,13 +19,16 @@ FishMaster::FishMaster(OceanFloorNode* ocean, PropertyTree& ptree)
     ptree.Reload();
 
 
+
     FaceSet* fs = new FaceSet();
     FaceBuilder::FaceState state;
     state.color = Vector<4,float>(.5,.5,.5,1);
     FaceBuilder::MakeABox(fs,state,Vector<3,float>(),Vector<3,float>(8) );  
 
-    shark = new Shark(new GeometryNode(fs),
-                      ptree.Get("shark.pos",Vector<3,float>()));
+    Vector<3,float> p = ptree.Get("shark.pos",Vector<3,float>());
+
+    shark = new Shark(new GeometryNode(fs),ScaledPos(p));
+
 
     
 
@@ -122,6 +125,7 @@ void FishMaster::Handle(InitializeEventArg arg) {
                 <<  " " << endPoint << logger.end;
 
     loopTimer.Start();
+    Reset();
 
 }
 void FishMaster::Handle(ProcessEventArg arg) {
@@ -156,7 +160,7 @@ void FishMaster::Reset() {
 
         s->Reset();
     }
-    shark->position = startPos;
+    shark->position = ScaledPos(startPos);
     shark->velocity = Vector<3,float>(0,0,0);
                          //shark->Update(0);
 
@@ -169,6 +173,17 @@ Shark* FishMaster::GetShark() {
     return shark;
 }
 
+Vector<3,float> FishMaster::ScaledPos(Vector<3,float> p) {
+    Vector<3,float> r;
+    r[0] = endPoint[0]*p[0] + startPoint[0];
+    //r[1] = endPoint[1]*p[1] + startPoint[1];
+
+    r[2] = endPoint[2]*p[2] + startPoint[2];
+
+    r[1] = p[1]+GetHeight(r);
+
+    return r;
+}
 
 // Boids rules
 Vector<3,float> FishMaster::HeadForDirection(Fish* f, Vector<3,float> d) {
@@ -208,3 +223,4 @@ Vector<3,float> FishMaster::HeightRule(Fish* f) {
     }
 
 }
+

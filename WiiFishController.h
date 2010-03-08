@@ -49,7 +49,7 @@ private:
     PropertyTree& ptree;
     
     vector<Camera*> cams;
-    unsigned int curCamIdx;
+    int curCamIdx;
 
     Vector<3,float> camMove;
     float speed;
