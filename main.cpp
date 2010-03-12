@@ -114,8 +114,8 @@ int main(int argc, char** argv) {
     rsn->EnableOption(RenderStateNode::COLOR_MATERIAL);
 
     root->AddNode(sun);
-    sun->AddNode(oceanFloor);
     sun->AddNode(rsn);
+    rsn->AddNode(oceanFloor);
     rsn->AddNode(fm->GetFishNode());
     setup->SetScene(*root);
 
