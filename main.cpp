@@ -18,7 +18,7 @@
 #include <Display/InterpolatedViewingVolume.h>
 #include <Resources/ResourceManager.h>
 #include <Resources/ColladaResource.h>
-#include <Renderers/BufferObjectBinder.h>
+#include <Renderers/DataBlockBinder.h>
 
 // SimpleSetup
 #include <Utils/SimpleSetup.h>
@@ -148,7 +148,7 @@ int main(int argc, char** argv) {
     setup->GetEngine().ProcessEvent().Attach(*ptree);
     setup->GetEngine().DeinitializeEvent().Attach(*ptree);
 
-    BufferObjectBinder* bob = new BufferObjectBinder(setup->GetRenderer());
+    DataBlockBinder* bob = new DataBlockBinder(setup->GetRenderer());
     setup->GetRenderer().InitializeEvent().Attach(*bob);
 
     setup->ShowFPS();
