@@ -119,9 +119,6 @@ int main(int argc, char** argv) {
     rsn->AddNode(fm->GetFishNode());
     setup->SetScene(*root);
 
-    //setup->GetCamera()->SetPosition(Vector<3, float>(-256.0, 800.0, -256.0));
-    //setup->GetCamera()->LookAt(1024.0, 127.0, 1024.0);
-    
     //FollowCamera* cam = new FollowCamera(*(new StereoCamera(*(new InterpolatedViewingVolume(*(new PerspectiveViewingVolume(10)))))));
 
     FollowCamera* cam = new FollowCamera(*(new InterpolatedViewingVolume(*(new PerspectiveViewingVolume(10)))));
