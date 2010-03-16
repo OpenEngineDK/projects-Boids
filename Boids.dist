@@ -28,7 +28,7 @@ darcs /extensions/OBJResource            http://openengine.dk/code/extensions/OB
 darcs /extensions/AccelerationStructures http://openengine.dk/code/extensions/AccelerationStructures
 darcs /extensions/FaceBuilder            http://openengine.dk/code/extensions/FaceBuilder
 darcs /extensions/HeightMap              http://openengine.dk/code/extensions/HeightMap
-darcs /extensions/OpenALSoundResource    http://openengine.dk/code/extensions/OpenALSoundResource
+darcs /extensions/OpenALSoundSystem    http://openengine.dk/code/extensions/OpenALSoundSystem
 darcs /extensions/MusicPlayer            http://openengine.dk/code/extensions/MusicPlayer
 
 
@@ -44,7 +44,7 @@ darcs-dev /extensions/TGAResource            fh.daimi.au.dk:/users/cgd/code/exte
 darcs-dev /extensions/OBJResource            fh.daimi.au.dk:/users/cgd/code/extensions/OBJResource
 darcs-dev /extensions/AccelerationStructures fh.daimi.au.dk:/users/cgd/code/extensions/AccelerationStructures
 darcs-dev /extensions/HeightMap              fh.daimi.au.dk:/users/cgd/code/extensions/HeightMap
-darcs-dev /extensions/OpenALSoundResource    fh.daimi.au.dk:/users/cgd/code/extensions/OpenALSoundResource
+darcs-dev /extensions/OpenALSoundSystem      fh.daimi.au.dk:/users/cgd/code/extensions/OpenALSoundSystem
 darcs-dev /extensions/MusicPlayer            fh.daimi.au.dk:/users/cgd/code/extensions/MusicPlayer
 
 # windows libraries
