@@ -286,6 +286,8 @@ Vector<3,float> Shoal::Flee(Fish* f, Vector<3,float> p) {
     if (len < sharkDistance) {
         v = (f->position - p);
         v *= (sharkDistance - len)*fleeScale;
+        if (!f->sound->IsPlaying())
+            f->sound->Play();
     }
     return v;
 }

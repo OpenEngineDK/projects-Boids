@@ -4,15 +4,28 @@
 #include <Logging/Logger.h>
 #include <Scene/GeometryNode.h>
 
+#include <Resources/ISoundResource.h>
+#include <Resources/ResourceManager.h>
+#include <Scene/SoundNode.h>
+#include <Sound/IMonoSound.h>
+#include <Sound/ISoundSystem.h>
+
+
+extern ISoundSystem * soundsystem;
+extern ISoundResourcePtr fishres;
 
 Fish::Fish(ISceneNode* child, Vector<3,float> start) {
-
     node = new TransformationNode();
     node->AddNode(child);
     childNode = child;
     velocity = Vector<3,float>(0,0,0);
     position = start;
 
+    sound = (IMonoSound*)soundsystem->CreateSound(fishres);
+    sound->SetGain(100.0);
+    sound->SetMaxDistance(1000.0);
+    SoundNode* soundNode = new SoundNode(sound);
+    node->AddNode(soundNode);
 }
 
 

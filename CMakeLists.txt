@@ -46,4 +46,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
   Extensions_OpenGLRenderer
   Extensions_OpenColladaResource
   Extensions_PropertyTree
+  Extensions_OpenALSoundSystem
+  Extensions_VorbisResource
+  Extensions_MusicPlayer
 )

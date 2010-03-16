@@ -28,6 +28,9 @@ darcs /extensions/OBJResource            http://openengine.dk/code/extensions/OB
 darcs /extensions/AccelerationStructures http://openengine.dk/code/extensions/AccelerationStructures
 darcs /extensions/FaceBuilder            http://openengine.dk/code/extensions/FaceBuilder
 darcs /extensions/HeightMap              http://openengine.dk/code/extensions/HeightMap
+darcs /extensions/OpenALSoundResource    http://openengine.dk/code/extensions/OpenALSoundResource
+darcs /extensions/MusicPlayer            http://openengine.dk/code/extensions/MusicPlayer
+
 
 darcs-dev /extensions/SetupHelpers           fh.daimi.au.dk:/users/cgd/code/extensions/SetupHelpers
 darcs-dev /extensions/HUD                    fh.daimi.au.dk:/users/cgd/code/extensions/HUD
@@ -41,6 +44,8 @@ darcs-dev /extensions/TGAResource            fh.daimi.au.dk:/users/cgd/code/exte
 darcs-dev /extensions/OBJResource            fh.daimi.au.dk:/users/cgd/code/extensions/OBJResource
 darcs-dev /extensions/AccelerationStructures fh.daimi.au.dk:/users/cgd/code/extensions/AccelerationStructures
 darcs-dev /extensions/HeightMap              fh.daimi.au.dk:/users/cgd/code/extensions/HeightMap
+darcs-dev /extensions/OpenALSoundResource    fh.daimi.au.dk:/users/cgd/code/extensions/OpenALSoundResource
+darcs-dev /extensions/MusicPlayer            fh.daimi.au.dk:/users/cgd/code/extensions/MusicPlayer
 
 # windows libraries
 win32 /libraries http://openengine.dk/data/libraries/boost-win32.zip
@@ -58,3 +63,5 @@ darwin /libraries http://openengine.dk/data/libraries/wii_mac64.tgz
 
 any /projects/Boids/data	http://www.openengine.dk/data/projects/ThirdPersonEater/textures.zip
 any /projects/Boids/data	http://www.openengine.dk/data/projects/ThirdPersonEater/fish.tar.gz
+any /projects/Boids/data	http://www.openengine.dk/data/projects/ThirdPersonEater/underwater.ogg
+any /projects/Boids/data	http://www.openengine.dk/data/projects/ThirdPersonEater/bubbles.ogg
