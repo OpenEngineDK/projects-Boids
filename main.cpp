@@ -38,6 +38,16 @@
 #include <Display/SDLEnvironment.h>
 #include <Core/GLUTEngine.h>
 
+// sound stuff
+#include <Sound/OpenALSoundSystem.h>
+#include <Sound/ISoundSystem.h>
+#include <Sound/ISound.h>
+#include <Sound/MusicPlayer.h>
+#include <Scene/SoundNode.h>
+
+#include <Resources/VorbisResource.h>
+#include <Resources/ISoundResource.h>
+
 #include "FishMaster.h"
 #include "WiiFishController.h"
 
@@ -51,12 +61,17 @@ using namespace OpenEngine::Display;
 using namespace OpenEngine::Scene;
 using namespace OpenEngine::Renderers::OpenGL;
 using namespace OpenEngine::Renderers;
+using namespace OpenEngine::Sound;
 
 // Forward method declarations
 void SetupTerrain(SimpleSetup* setup);
 
 SunNode* sun;
 OceanFloorNode* oceanFloor;
+
+ISoundSystem* soundsystem;
+MusicPlayer* mplayer;
+ISoundResourcePtr fishres;
 
 /**
  * Main method for the first quarter project of CGD.
@@ -67,6 +82,8 @@ OceanFloorNode* oceanFloor;
 int main(int argc, char** argv) {
 
     ResourceManager<IModelResource>::AddPlugin(new ColladaPlugin());
+    ResourceManager<ISoundResource>::AddPlugin(new VorbisResourcePlugin());
+
 
     // Create simple setup
     //IEnvironment* env = new SDLEnvironment(800,600);
@@ -83,6 +100,22 @@ int main(int argc, char** argv) {
     setup->GetRenderer().SetBackgroundColor(Vector<4, float>(0.12, 0.16, 0.35, 1.0));
 
     SetupTerrain(setup);
+    
+    // sound stuff
+    OpenALSoundSystem* openal = new OpenALSoundSystem(/*root, camera*/);
+    soundsystem = openal;
+    openal->SetDevice(1);
+    setup->GetEngine().InitializeEvent().Attach(*openal);
+    setup->GetEngine().DeinitializeEvent().Attach(*openal);
+    setup->GetRenderer().PreProcessEvent().Attach(*openal);
+
+    string file = "bubbles.ogg";
+    fishres = ResourceManager<ISoundResource>::Create(file);
+
+    mplayer = new MusicPlayer(NULL, openal);
+    mplayer->AddSound("underwater.ogg");
+    setup->GetEngine().ProcessEvent().Attach(*mplayer);
+    mplayer->Play();
 
     string confPath = DirectoryManager::FindFileInPath("boids.yaml");
 
