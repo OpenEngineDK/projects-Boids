@@ -13,6 +13,9 @@
 #include <Scene/HeightMapNode.h>
 #include <Resources/IShaderResource.h>
 #include <Resources/ResourceManager.h>
+#include <Meta/OpenGL.h>
+
+//#define SHADER
 
 namespace OpenEngine {
 namespace Scene {
@@ -20,6 +23,8 @@ namespace Scene {
     class OceanFloorNode : public HeightMapNode {
     private:
         unsigned int elapsedTime;
+        ITexture2DPtr sand;
+
     public:
         OceanFloorNode() : HeightMapNode() {}
         OceanFloorNode(FloatTexture2DPtr tex) : HeightMapNode(tex) {
@@ -28,7 +33,13 @@ namespace Scene {
         ~OceanFloorNode() {}
 
         void Initialize(RenderingEventArg arg) {
+#ifdef SHADER
             landscapeShader = ResourceManager<IShaderResource>::Create("projects/Boids/data/shaders/oceanfloor/oceanfloor.glsl");
+#else
+            sand = ResourceManager<ITexture2D>::Create("textures/sand01.jpg");
+            sand->SetMipmapping(true);
+            arg.renderer.LoadTexture(sand.get());
+#endif
             SetTextureDetail(1.0f / 16.0f);
         }
 
@@ -37,7 +48,20 @@ namespace Scene {
         }
 
         void PreRender(Display::Viewport view) {
+#ifdef SHADER
             this->landscapeShader->SetUniform("time", (float) elapsedTime / 12000000);
+#else
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, sand->GetID());
+#endif
+        }
+
+        void PostRender(Display::Viewport view) {
+#ifndef SHADER
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glDisable(GL_TEXTURE_2D);
+#endif
+            
         }
     };
 }
