@@ -49,4 +49,5 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
   Extensions_OpenALSoundSystem
   Extensions_VorbisResource
   Extensions_MusicPlayer
+  Extensions_MeshUtils
 )
