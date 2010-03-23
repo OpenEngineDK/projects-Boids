@@ -201,7 +201,7 @@ void SetupTerrain(SimpleSetup* setup){
     map = CreateSmoothTerrain(map, 16000, 3, -6);
     map = CreateSmoothTerrain(map, 40000, 2, 3);
     */
-    FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(129, 129, 1));
+    FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(193, 193, 1));
     Empty(map);
     map = CreateSmoothTerrain(map, 1, 160, 300);
     map = CreateSmoothTerrain(map, 25, 20, 60);

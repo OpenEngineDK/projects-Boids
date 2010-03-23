@@ -183,6 +183,9 @@ void WiiFishController::Handle(WiiMoteFoundEventArg arg) {
 
 void WiiFishController::Handle(InitializeEventArg arg) {
     WiiMoteManager* mgr = new WiiMoteManager();
+
+    setup->GetEngine().ProcessEvent().Attach(*mgr);
+
     mgr->WiiMoteFoundEvent().Attach(*this);
     mgr->LookForMote();
     logger.info << "Looking for wiimotes" << logger.end;
