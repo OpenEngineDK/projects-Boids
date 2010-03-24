@@ -33,7 +33,7 @@ public:
 
     IMonoSound* sound;
 
-    Fish(ISceneNode* child, Vector<3,float> start);
+    Fish(ISceneNode* child, Vector<3,float> start, ISoundResourcePtr fishres);
 
     TransformationNode* GetNode();
     void SetChildNode(ISceneNode* child);

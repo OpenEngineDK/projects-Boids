@@ -12,9 +12,9 @@
 
 
 extern ISoundSystem * soundsystem;
-extern ISoundResourcePtr fishres;
 
-Fish::Fish(ISceneNode* child, Vector<3,float> start) {
+
+Fish::Fish(ISceneNode* child, Vector<3,float> start, ISoundResourcePtr fishres) {
     node = new TransformationNode();
     node->AddNode(child);
     childNode = child;

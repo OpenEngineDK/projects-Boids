@@ -10,10 +10,11 @@
 using namespace OpenEngine::Geometry;
 using namespace OpenEngine::Math;
 
-FishMaster::FishMaster(OceanFloorNode* ocean, PropertyTree& ptree)
+FishMaster::FishMaster(OceanFloorNode* ocean, PropertyTree& ptree, ISoundResourcePtr snd)
     : ptree(ptree)
     , root(new SceneNode())
     , ocean(ocean)
+    , blubSound(snd)
     , rg(new RandomGenerator()) {
     ptree.PropertiesChangedEvent().Attach(*this);
     ptree.Reload();
@@ -27,7 +28,7 @@ FishMaster::FishMaster(OceanFloorNode* ocean, PropertyTree& ptree)
 
     Vector<3,float> p = ptree.Get("shark.pos",Vector<3,float>());
 
-    shark = new Shark(new GeometryNode(fs),ScaledPos(p));
+    shark = new Shark(new GeometryNode(fs),ScaledPos(p),blubSound);
 
 
     
@@ -108,10 +109,6 @@ Vector<3,float> FishMaster::GetReflect(Vector<3,float> p, Vector<3,float> d) {
         return ocean->GetReflectedDirection(p, d);
     return Vector<3,float>(0,1,0);
 }
-
-
-
-
 
 
 void FishMaster::Handle(InitializeEventArg arg) {

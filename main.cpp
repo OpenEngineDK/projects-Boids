@@ -74,7 +74,6 @@ OceanFloorNode* oceanFloor;
 
 ISoundSystem* soundsystem;
 MusicPlayer* mplayer;
-ISoundResourcePtr fishres;
 
 
 /**
@@ -88,7 +87,7 @@ int main(int argc, char** argv) {
     ResourceManager<IModelResource>::AddPlugin(new ColladaPlugin());
     ResourceManager<ISoundResource>::AddPlugin(new VorbisResourcePlugin());
 
-    const bool useStereo = true;
+    const bool useStereo = false;
 
     // Create simple setup
     //IEnvironment* env = new SDLEnvironment(800,600);
@@ -124,20 +123,19 @@ int main(int argc, char** argv) {
     setup->GetEngine().DeinitializeEvent().Attach(*openal);
     setup->GetRenderer().PreProcessEvent().Attach(*openal);
 
-    string file = "bubbles.ogg";
-    fishres = ResourceManager<ISoundResource>::Create(file);
 
     mplayer = new MusicPlayer(NULL, openal);
     mplayer->AddSound("underwater.ogg");
     setup->GetEngine().ProcessEvent().Attach(*mplayer);
     mplayer->Play();
 
+
     string confPath = DirectoryManager::FindFileInPath("boids.yaml");
     PropertyTree* ptree = new PropertyTree(confPath);
     FishMaster *fm = new FishMaster(oceanFloor,
-                                    *ptree);
-    // IModelResourcePtr sharkModel = 
-    // ResourceManager<IModelResource>::Create("shark/models/shark.dae");
+                                    *ptree,
+                                    ResourceManager<ISoundResource>::Create("bubbles.ogg"));
+
 
     IModelResourcePtr sharkModel = 
         ResourceManager<IModelResource>::Create("leopardshark/models/lepord.dae");

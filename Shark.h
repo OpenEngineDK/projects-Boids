@@ -25,7 +25,7 @@ using namespace OpenEngine::Utils;
  *
  * @class Shark Shark.h ts/Boids/Shark.h
  */
-class Shark : public Fish{
+class Shark : public Fish {
 private:
 
     float speed;
@@ -34,7 +34,7 @@ public:
     float jaw,dir;
     Vector<3,float> direction;
 
-    Shark(ISceneNode* child, Vector<3,float> start);
+    Shark(ISceneNode* child, Vector<3,float> start, ISoundResourcePtr fishres);
 
     void SetSpeed(float s);
     void AddDirection(float j, float r);

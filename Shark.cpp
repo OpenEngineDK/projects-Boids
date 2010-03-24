@@ -2,8 +2,8 @@
 #include "Shark.h"
 #include <Logging/Logger.h>
 
-Shark::Shark(ISceneNode* child, Vector<3,float> start) 
-  : Fish(child,start) {
+Shark::Shark(ISceneNode* child, Vector<3,float> start, ISoundResourcePtr fishres) 
+    : Fish(child,start,fishres) {
     direction = Vector<3,float>(1,0,0);
     speed = 1.0f;
     jaw = 0;

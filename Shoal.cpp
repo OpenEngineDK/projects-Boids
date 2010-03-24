@@ -101,7 +101,7 @@ void Shoal::ReloadProperties(PropertyTreeNode ptn) {
             n->AddNode(van);
             n->AddNode(geom);
             
-            Fish *f = new Fish(n, startPos);
+            Fish *f = new Fish(n, fm->ScaledPos(startPos),fm->blubSound);
             fishes.push_back(f);
             root->AddNode(f->GetNode());
         }

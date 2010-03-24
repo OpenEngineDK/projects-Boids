@@ -55,6 +55,8 @@ private:
     void ReloadProperties();
 public:
 
+    ISoundResourcePtr blubSound;
+    
     float GetHeight(Vector<3,float>);
     Vector<3,float> GetNormal(Vector<3,float>);
                               Vector<3,float> GetReflect(Vector<3,float>,Vector<3,float>);
@@ -65,7 +67,7 @@ public:
 
     Vector<3,float> ScaledPos(Vector<3,float>);
 
-    FishMaster(OceanFloorNode* ocean, PropertyTree& ptree);
+    FishMaster(OceanFloorNode* ocean, PropertyTree& ptree, ISoundResourcePtr snd);
 
     ISceneNode* GetFishNode();
     Shark* GetShark();
