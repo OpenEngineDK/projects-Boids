@@ -26,6 +26,8 @@
 #include <Display/Camera.h>
 #include <Renderers/OpenGL/StereoRenderer.h>
 
+#include <Devices/KeyboardActionMapper.h>
+
 
 using namespace OpenEngine::Core;
 using namespace OpenEngine::Devices;
@@ -44,15 +46,39 @@ class WiiFishController : public IModule
                         , public IListener<KeyboardEventArg>
                         , public IListener<PropertiesChangedEventArg>
 {
-private:
+    class KeyArg {
+
+    };
+
+    template <class T>
+    class ActionCallBack : public IListener<KeyArg> {
+        T* callee;
+        void (T::*callback)(void);
+    public:
+        ActionCallBack(T* who, void (T::*func)(void)) 
+            : callee(who),callback(func)
+        {}
+        
+        void Handle(KeyArg arg) {
+            (callee->*callback)();
+        }
+    };
+
+    class KM : public KeyboardActionMapper<KeyArg> {
+        KeyArg toAction(KeyboardEventArg arg) {return KeyArg(); }
+    };
+
+private:    
     FishMaster* fm;
     Camera* cam;
     StereoCamera* stereoCam;
     SimpleSetup* setup;
-    PropertyTree& ptree;
+    PropertyTree& ptree;    
     
     vector<Camera*> cams;
     int curCamIdx;
+
+    KM km;
 
     Vector<3,float> camMove;
     float speed;
@@ -65,6 +91,9 @@ private:
 public:    
     
     WiiFishController(FishMaster* fm, Camera* cam, SimpleSetup* setup, PropertyTree& ptree, StereoCamera* sc = NULL);
+
+    void SetKeyBindings();
+    void LeftAction();
 
     void Handle(WiiButtonEventArg arg);
     void Handle(WiiMoteFoundEventArg arg);

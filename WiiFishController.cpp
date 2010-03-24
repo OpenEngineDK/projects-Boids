@@ -25,6 +25,19 @@ WiiFishController::WiiFishController(FishMaster* fm, Camera* cam, SimpleSetup* s
 {
     ptree.PropertiesChangedEvent().Attach(*this);
     ReloadConfig();
+    SetKeyBindings();
+}
+
+void WiiFishController::LeftAction() {
+    logger.info << " GO LEFT " << logger.end;
+}
+
+void WiiFishController::SetKeyBindings() {
+    ActionCallBack<WiiFishController>* left
+        = new ActionCallBack<WiiFishController>(this,&WiiFishController::LeftAction);
+
+
+    km.onKeyPress(KEY_x, *left);
 }
 
 void WiiFishController::ReloadConfig() {        
@@ -105,6 +118,8 @@ void WiiFishController::Handle(WiiButtonEventArg arg) {
 }
 
 void WiiFishController::Handle(KeyboardEventArg arg) {
+
+    km.Handle(arg);
 
     switch(arg.sym) {
     case KEY_UP:

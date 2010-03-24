@@ -14,6 +14,7 @@ darcs /projects/Boids http://openengine.dk/code/projects/Boids
 darcs-dev /projects/Boids fh.daimi.au.dk:/users/cgd/code/projects/Boids
 
 # required extensions
+darcs /extensions/ActionMappers          http://openengine.dk/code/extensions/ActionMappers
 darcs /extensions/SetupHelpers           http://openengine.dk/code/extensions/SetupHelpers
 darcs /extensions/HUD                    http://openengine.dk/code/extensions/HUD
 darcs /extensions/SDL                    http://openengine.dk/code/extensions/SDL
@@ -33,6 +34,8 @@ darcs /extensions/MusicPlayer            http://openengine.dk/code/extensions/Mu
 darcs /extensions/VorbisResource         http://openengine.dk/code/extensions/VorbisResource
 darcs /extensions/MeshUtils              http://openengine.dk/code/extensions/MeshUtils
 
+#dev
+darcs-dev /extensions/ActionMappers          fh.daimi.au.dk:/users/cgd/code/extensions/ActionMappers
 darcs-dev /extensions/SetupHelpers           fh.daimi.au.dk:/users/cgd/code/extensions/SetupHelpers
 darcs-dev /extensions/HUD                    fh.daimi.au.dk:/users/cgd/code/extensions/HUD
 darcs-dev /extensions/SDL                    fh.daimi.au.dk:/users/cgd/code/extensions/SDL
