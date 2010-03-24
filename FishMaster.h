@@ -48,7 +48,7 @@ private:
 
 
     Vector<3,float> HeadForDirection(Fish* f, Vector<3,float> d);
-    Vector<3,float> HeightRule(Fish* f);
+    Vector<3,float> HeightRule(Shark* f);
     void BoxLimit(Fish *f);
 
 

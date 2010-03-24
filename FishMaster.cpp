@@ -176,8 +176,6 @@ Shark* FishMaster::GetShark() {
 Vector<3,float> FishMaster::ScaledPos(Vector<3,float> p) {
     Vector<3,float> r;
     r[0] = endPoint[0]*p[0] + startPoint[0];
-    //r[1] = endPoint[1]*p[1] + startPoint[1];
-
     r[2] = endPoint[2]*p[2] + startPoint[2];
 
     r[1] = p[1]+GetHeight(r);
@@ -189,15 +187,17 @@ Vector<3,float> FishMaster::ScaledPos(Vector<3,float> p) {
 Vector<3,float> FishMaster::HeadForDirection(Fish* f, Vector<3,float> d) {
     return d*0.1;
 }
-Vector<3,float> FishMaster::HeightRule(Fish* f) {
+Vector<3,float> FishMaster::HeightRule(Shark* f) {
     float h = GetHeight(f->position);
 
     float dt = f->position[1] - h;
 
     Vector<3,float> v;
     if (dt < heightMin){
-        if (dt < 0)
+        if (dt < 0) {
+            f->jaw = 0;
             f->position[1] = h;
+        }
         v = Vector<3,float>(0,1,0)*heightSpeed;
             //GetNormal(f->position)*heightSpeed;
     }

@@ -58,7 +58,7 @@ void Shoal::ReloadProperties(PropertyTreeNode ptn) {
     vector<Fish*> oldFishes = fishes;
     fishes.clear();
 
-    startPos = ptn.Get("startPos",Vector<3,float>());
+    startPos = ptn.Get("startPos",Vector<3,float>(0.5, 20, 0.5));
 
     unsigned int n = ptn.Get("numFish",10);
     for (unsigned int i=0;i<n;i++) {
@@ -133,8 +133,8 @@ void Shoal::ReloadProperties(PropertyTreeNode ptn) {
     rule3Enabled = ptn.GetPath("rule3.enabled",true);
     massFactor = ptn.GetPath("rule3.massFactor",100);
 
-    homeEnabled = ptn.GetPath("home.enabled", true);
-    home = ptn.GetPath("home.position", Vector<3,float>(0,0,0));
+    homeEnabled = ptn.GetPath("home.enabled", false);
+    home = ptn.GetPath("home.position", Vector<3,float>(0.5,10,0.5));
     home = fm->ScaledPos(home);
     homeScalar = ptn.GetPath("home.factor",100.0f);
 
@@ -165,6 +165,8 @@ ISceneNode* Shoal::GetNode() {
 
 void Shoal::Update(Time dt) {
 
+    soundPlaying = false;
+
     for (vector<Fish*>::iterator itr = fishes.begin();
          itr != fishes.end();
          itr++) {
@@ -172,7 +174,11 @@ void Shoal::Update(Time dt) {
         Vector<3,float> v1,v2,v3;
 
 
+        
         // Based on: http://www.vergenet.net/~conrad/boids/pseudocode.html
+        //      and: http://www.red3d.com/cwr/boids/
+        
+        FindNeighbors (f);
 
         if (rule1Enabled)   f->AddVelocity(Rule1       (f));
         if (rule2Enabled)   f->AddVelocity(Rule2       (f));
@@ -207,23 +213,36 @@ void Shoal::Reset() {
     }
 }
 
+void Shoal::FindNeighbors(Fish* f) {
+    f->neighbors.clear();
+    for (vector<Fish*>::iterator itr = fishes.begin();
+         itr != fishes.end();
+         itr++) {
+        Fish* n = *itr;
+        if (n != f) {
+            float dist = (n->position - f->position).GetLength();            
+            if (dist < nearDist) {
+                // float angle = n->position.GetNormalize() * f->position.GetNormalize();
+                // if (angle < 2)
+                    f->neighbors.push_back(n);
+            }
+        }
+    }
+}
 
 /// Boids rules
 // Keep distance to other boids
 Vector<3,float> Shoal::Rule1(Fish* f) {
     Vector<3,float> c;
-    for (vector<Fish*>::iterator itr = fishes.begin();
-         itr != fishes.end();
+    for (list<Fish*>::iterator itr = f->neighbors.begin();
+         itr != f->neighbors.end();
          itr++) {
-            Fish *n = *itr;
-            if (n != f){ // if not self
-                Vector<3,float> d = (n->position - f->position);
-                float dist = d.GetLength();
-                if (dist < nearDist && dist < privacyRadius)
-                    c = c - d;
-            }
+            Fish *n = *itr;            
+            Vector<3,float> d = (n->position - f->position);
+            float dist = d.GetLength();
+            if (dist < privacyRadius)
+                c = c - d;            
     }
-
     return c;
 }
 
@@ -231,18 +250,16 @@ Vector<3,float> Shoal::Rule1(Fish* f) {
 Vector<3,float> Shoal::Rule2(Fish* f) {
     Vector<3,float> pv;
     int c = 0;
-    for (vector<Fish*>::iterator itr = fishes.begin();
-         itr != fishes.end();
+    for (list<Fish*>::iterator itr = f->neighbors.begin();
+         itr != f->neighbors.end();
          itr++) {
-            Fish *n = *itr;
-            if (n != f) { // If not self
-                Vector<3,float> d = (n->position - f->position);
-                float dist = d.GetLength();
-                if (dist < nearDist) {
-                    pv = pv + n->velocity;
-                    c++;
-                }
-            }
+        Fish *n = *itr;
+            
+        Vector<3,float> d = (n->position - f->position);
+        
+        pv = pv + n->velocity;
+        c++;        
+   
     }
 
     pv = pv / max(c,1);
@@ -253,20 +270,16 @@ Vector<3,float> Shoal::Rule2(Fish* f) {
 Vector<3,float> Shoal::Rule3(Fish* f) {
     Vector<3,float> pc;
     int c = 0;
-    for (vector<Fish*>::iterator itr = fishes.begin();
-         itr != fishes.end();
+    for (list<Fish*>::iterator itr = f->neighbors.begin();
+         itr != f->neighbors.end();
          itr++) {
-
         Fish *n = *itr;
 
-        if (n != f){ // Skip self
-            Vector<3,float> d = (n->position - f->position);
-            float dist = d.GetLength();
-            if (dist < nearDist) {
-                pc += n->position;
-                c++;
-            }
-        }
+        Vector<3,float> d = (n->position - f->position);        
+        pc += n->position;
+        c++;
+            
+    
     }
 
     pc = pc / max(c,1);
@@ -286,8 +299,11 @@ Vector<3,float> Shoal::Flee(Fish* f, Vector<3,float> p) {
     if (len < sharkDistance) {
         v = (f->position - p);
         v *= (sharkDistance - len)*fleeScale;
-        if (!f->sound->IsPlaying())
-            f->sound->Play();
+        if (!soundPlaying)  {
+            soundPlaying = true;
+            if (!f->sound->IsPlaying()) 
+                f->sound->Play();                
+        }
     }
     return v;
 }

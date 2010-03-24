@@ -29,12 +29,15 @@ class Shark : public Fish{
 private:
 
     float speed;
+
 public:
+    float jaw,dir;
     Vector<3,float> direction;
 
     Shark(ISceneNode* child, Vector<3,float> start);
 
     void SetSpeed(float s);
+    void AddDirection(float j, float r);
     void SetDirection(float j, float r);
 };
 

@@ -26,6 +26,8 @@ public:
     Vector<3,float> position;
     Quaternion<float> rotation;
 
+    list<Fish*> neighbors;
+
     TransformationNode *node;
     ISceneNode* childNode;
 

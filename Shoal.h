@@ -46,6 +46,8 @@ private:
     RandomGenerator* rg;
 
     // Boids rules
+    void FindNeighbors(Fish* f);
+
     Vector<3,float> Rule1(Fish* f);
     Vector<3,float> Rule2(Fish* f);
     Vector<3,float> Rule3(Fish* f);
@@ -64,8 +66,8 @@ private:
     Vector<3,float> Flee(Fish* f, Vector<3,float> p);
     Vector<3,float> Randomize(Fish *f);
 
-
-
+    bool soundPlaying;
+    
     // Boid properties
     float nearDist;
 
