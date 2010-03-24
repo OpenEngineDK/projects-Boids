@@ -88,15 +88,19 @@ int main(int argc, char** argv) {
     ResourceManager<IModelResource>::AddPlugin(new ColladaPlugin());
     ResourceManager<ISoundResource>::AddPlugin(new VorbisResourcePlugin());
 
+    const bool useStereo = true;
 
     // Create simple setup
     //IEnvironment* env = new SDLEnvironment(800,600);
     //IEnvironment* env = new GLUTEnvironment(1440,900,32,FRAME_FULLSCREEN);
+    
     IEnvironment* env = new GLUTEnvironment(1024,768,32);
+    if (useStereo)
+        env->GetFrame().ToggleOption(FRAME_STEREO);
     Viewport* vp = new Viewport(env->GetFrame());
     IRenderingView* rv = new TerrainRenderingView(*vp);
 
-    const bool useStereo = false;
+
     
     StereoRenderer* rend = (useStereo?new StereoRenderer(vp):NULL);
     
