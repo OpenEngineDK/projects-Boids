@@ -28,16 +28,26 @@ WiiFishController::WiiFishController(FishMaster* fm, Camera* cam, SimpleSetup* s
     SetKeyBindings();
 }
 
-void WiiFishController::LeftAction() {
-    logger.info << " GO LEFT " << logger.end;
-}
+void WiiFishController::LeftAction(KeyArg arg) {left = arg.type == EVENT_PRESS;}
+void WiiFishController::RightAction(KeyArg arg) {right = arg.type == EVENT_PRESS;}
+void WiiFishController::UpAction(KeyArg arg) {up = arg.type == EVENT_PRESS;}
+void WiiFishController::DownAction(KeyArg arg) {down = arg.type == EVENT_PRESS;}
+void WiiFishController::AccelerateAction(KeyArg arg) {forward = arg.type == EVENT_PRESS;}
+void WiiFishController::DeaccelerateAction(KeyArg arg) {back = arg.type == EVENT_PRESS;}
 
 void WiiFishController::SetKeyBindings() {
-    ActionCallBack<WiiFishController>* left
-        = new ActionCallBack<WiiFishController>(this,&WiiFishController::LeftAction);
+    // ActionCallBack<WiiFishController>* left
+    //     = new ActionCallBack<WiiFishController>(this,&WiiFishController::LeftAction);
+    
 
+    km.onKeyChange(KEY_LEFT, *(new WiiActionCallback(this,&WiiFishController::LeftAction)));
+    km.onKeyChange(KEY_RIGHT, *(new WiiActionCallback(this,&WiiFishController::RightAction)));
+    km.onKeyChange(KEY_UP, *(new WiiActionCallback(this,&WiiFishController::UpAction)));
+    km.onKeyChange(KEY_DOWN, *(new WiiActionCallback(this,&WiiFishController::DownAction)));
+    km.onKeyChange(KEY_a, *(new WiiActionCallback(this,&WiiFishController::AccelerateAction)));
+    km.onKeyChange(KEY_z, *(new WiiActionCallback(this,&WiiFishController::DeaccelerateAction)));
 
-    km.onKeyPress(KEY_x, *left);
+    
 }
 
 void WiiFishController::ReloadConfig() {        
@@ -122,24 +132,6 @@ void WiiFishController::Handle(KeyboardEventArg arg) {
     km.Handle(arg);
 
     switch(arg.sym) {
-    case KEY_UP:
-        up = arg.type == EVENT_PRESS;
-        break;
-    case KEY_DOWN:
-        down = arg.type == EVENT_PRESS;                
-        break;
-    case KEY_RIGHT:
-        right = arg.type == EVENT_PRESS;                
-        break;
-    case KEY_LEFT:
-        left = arg.type == EVENT_PRESS;                
-        break;        
-    case KEY_a:
-        forward = arg.type == EVENT_PRESS;                
-        break;
-    case KEY_z:
-        back = arg.type == EVENT_PRESS;                
-        break;
     default:
         break;
     }

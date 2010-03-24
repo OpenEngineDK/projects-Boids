@@ -46,26 +46,32 @@ class WiiFishController : public IModule
                         , public IListener<KeyboardEventArg>
                         , public IListener<PropertiesChangedEventArg>
 {
-    class KeyArg {
-
+    struct KeyArg {    
+        ButtonEvent type;
+        KeyArg(ButtonEvent t) : type(t) {}
     };
 
-    template <class T>
-    class ActionCallBack : public IListener<KeyArg> {
+    template <class T, class A>
+    class ActionCallback : public IListener<KeyArg> {
         T* callee;
-        void (T::*callback)(void);
+        void (T::*callback)(A);
     public:
-        ActionCallBack(T* who, void (T::*func)(void)) 
-            : callee(who),callback(func)
-        {}
+        ActionCallback(T* who, void (T::*func)(A)) 
+            : callee(who),callback(func) {}
         
-        void Handle(KeyArg arg) {
-            (callee->*callback)();
+        void Handle(A arg) {
+            (callee->*callback)(arg);
         }
     };
 
+    class WiiActionCallback : public ActionCallback<WiiFishController,KeyArg> {
+    public:
+        WiiActionCallback(WiiFishController* who, void (WiiFishController::*func)(KeyArg))
+            : ActionCallback<WiiFishController,KeyArg>(who,func) {}
+    };
+
     class KM : public KeyboardActionMapper<KeyArg> {
-        KeyArg toAction(KeyboardEventArg arg) {return KeyArg(); }
+        KeyArg toAction(KeyboardEventArg arg) {return KeyArg(arg.type); }
     };
 
 private:    
@@ -93,7 +99,13 @@ public:
     WiiFishController(FishMaster* fm, Camera* cam, SimpleSetup* setup, PropertyTree& ptree, StereoCamera* sc = NULL);
 
     void SetKeyBindings();
-    void LeftAction();
+    
+    void LeftAction(KeyArg);
+    void RightAction(KeyArg);
+    void UpAction(KeyArg);
+    void DownAction(KeyArg);
+    void AccelerateAction(KeyArg);
+    void DeaccelerateAction(KeyArg);
 
     void Handle(WiiButtonEventArg arg);
     void Handle(WiiMoteFoundEventArg arg);
