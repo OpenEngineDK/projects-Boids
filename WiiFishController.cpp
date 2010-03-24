@@ -6,9 +6,10 @@
 #include <Devices/WiiMote.h>
 
 
-WiiFishController::WiiFishController(FishMaster* fm, Camera* cam, SimpleSetup* setup, PropertyTree& ptree) 
+WiiFishController::WiiFishController(FishMaster* fm, Camera* cam, SimpleSetup* setup, PropertyTree& ptree, StereoCamera* sc) 
     : fm(fm)
     , cam(cam)
+    , stereoCam(sc)
     , setup(setup)
     , ptree(ptree)
     , curCamIdx(-1)
@@ -62,7 +63,7 @@ void WiiFishController::ReloadConfig() {
     }
     if (curCamIdx == -1)
         setup->SetCamera(*cam);
-    else if (curCamIdx < cams.size())
+    else if (curCamIdx < int(cams.size()))
         setup->SetCamera(*(cams[curCamIdx]));
     else
         setup->SetCamera(*cam);
@@ -154,6 +155,15 @@ void WiiFishController::Handle(KeyboardEventArg arg) {
                 }
                 break;
             }
+        case KEY_PLUS:
+            if (stereoCam)
+                stereoCam->dist += 1;
+            break;
+        case KEY_MINUS:
+            if (stereoCam)
+                stereoCam->dist -= 1;
+            break;
+            
         default:
             break;
     }
@@ -211,4 +221,8 @@ void WiiFishController::Handle(ProcessEventArg arg) {
     cam->Move(camMove);
     fm->GetShark()->SetSpeed(speed);
     fm->GetShark()->SetDirection(jaw,direction);
+    //fm->GetShark()->AddDirection(jaw,direction);
+    //jaw = 0;
+    //direction = 0;
+
 }  

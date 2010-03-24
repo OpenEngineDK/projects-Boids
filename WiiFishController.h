@@ -24,6 +24,8 @@
 
 #include "FishMaster.h"
 #include <Display/Camera.h>
+#include <Renderers/OpenGL/StereoRenderer.h>
+
 
 using namespace OpenEngine::Core;
 using namespace OpenEngine::Devices;
@@ -45,6 +47,7 @@ class WiiFishController : public IModule
 private:
     FishMaster* fm;
     Camera* cam;
+    StereoCamera* stereoCam;
     SimpleSetup* setup;
     PropertyTree& ptree;
     
@@ -59,8 +62,9 @@ private:
 
     void ReloadConfig();
 
-public:
-    WiiFishController(FishMaster* fm, Camera* cam, SimpleSetup* setup, PropertyTree& ptree);
+public:    
+    
+    WiiFishController(FishMaster* fm, Camera* cam, SimpleSetup* setup, PropertyTree& ptree, StereoCamera* sc = NULL);
 
     void Handle(WiiButtonEventArg arg);
     void Handle(WiiMoteFoundEventArg arg);

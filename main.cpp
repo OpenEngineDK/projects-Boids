@@ -13,7 +13,6 @@
 #include <Logging/StreamLogger.h>
 #include <Core/Engine.h>
 #include <Display/FollowCamera.h>
-//#include "StereoCamera.h"
 #include <Display/PerspectiveViewingVolume.h>
 #include <Display/InterpolatedViewingVolume.h>
 #include <Resources/ResourceManager.h>
@@ -33,6 +32,7 @@
 #include <Utils/TerrainUtils.h>
 #include <Utils/TerrainTexUtils.h>
 #include <Renderers/OpenGL/TerrainRenderingView.h>
+#include <Renderers/OpenGL/StereoRenderer.h>
 
 #include <Display/GLUTEnvironment.h>
 #include <Display/SDLEnvironment.h>
@@ -47,6 +47,8 @@
 
 #include <Resources/VorbisResource.h>
 #include <Resources/ISoundResource.h>
+
+#include <Scene/DotVisitor.h>
 
 #include "FishMaster.h"
 #include "WiiFishController.h"
@@ -63,6 +65,7 @@ using namespace OpenEngine::Renderers::OpenGL;
 using namespace OpenEngine::Renderers;
 using namespace OpenEngine::Sound;
 
+
 // Forward method declarations
 void SetupTerrain(SimpleSetup* setup);
 
@@ -72,6 +75,7 @@ OceanFloorNode* oceanFloor;
 ISoundSystem* soundsystem;
 MusicPlayer* mplayer;
 ISoundResourcePtr fishres;
+
 
 /**
  * Main method for the first quarter project of CGD.
@@ -87,18 +91,25 @@ int main(int argc, char** argv) {
 
     // Create simple setup
     //IEnvironment* env = new SDLEnvironment(800,600);
-    IEnvironment* env = new GLUTEnvironment(1024,768);
+    //IEnvironment* env = new GLUTEnvironment(1440,900,32,FRAME_FULLSCREEN);
+    IEnvironment* env = new GLUTEnvironment(1024,768,32);
     Viewport* vp = new Viewport(env->GetFrame());
     IRenderingView* rv = new TerrainRenderingView(*vp);
-   
+
+    const bool useStereo = false;
+    
+    StereoRenderer* rend = (useStereo?new StereoRenderer(vp):NULL);
+    
+
     SimpleSetup* setup = new SimpleSetup("Larry - The not so Friendly Shark",
-                                          vp, env, rv, new GLUTEngine());
+                                         vp, env, rv, 
+                                         new GLUTEngine(), 
+                                         rend);
     //                                     vp, env, rv );
     DirectoryManager::AppendPath("projects/Boids/data/");
     DirectoryManager::AppendPath("projects/Boids/");
 
     setup->GetRenderer().SetBackgroundColor(Vector<4, float>(0.12, 0.16, 0.35, 1.0));
-
     SetupTerrain(setup);
     
     // sound stuff
@@ -118,26 +129,29 @@ int main(int argc, char** argv) {
     mplayer->Play();
 
     string confPath = DirectoryManager::FindFileInPath("boids.yaml");
-
     PropertyTree* ptree = new PropertyTree(confPath);
-
     FishMaster *fm = new FishMaster(oceanFloor,
                                     *ptree);
+    // IModelResourcePtr sharkModel = 
+    // ResourceManager<IModelResource>::Create("shark/models/shark.dae");
 
-    IModelResourcePtr sharkModel = ResourceManager<IModelResource>::Create("shark/models/shark.dae");
-
+    IModelResourcePtr sharkModel = 
+        ResourceManager<IModelResource>::Create("leopardshark/models/lepord.dae");
     sharkModel->Load();
     
     TransformationNode* sharkGeom = new TransformationNode();
     sharkGeom->AddNode(sharkModel->GetSceneNode());
+    sharkGeom->Rotate(0,PI,0);
+    //sharkGeom->Move(200,0,-150);
+    sharkGeom->Scale(0.5, 0.5, 0.5);
 
-    sharkGeom->Move(200,0,-150);
-    sharkGeom->Scale(200,200,200);
-
+    // TransformationNode* sharkGeom = new TransformationNode();
+    // sharkGeom->AddNode(sharkModel->GetSceneNode());
+    // sharkGeom->Move(200,0,-150);
+    // sharkGeom->Scale(200,200,200);
 
     VertexArrayTransformer transf;
     transf.Transform(*sharkGeom);
-
     fm->GetShark()->GetNode()->AddNode(sharkGeom);
 
     SceneNode *root = new SceneNode();
@@ -152,19 +166,20 @@ int main(int argc, char** argv) {
     rsn->AddNode(fm->GetFishNode());
     setup->SetScene(*root);
 
-    //FollowCamera* cam = new FollowCamera(*(new StereoCamera(*(new InterpolatedViewingVolume(*(new PerspectiveViewingVolume(10)))))));
+    IViewingVolume* innerV = new InterpolatedViewingVolume(*(new PerspectiveViewingVolume(10)));
+    FollowCamera* cam = new FollowCamera(*innerV);
+    StereoCamera* sc = new StereoCamera(*cam);
 
-    FollowCamera* cam = new FollowCamera(*(new InterpolatedViewingVolume(*(new PerspectiveViewingVolume(10)))));
+    if (rend)
+        rend->SetStereoCamera(sc);
 
-    //StereoCamera* sc = new StereoCamera(*cam);
     
     cam->Follow(fm->GetShark()->GetNode());
-    setup->SetCamera(*cam);
-    //setup->SetCamera(*sc);
+    setup->SetCamera(*sc);
     cam->SetDirection(Vector<3,float>(1,0,0),Vector<3,float>(0,1,0));
     cam->Move(Vector<3, float>(0, 100, 600));
 
-    WiiFishController *ctrl = new WiiFishController(fm,cam,setup,*ptree);
+    WiiFishController *ctrl = new WiiFishController(fm,cam,setup,*ptree,sc);
     setup->GetKeyboard().KeyEvent().Attach(*ctrl);
     setup->GetEngine().InitializeEvent().Attach(*ctrl);
     setup->GetEngine().ProcessEvent().Attach(*ctrl);
@@ -183,6 +198,11 @@ int main(int argc, char** argv) {
 
     setup->ShowFPS();
 
+
+    // Write dot graph    
+    DotVisitor dv;
+    ofstream os("graph.dot", ofstream::out);
+    dv.Write(*(setup->GetScene()), &os);
     // Start the engine.
     setup->GetEngine().Start();
 
@@ -192,15 +212,16 @@ int main(int argc, char** argv) {
 
 void SetupTerrain(SimpleSetup* setup){
     // Create the map
-    /*
-    FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(1025, 1025, 1));
+    /**/
+#if 1
+    FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(1057, 1057, 1));
     Empty(map);
     map = CreateSmoothTerrain(map, 20, 160, 300);
     map = CreateSmoothTerrain(map, 1600, 20, 60);
     map = CreateSmoothTerrain(map, 8000, 10, 40);
     map = CreateSmoothTerrain(map, 16000, 3, -6);
     map = CreateSmoothTerrain(map, 40000, 2, 3);
-    */
+#else
     FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(193, 193, 1));
     Empty(map);
     map = CreateSmoothTerrain(map, 1, 160, 300);
@@ -208,6 +229,7 @@ void SetupTerrain(SimpleSetup* setup){
     map = CreateSmoothTerrain(map, 125, 5, 40);
     map = CreateSmoothTerrain(map, 250, 3, -6);
     map = CreateSmoothTerrain(map, 625, 2, 3);
+#endif
     map = MakePlateau(map, 700, 30);
     float widthScale = 16.0;
 
