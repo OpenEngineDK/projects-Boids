@@ -1,12 +1,12 @@
 # Distribution file for the Example project.
 # http://www.openengine.dk/wiki/Projects/Boids
 
-dist /extensions/OpenColladaResource/OpenColladaResource.dist http://openengine.dk/code/branches/OpenColladaVBO/OpenColladaResource.dist
+dist /extensions/OpenColladaResource/OpenColladaResource.dist http://openengine.dk/code/extension/OpenColladaResource/OpenColladaResource.dist
 dist /extensions/PropertyTree/PropertyTree.dist               http://openengine.dk/code/extensions/PropertyTree/PropertyTree.dist
 
 # main repository
-darcs / http://openengine.dk/code/branches/BufferObjects
-darcs-dev / fh.daimi.au.dk:/users/cgd/code/branches/BufferObjects
+darcs / http://openengine.dk/code/openengine
+darcs-dev / fh.daimi.au.dk:/users/cgd/code/openengine
 
 # project repository
 # (uncomment the following two lines after uploading your project)
@@ -23,7 +23,7 @@ darcs /extensions/GLUT                   http://openengine.dk/code/extensions/GL
 darcs /extensions/SDLImage               http://openengine.dk/code/extensions/SDLImage
 darcs /extensions/CairoResource          http://openengine.dk/code/extensions/CairoResource
 darcs /extensions/OpenGLRenderer         http://openengine.dk/code/extensions/OpenGLRenderer
-darcs /extensions/OpenGLRenderer         http://openengine.dk/code/branches/OpenGLRendererVBO
+darcs /extensions/OpenGLRenderer         http://openengine.dk/code/extensions/OpenGLRenderer
 darcs /extensions/TGAResource            http://openengine.dk/code/extensions/TGAResource
 darcs /extensions/OBJResource            http://openengine.dk/code/extensions/OBJResource
 darcs /extensions/AccelerationStructures http://openengine.dk/code/extensions/AccelerationStructures
@@ -43,7 +43,7 @@ darcs-dev /extensions/WiiMote                fh.daimi.au.dk:/users/cgd/code/exte
 darcs-dev /extensions/GLUT                   fh.daimi.au.dk:/users/cgd/code/extensions/GLUT
 darcs-dev /extensions/SDLImage               fh.daimi.au.dk:/users/cgd/code/extensions/SDLImage
 darcs-dev /extensions/CairoResource          fh.daimi.au.dk:/users/cgd/code/extensions/CairoResource
-darcs-dev /extensions/OpenGLRenderer         fh.daimi.au.dk:/users/cgd/code/branches/OpenGLRendererVBO
+darcs-dev /extensions/OpenGLRenderer         fh.daimi.au.dk:/users/cgd/code/extensions/OpenGLRenderer
 darcs-dev /extensions/TGAResource            fh.daimi.au.dk:/users/cgd/code/extensions/TGAResource
 darcs-dev /extensions/OBJResource            fh.daimi.au.dk:/users/cgd/code/extensions/OBJResource
 darcs-dev /extensions/AccelerationStructures fh.daimi.au.dk:/users/cgd/code/extensions/AccelerationStructures
