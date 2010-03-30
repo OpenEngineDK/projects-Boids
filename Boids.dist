@@ -1,7 +1,7 @@
 # Distribution file for the Example project.
 # http://www.openengine.dk/wiki/Projects/Boids
 
-dist /extensions/OpenColladaResource/OpenColladaResource.dist http://openengine.dk/code/extension/OpenColladaResource/OpenColladaResource.dist
+dist /extensions/OpenColladaResource/OpenColladaResource.dist http://openengine.dk/code/extensions/OpenColladaResource/OpenColladaResource.dist
 dist /extensions/PropertyTree/PropertyTree.dist               http://openengine.dk/code/extensions/PropertyTree/PropertyTree.dist
 
 # main repository
