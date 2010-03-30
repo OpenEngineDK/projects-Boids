@@ -118,7 +118,7 @@ int main(int argc, char** argv) {
     // sound stuff
     OpenALSoundSystem* openal = new OpenALSoundSystem(/*root, camera*/);
     soundsystem = openal;
-    openal->SetDevice(1);
+    openal->SetDevice(0);
     setup->GetEngine().InitializeEvent().Attach(*openal);
     setup->GetEngine().DeinitializeEvent().Attach(*openal);
     setup->GetRenderer().PreProcessEvent().Attach(*openal);
