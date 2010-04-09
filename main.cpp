@@ -196,8 +196,7 @@ int main(int argc, char** argv) {
     setup->GetEngine().DeinitializeEvent().Attach(*ptree);
 
     DataBlockBinder* bob = new DataBlockBinder(setup->GetRenderer());
-    setup->GetRenderer().InitializeEvent().Attach(*bob);
-
+    bob->Bind(*root);
     setup->ShowFPS();
 
 
