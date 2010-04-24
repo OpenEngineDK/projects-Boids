@@ -174,7 +174,6 @@ int main(int argc, char** argv) {
 
     if (rend)
         rend->SetStereoCamera(sc);
-
     
     cam->Follow(fm->GetShark()->GetNode());
     setup->SetCamera(*sc);
@@ -199,7 +198,6 @@ int main(int argc, char** argv) {
     bob->Bind(*root);
     setup->ShowFPS();
 
-
     // Write dot graph    
     DotVisitor dv;
     ofstream os("graph.dot", ofstream::out);
@@ -213,7 +211,6 @@ int main(int argc, char** argv) {
 
 void SetupTerrain(SimpleSetup* setup){
     // Create the map
-    /**/
 #if 1
     FloatTexture2DPtr map = FloatTexture2DPtr(new FloatTexture2D(1057, 1057, 1));
     Empty(map);

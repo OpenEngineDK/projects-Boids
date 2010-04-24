@@ -13,6 +13,9 @@ darcs-dev / fh.daimi.au.dk:/users/cgd/code/openengine
 darcs /projects/Boids http://openengine.dk/code/projects/Boids
 darcs-dev /projects/Boids fh.daimi.au.dk:/users/cgd/code/projects/Boids
 
+# dist dependencies
+dist /extensions/HeightMap/HeightMap.dist http://openengine.dk/code/extensions/HeightMap/HeightMap.dist
+
 # required extensions
 darcs /extensions/ActionMappers          http://openengine.dk/code/extensions/ActionMappers
 darcs /extensions/SetupHelpers           http://openengine.dk/code/extensions/SetupHelpers
@@ -23,16 +26,13 @@ darcs /extensions/GLUT                   http://openengine.dk/code/extensions/GL
 darcs /extensions/SDLImage               http://openengine.dk/code/extensions/SDLImage
 darcs /extensions/CairoResource          http://openengine.dk/code/extensions/CairoResource
 darcs /extensions/OpenGLRenderer         http://openengine.dk/code/extensions/OpenGLRenderer
-darcs /extensions/OpenGLRenderer         http://openengine.dk/code/extensions/OpenGLRenderer
 darcs /extensions/TGAResource            http://openengine.dk/code/extensions/TGAResource
 darcs /extensions/OBJResource            http://openengine.dk/code/extensions/OBJResource
 darcs /extensions/AccelerationStructures http://openengine.dk/code/extensions/AccelerationStructures
 darcs /extensions/FaceBuilder            http://openengine.dk/code/extensions/FaceBuilder
-darcs /extensions/HeightMap              http://openengine.dk/code/extensions/HeightMap
 darcs /extensions/OpenALSoundSystem      http://openengine.dk/code/extensions/OpenALSoundSystem
 darcs /extensions/MusicPlayer            http://openengine.dk/code/extensions/MusicPlayer
 darcs /extensions/VorbisResource         http://openengine.dk/code/extensions/VorbisResource
-darcs /extensions/MeshUtils              http://openengine.dk/code/extensions/MeshUtils
 
 #dev
 darcs-dev /extensions/ActionMappers          fh.daimi.au.dk:/users/cgd/code/extensions/ActionMappers
@@ -47,11 +47,9 @@ darcs-dev /extensions/OpenGLRenderer         fh.daimi.au.dk:/users/cgd/code/exte
 darcs-dev /extensions/TGAResource            fh.daimi.au.dk:/users/cgd/code/extensions/TGAResource
 darcs-dev /extensions/OBJResource            fh.daimi.au.dk:/users/cgd/code/extensions/OBJResource
 darcs-dev /extensions/AccelerationStructures fh.daimi.au.dk:/users/cgd/code/extensions/AccelerationStructures
-darcs-dev /extensions/HeightMap              fh.daimi.au.dk:/users/cgd/code/extensions/HeightMap
 darcs-dev /extensions/OpenALSoundSystem      fh.daimi.au.dk:/users/cgd/code/extensions/OpenALSoundSystem
 darcs-dev /extensions/MusicPlayer            fh.daimi.au.dk:/users/cgd/code/extensions/MusicPlayer
 darcs-dev /extensions/VorbisResource         fh.daimi.au.dk:/users/cgd/code/extensions/VorbisResource
-darcs-dev /extensions/MeshUtils              fh.daimi.au.dk:/users/cgd/code/extensions/MeshUtils
 
 # windows libraries
 win32 /libraries http://openengine.dk/data/libraries/boost-win32.zip

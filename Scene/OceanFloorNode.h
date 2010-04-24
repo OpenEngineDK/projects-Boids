@@ -40,7 +40,6 @@ namespace Scene {
             sand->SetMipmapping(true);
             arg.renderer.LoadTexture(sand.get());
 #endif
-            SetTextureDetail(1.0f / 16.0f);
         }
 
         void Process(ProcessEventArg arg){
