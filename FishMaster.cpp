@@ -111,7 +111,7 @@ Vector<3,float> FishMaster::GetReflect(Vector<3,float> p, Vector<3,float> d) {
 }
 
 
-void FishMaster::Handle(InitializeEventArg arg) {
+void FishMaster::Handle(Core::InitializeEventArg arg) {
 
     float* startVertex = ocean->GetVertex(0, 0);
     startPoint = Vector<3,float>(startVertex[0], 0, startVertex[2]);
@@ -125,7 +125,7 @@ void FishMaster::Handle(InitializeEventArg arg) {
     Reset();
 
 }
-void FishMaster::Handle(ProcessEventArg arg) {
+void FishMaster::Handle(Core::ProcessEventArg arg) {
     Time dt = loopTimer.GetElapsedTimeAndReset();
 
     for (vector<Shoal*>::iterator itr = shoals.begin();
@@ -147,6 +147,9 @@ void FishMaster::Handle(ProcessEventArg arg) {
     BoxLimit(shark);
 }
 
+void FishMaster::Handle(Core::DeinitializeEventArg arg) {}
+
+
 void FishMaster::Reset() {
     Vector<3,float> startPos = ptree.Get("shark.pos",Vector<3,float>(0,0,0));
 
@@ -164,7 +167,6 @@ void FishMaster::Reset() {
 }
 
 
-void FishMaster::Handle(DeinitializeEventArg arg) {}
 
 Shark* FishMaster::GetShark() {
     return shark;

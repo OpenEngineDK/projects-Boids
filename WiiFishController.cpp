@@ -164,11 +164,11 @@ void WiiFishController::Handle(KeyboardEventArg arg) {
             }
         case KEY_PLUS:
             if (stereoCam)
-                stereoCam->dist += 1;
+                stereoCam->SetEyeDistance(stereoCam->GetEyeDistance()+1);
             break;
         case KEY_MINUS:
             if (stereoCam)
-                stereoCam->dist -= 1;
+                stereoCam->SetEyeDistance(stereoCam->GetEyeDistance()-1);
             break;
             
         default:
@@ -198,7 +198,7 @@ void WiiFishController::Handle(WiiMoteFoundEventArg arg) {
     logger.info << "Found a wiimote!" << logger.end;
 }
 
-void WiiFishController::Handle(InitializeEventArg arg) {
+void WiiFishController::Handle(Core::InitializeEventArg arg) {
     WiiMoteManager* mgr = new WiiMoteManager();
 
     setup->GetEngine().ProcessEvent().Attach(*mgr);
@@ -207,8 +207,8 @@ void WiiFishController::Handle(InitializeEventArg arg) {
     mgr->LookForMote();
     logger.info << "Looking for wiimotes" << logger.end;
 }
-void WiiFishController::Handle(DeinitializeEventArg arg) {} 
-void WiiFishController::Handle(ProcessEventArg arg) {
+void WiiFishController::Handle(Core::DeinitializeEventArg arg) {} 
+void WiiFishController::Handle(Core::ProcessEventArg arg) {
 
     float dt = arg.approx / 10000.0;
 

@@ -32,7 +32,7 @@
 #include <Utils/TerrainUtils.h>
 #include <Utils/TerrainTexUtils.h>
 #include <Renderers/OpenGL/TerrainRenderingView.h>
-#include <Renderers/OpenGL/StereoRenderer.h>
+//#include <Renderers/OpenGL/StereoRenderer.h>
 
 #include <Display/GLUTEnvironment.h>
 #include <Display/SDLEnvironment.h>
@@ -90,24 +90,21 @@ int main(int argc, char** argv) {
     const bool useStereo = false;
 
     // Create simple setup
-    //IEnvironment* env = new SDLEnvironment(800,600);
+    IEnvironment* env = new SDLEnvironment(800,600);
     //IEnvironment* env = new GLUTEnvironment(1440,900,32,FRAME_FULLSCREEN);
     
-    IEnvironment* env = new GLUTEnvironment(1024,768,32);
-    if (useStereo)
-        env->GetFrame().ToggleOption(FRAME_STEREO);
-    Viewport* vp = new Viewport(env->GetFrame());
-    IRenderingView* rv = new TerrainRenderingView(*vp);
+    //IEnvironment* env = new GLUTEnvironment(1024,768,32);
+    // if (useStereo)
+    //     env->GetFrame().ToggleOption(FRAME_STEREO);
+    //Viewport* vp = new Viewport(env->GetFrame());
+    IRenderingView* rv = new TerrainRenderingView();
 
 
     
-    StereoRenderer* rend = (useStereo?new StereoRenderer(vp):NULL);
+    //StereoRenderer* rend = (useStereo?new StereoRenderer():NULL);
     
-
     SimpleSetup* setup = new SimpleSetup("Larry - The not so Friendly Shark",
-                                         vp, env, rv, 
-                                         new GLUTEngine(), 
-                                         rend);
+                                         env, rv);
     //                                     vp, env, rv );
     DirectoryManager::AppendPath("projects/Boids/data/");
     DirectoryManager::AppendPath("projects/Boids/");
@@ -137,8 +134,11 @@ int main(int argc, char** argv) {
                                     ResourceManager<ISoundResource>::Create("bubbles.ogg"));
 
 
+    // IModelResourcePtr sharkModel = 
+    //     ResourceManager<IModelResource>::Create("shark/models/shark.dae");
     IModelResourcePtr sharkModel = 
         ResourceManager<IModelResource>::Create("leopardshark/models/lepord.dae");
+
     sharkModel->Load();
     
     TransformationNode* sharkGeom = new TransformationNode();
@@ -172,8 +172,8 @@ int main(int argc, char** argv) {
     FollowCamera* cam = new FollowCamera(*innerV);
     StereoCamera* sc = new StereoCamera(*cam);
 
-    if (rend)
-        rend->SetStereoCamera(sc);
+    // if (rend)
+    //     rend->SetStereoCamera(sc);
     
     cam->Follow(fm->GetShark()->GetNode());
     setup->SetCamera(*sc);
@@ -240,7 +240,7 @@ void SetupTerrain(SimpleSetup* setup){
 
     OceanFloorNode* node = new OceanFloorNode(map);
     node->SetWidthScale(widthScale);
-    node->SetSun(sun);
+    //node->SetSun(sun);
     setup->GetRenderer().InitializeEvent().Attach(*node);
     setup->GetEngine().ProcessEvent().Attach(*node);
     oceanFloor = node;

@@ -42,7 +42,7 @@ namespace Scene {
 #endif
         }
 
-        void Process(ProcessEventArg arg){
+        void Process(Core::ProcessEventArg arg){
             elapsedTime += arg.approx;
         }
 

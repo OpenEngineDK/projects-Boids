@@ -24,7 +24,9 @@
 
 #include "FishMaster.h"
 #include <Display/Camera.h>
-#include <Renderers/OpenGL/StereoRenderer.h>
+//#include <Renderers/OpenGL/StereoRenderer.h>
+
+#include <Display/StereoCamera.h>
 
 #include <Devices/KeyboardActionMapper.h>
 
@@ -114,9 +116,9 @@ public:
     void Handle(KeyboardEventArg arg);
     void Handle(PropertiesChangedEventArg arg);
 
-    void Handle(InitializeEventArg arg);
-    void Handle(DeinitializeEventArg arg);
-    void Handle(ProcessEventArg arg);
+    void Handle(Core::InitializeEventArg arg);
+    void Handle(Core::DeinitializeEventArg arg);
+    void Handle(Core::ProcessEventArg arg);
 
 };
 

@@ -74,9 +74,9 @@ public:
 
     void Reset();
 
-    void Handle(InitializeEventArg arg);
-    void Handle(ProcessEventArg arg);
-    void Handle(DeinitializeEventArg arg);
+    void Handle(Core::InitializeEventArg arg);
+    void Handle(Core::ProcessEventArg arg);
+    void Handle(Core::DeinitializeEventArg arg);
 
     void Handle(PropertiesChangedEventArg arg);
 };
