@@ -15,7 +15,7 @@
 #include <Resources/ResourceManager.h>
 #include <Meta/OpenGL.h>
 
-//#define SHADER
+#define SHADER
 
 namespace OpenEngine {
 namespace Scene {
@@ -46,7 +46,7 @@ namespace Scene {
             elapsedTime += arg.approx;
         }
 
-        void PreRender(Display::Viewport view) {
+        void PreRender(Renderers::RenderingEventArg arg) {
 #ifdef SHADER
             this->landscapeShader->SetUniform("time", (float) elapsedTime / 12000000);
 #else

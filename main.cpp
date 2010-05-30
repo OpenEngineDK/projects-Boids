@@ -159,8 +159,9 @@ int main(int argc, char** argv) {
     SceneNode *root = new SceneNode();
     RenderStateNode *rsn = new RenderStateNode();
 
-    rsn->EnableOption(RenderStateNode::LIGHTING);    
+    rsn->EnableOption(RenderStateNode::LIGHTING);
     rsn->EnableOption(RenderStateNode::COLOR_MATERIAL);
+    rsn->EnableOption(RenderStateNode::BACKFACE);
 
     root->AddNode(sun);
     sun->AddNode(rsn);
@@ -240,7 +241,6 @@ void SetupTerrain(SimpleSetup* setup){
 
     OceanFloorNode* node = new OceanFloorNode(map);
     node->SetWidthScale(widthScale);
-    //node->SetSun(sun);
     setup->GetRenderer().InitializeEvent().Attach(*node);
     setup->GetEngine().ProcessEvent().Attach(*node);
     oceanFloor = node;
