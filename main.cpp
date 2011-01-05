@@ -86,6 +86,7 @@ int main(int argc, char** argv) {
 
     ResourceManager<IModelResource>::AddPlugin(new ColladaPlugin());
     ResourceManager<ISoundResource>::AddPlugin(new VorbisResourcePlugin());
+    ResourceManager<IStreamingSoundResource>::AddPlugin(new StreamingVorbisResourcePlugin());
 
     const bool useStereo = false;
 
