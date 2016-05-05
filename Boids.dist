@@ -1,55 +1,55 @@
 # Distribution file for the Example project.
 # http://www.openengine.dk/wiki/Projects/Boids
 
-dist /extensions/OpenColladaResource/OpenColladaResource.dist http://openengine.dk/code/extensions/OpenColladaResource/OpenColladaResource.dist
-dist /extensions/PropertyTree/PropertyTree.dist               http://openengine.dk/code/extensions/PropertyTree/PropertyTree.dist
+dist /extensions/OpenColladaResource/OpenColladaResource.dist https://raw.githubusercontent.com/OpenEngineDK/extensions-OpenColladaResource/master/OpenColladaResource.dist
+dist /extensions/PropertyTree/PropertyTree.dist               https://raw.githubusercontent.com/OpenEngineDK/extensions-PropertyTree/master/PropertyTree.dist
 
 # main repository
-darcs / http://openengine.dk/code/openengine
-darcs-dev / fh.daimi.au.dk:/users/cgd/code/openengine
+git / https://github.com/OpenEngineDK/openengine.git
+git-dev / git@github.com:OpenEngineDK/openengine.git
 
 # project repository
 # (uncomment the following two lines after uploading your project)
-darcs /projects/Boids http://openengine.dk/code/projects/Boids
-darcs-dev /projects/Boids fh.daimi.au.dk:/users/cgd/code/projects/Boids
+git /projects/Boids https://github.com/OpenEngineDK/projects-Boids.git
+git-dev /projects/Boids git@github.com:OpenEngineDK/projects-Boids.git
 
 # dist dependencies
-dist /extensions/HeightMap/HeightMap.dist http://openengine.dk/code/extensions/HeightMap/HeightMap.dist
+dist /extensions/HeightMap/HeightMap.dist https://raw.githubusercontent.com/OpenEngineDK/extensions-HeightMap/master/HeightMap.dist
 
 # required extensions
-darcs /extensions/ActionMappers          http://openengine.dk/code/extensions/ActionMappers
-darcs /extensions/SetupHelpers           http://openengine.dk/code/extensions/SetupHelpers
-darcs /extensions/HUD                    http://openengine.dk/code/extensions/HUD
-darcs /extensions/SDL                    http://openengine.dk/code/extensions/SDL
-darcs /extensions/WiiMote                http://openengine.dk/code/extensions/WiiMote
-darcs /extensions/GLUT                   http://openengine.dk/code/extensions/GLUT
-darcs /extensions/SDLImage               http://openengine.dk/code/extensions/SDLImage
-darcs /extensions/CairoResource          http://openengine.dk/code/extensions/CairoResource
-darcs /extensions/OpenGLRenderer         http://openengine.dk/code/extensions/OpenGLRenderer
-darcs /extensions/TGAResource            http://openengine.dk/code/extensions/TGAResource
-darcs /extensions/OBJResource            http://openengine.dk/code/extensions/OBJResource
-darcs /extensions/AccelerationStructures http://openengine.dk/code/extensions/AccelerationStructures
-darcs /extensions/FaceBuilder            http://openengine.dk/code/extensions/FaceBuilder
-darcs /extensions/OpenALSoundSystem      http://openengine.dk/code/extensions/OpenALSoundSystem
-darcs /extensions/MusicPlayer            http://openengine.dk/code/extensions/MusicPlayer
-darcs /extensions/VorbisResource         http://openengine.dk/code/extensions/VorbisResource
+git /extensions/ActionMappers          https://github.com/OpenEngineDK/extensions-ActionMappers.git
+git /extensions/SetupHelpers           https://github.com/OpenEngineDK/extensions-SetupHelpers.git
+git /extensions/HUD                    https://github.com/OpenEngineDK/extensions-HUD.git
+git /extensions/SDL                    https://github.com/OpenEngineDK/extensions-SDL.git
+git /extensions/WiiMote                https://github.com/OpenEngineDK/extensions-WiiMote.git
+git /extensions/GLUT                   https://github.com/OpenEngineDK/extensions-GLUT.git
+git /extensions/SDLImage               https://github.com/OpenEngineDK/extensions-SDLImage.git
+git /extensions/CairoResource          https://github.com/OpenEngineDK/extensions-CairoResource.git
+git /extensions/OpenGLRenderer         https://github.com/OpenEngineDK/extensions-OpenGLRenderer.git
+git /extensions/TGAResource            https://github.com/OpenEngineDK/extensions-TGAResource.git
+git /extensions/OBJResource            https://github.com/OpenEngineDK/extensions-OBJResource.git
+git /extensions/AccelerationStructures https://github.com/OpenEngineDK/extensions-AccelerationStructures.git
+git /extensions/FaceBuilder            https://github.com/OpenEngineDK/extensions-FaceBuilder.git
+git /extensions/OpenALSoundSystem      https://github.com/OpenEngineDK/extensions-OpenALSoundSystem.git
+git /extensions/MusicPlayer            https://github.com/OpenEngineDK/extensions-MusicPlayer.git
+git /extensions/VorbisResource         https://github.com/OpenEngineDK/extensions-VorbisResource.git
 
 #dev
-darcs-dev /extensions/ActionMappers          fh.daimi.au.dk:/users/cgd/code/extensions/ActionMappers
-darcs-dev /extensions/SetupHelpers           fh.daimi.au.dk:/users/cgd/code/extensions/SetupHelpers
-darcs-dev /extensions/HUD                    fh.daimi.au.dk:/users/cgd/code/extensions/HUD
-darcs-dev /extensions/SDL                    fh.daimi.au.dk:/users/cgd/code/extensions/SDL
-darcs-dev /extensions/WiiMote                fh.daimi.au.dk:/users/cgd/code/extensions/WiiMote
-darcs-dev /extensions/GLUT                   fh.daimi.au.dk:/users/cgd/code/extensions/GLUT
-darcs-dev /extensions/SDLImage               fh.daimi.au.dk:/users/cgd/code/extensions/SDLImage
-darcs-dev /extensions/CairoResource          fh.daimi.au.dk:/users/cgd/code/extensions/CairoResource
-darcs-dev /extensions/OpenGLRenderer         fh.daimi.au.dk:/users/cgd/code/extensions/OpenGLRenderer
-darcs-dev /extensions/TGAResource            fh.daimi.au.dk:/users/cgd/code/extensions/TGAResource
-darcs-dev /extensions/OBJResource            fh.daimi.au.dk:/users/cgd/code/extensions/OBJResource
-darcs-dev /extensions/AccelerationStructures fh.daimi.au.dk:/users/cgd/code/extensions/AccelerationStructures
-darcs-dev /extensions/OpenALSoundSystem      fh.daimi.au.dk:/users/cgd/code/extensions/OpenALSoundSystem
-darcs-dev /extensions/MusicPlayer            fh.daimi.au.dk:/users/cgd/code/extensions/MusicPlayer
-darcs-dev /extensions/VorbisResource         fh.daimi.au.dk:/users/cgd/code/extensions/VorbisResource
+git-dev /extensions/ActionMappers          git@github.com:OpenEngineDK/extensions-ActionMappers.git
+git-dev /extensions/SetupHelpers           git@github.com:OpenEngineDK/extensions-SetupHelpers.git
+git-dev /extensions/HUD                    git@github.com:OpenEngineDK/extensions-HUD.git
+git-dev /extensions/SDL                    git@github.com:OpenEngineDK/extensions-SDL.git
+git-dev /extensions/WiiMote                git@github.com:OpenEngineDK/extensions-WiiMote.git
+git-dev /extensions/GLUT                   git@github.com:OpenEngineDK/extensions-GLUT.git
+git-dev /extensions/SDLImage               git@github.com:OpenEngineDK/extensions-SDLImage.git
+git-dev /extensions/CairoResource          git@github.com:OpenEngineDK/extensions-CairoResource.git
+git-dev /extensions/OpenGLRenderer         git@github.com:OpenEngineDK/extensions-OpenGLRenderer.git
+git-dev /extensions/TGAResource            git@github.com:OpenEngineDK/extensions-TGAResource.git
+git-dev /extensions/OBJResource            git@github.com:OpenEngineDK/extensions-OBJResource.git
+git-dev /extensions/AccelerationStructures git@github.com:OpenEngineDK/extensions-AccelerationStructures.git
+git-dev /extensions/OpenALSoundSystem      git@github.com:OpenEngineDK/extensions-OpenALSoundSystem.git
+git-dev /extensions/MusicPlayer            git@github.com:OpenEngineDK/extensions-MusicPlayer.git
+git-dev /extensions/VorbisResource         git@github.com:OpenEngineDK/extensions-VorbisResource.git
 
 # windows libraries
 win32 /libraries http://openengine.dk/data/libraries/boost-win32.zip
